@@ -6,4 +6,5 @@ struct Material
 {
 	Texture diffuse;
 	Texture normal;
+	float normalStrength = 1.0f;
 };

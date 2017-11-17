@@ -9,6 +9,9 @@ in vec3 throughTangent;
 in vec3 throughBitangent;
 
 uniform sampler2D diffuseTexture;
+uniform sampler2D normalMap;
+uniform samplerCube cubemap;
+uniform sampler2D renderTexture;
 
 in vec3 vertexModelPosition;
 in vec3 vertexPosition;
@@ -31,18 +34,16 @@ uniform float useTexture;
 
 
 uniform float useNormal;
-uniform sampler2D normalMap;
+
 
 uniform float indexOfRefraction;
 
 uniform mat4 modelMatrix;
 
-uniform samplerCube cubemap;
+
 uniform float useSkybox;
 uniform float reflectivity;
 uniform float fresnel;
-
-uniform sampler2D renderTexture;
 
 void main()
 {

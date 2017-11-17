@@ -10,13 +10,15 @@
 #include <Camera.h>
 #include <Renderable.h>
 #include <Texture.h>
+#include <Cubemap.h>
+#include <Framebuffer.h>
 #include <map>
 #include <list>
 using namespace std;
 
 #define VERTEX_BYTE_SIZE sizeof(float) * 15
 
-GLuint programID;
+
 
 
 
@@ -50,8 +52,7 @@ GLuint frameBufferObjectID;
 GLuint renderBufferObjectID;
 GLuint depthBufferObjectID;
 
-Camera camera;
-Camera renderTargetCamera;
+
 bool movingRenderTargetCamera = false;
 float cameraFOV = 60.0f;
 float clipNear = 0.1f;
@@ -66,12 +67,11 @@ GLuint diffuseLightUniformLoc;
 
 
 GLuint useTextureUniformLoc;
-GLuint cubemapUniformLoc;
+
 GLuint useSkyboxUniformLoc;
 GLuint reflectivityUniformLoc;
 GLuint useNormalUniformLoc;
 GLuint fresnelValueUniformLoc;
-GLuint renderTextureUniformLoc;
 glm::mat4 camMat;
 glm::mat4 projMat;
 
@@ -89,13 +89,29 @@ glm::vec3 specularColor = glm::vec3(1.0f, 1.0f, 1.0f);
 GLuint selfIlumUniformLoc;
 
 
+GLuint programID;
+
+Camera sceneCamera;
+Camera renderTargetCamera;
+Camera* activeCameraPtr;
+
+GLuint activeTextureIndex = 0;
+Framebuffer *activeFramebuffer;
+
 // All images
 map<string, QImage> images;
 
 // All textures
 const int MAX_TEXTURES = 10;
-GLuint activeTextureIndex = 0;
 map<string, Texture> textures;
+
+// All cubemaps
+const int MAX_CUBEMAPS = 3;
+map<string, Cubemap> cubemaps;
+
+// All framebuffers
+const int MAX_FRAMEBUFFERS = 2;
+map<string, Framebuffer> framebuffers;
 
 // All renderable objects
 const int MAX_RENDERABLES = 100;
@@ -104,12 +120,15 @@ list<Renderable> renderables;
 // Uniform locations
 GLuint diffuseTextureUniformLoc;
 GLuint normalMapUniformLoc;
+GLuint cubemapUniformLoc;
+GLuint renderTextureUniformLoc;
 
 QImage makeImage(string filename)
 {
-	QString filenameAsQString = QString::fromStdString(filename);
+	QString filenameAsQString = QString::fromStdString(filename + ".png");
 	QImage image = QGLWidget::convertToGLFormat(QImage(filenameAsQString, "png"));
 	images.insert(std::pair<string, QImage>(filename, image));
+	cout << "Successfully made image: " << filename << endl;
 	return image;
 }
 
@@ -117,24 +136,94 @@ Texture makeTexture(string filename)
 {
 	QImage image = makeImage(filename);
 	glActiveTexture(GL_TEXTURE0 + activeTextureIndex);
-	Texture texture = Texture(activeTextureIndex, 
-		GL_TEXTURE0 + activeTextureIndex, image);
+	Texture texture = Texture(activeTextureIndex, image);
 	textures.insert(std::pair<string, Texture>(filename, texture));
 	activeTextureIndex++;
+	cout << "Successfully made texture: " << filename << endl;
 	return texture;
+}
+
+Cubemap makeCubemap(string filename)
+{
+	QImage left = makeImage(filename + "_Left");
+	QImage right = makeImage(filename + "_Right");
+	QImage up = makeImage(filename + "_Up");
+	QImage down = makeImage(filename + "_Down");
+	QImage back = makeImage(filename + "_Back");
+	QImage forward = makeImage(filename + "_Forward");
+	QImage images[] = { left, right, up, down, back, forward };
+	glActiveTexture(GL_TEXTURE0 + activeTextureIndex);
+	Cubemap cubemap = Cubemap(activeTextureIndex, images);
+	cubemaps.insert(std::pair<string, Cubemap>(filename, cubemap));
+	activeTextureIndex++;
+	cout << "Successfully made cubemap: " << filename << endl;
+	return cubemap;
+}
+
+Framebuffer makeFramebuffer(string name, int width, int height)
+{
+	Framebuffer framebuffer = Framebuffer(activeTextureIndex, width, height);
+	framebuffers.insert(std::pair<string, Framebuffer>(name, framebuffer));
+	activeTextureIndex++;
+
+	if (framebuffer.status != GL_FRAMEBUFFER_COMPLETE)
+		cout << "Framebuffer incomplete!" << endl;
+	else cout << "Framebuffer complete." << endl;
+
+	return framebuffer;
+}
+
+void setActiveDiffuseTexture(Texture diffuse)
+{
+	glUniform1i(diffuseTextureUniformLoc, diffuse.textureID);
 }
 
 void setActiveDiffuseTexture(string filename)
 {
-	Texture tex = textures[filename];
-	glUniform1i(diffuseTextureUniformLoc, tex.textureID);
+	Texture diffuse = textures[filename];
+	setActiveDiffuseTexture(diffuse);
+}
+
+void setActiveNormalMap(Texture normalMap)
+{
+	glUniform1i(normalMapUniformLoc, normalMap.textureID);
 }
 
 void setActiveNormalMap(string filename)
 {
 	Texture normalMap = textures[filename];
-	glUniform1i(normalMapUniformLoc, normalMap.textureID);
+	setActiveNormalMap(normalMap);
 }
+
+void setActiveCubemap(Cubemap cubemap)
+{
+	glUniform1i(cubemapUniformLoc, cubemap.cubemapID);
+}
+
+void setActiveCubemap(string filename)
+{
+	Cubemap cubemap = cubemaps[filename];
+	setActiveCubemap(cubemap);
+}
+
+void setActiveFramebuffer(Framebuffer framebuffer)
+{
+	activeFramebuffer = &framebuffer;
+}
+
+void setActiveFramebuffer(string name)
+{
+	Framebuffer framebuffer = framebuffers[name];
+	setActiveFramebuffer(framebuffer);
+}
+
+/*void setActiveMaterial(string filename)
+{
+	Material material = materials[filename];
+	setActiveDiffuseTexture(material.diffuse);
+	setActiveNormalTexture(material.normal);
+	setNormalStrength(material.normalStrength);
+}*/
 
 void MyGLWindow::updateScene()
 {
@@ -158,9 +247,7 @@ void MyGLWindow::updateScene()
 
 void MyGLWindow::mouseMoveEvent(QMouseEvent* e)
 {
-	if (movingRenderTargetCamera)
-		renderTargetCamera.mouseUpdate(glm::vec2(e->x(), -e->y()));
-	else camera.mouseUpdate(glm::vec2(e->x(), e->y()));
+	activeCameraPtr->mouseUpdate(glm::vec2(e->x(), e->y()));
 	repaint();
 }
 
@@ -251,52 +338,22 @@ void MyGLWindow::keyPressEvent(QKeyEvent* e)
 	switch (e->key())
 	{
 		case Qt::Key::Key_W:
-			if (movingRenderTargetCamera)
-				renderTargetCamera.moveForward();
-			else camera.moveForward();
+			activeCameraPtr->moveForward();
 			break;
 		case Qt::Key::Key_S:
-			if (movingRenderTargetCamera)
-				renderTargetCamera.moveBackward();
-			else camera.moveBackward();
+			activeCameraPtr->moveBackward();
 			break;
 		case Qt::Key::Key_A:
-			if (movingRenderTargetCamera)
-				renderTargetCamera.strafeLeft();
-			else camera.strafeLeft();
+			activeCameraPtr->strafeLeft();
 			break;
 		case Qt::Key::Key_D:
-			if (movingRenderTargetCamera)
-				renderTargetCamera.strafeRight();
-			else camera.strafeRight();
+			activeCameraPtr->strafeRight();
 			break;
 		case Qt::Key::Key_Q:
-			if (movingRenderTargetCamera)
-				renderTargetCamera.moveDown();
-			else camera.moveDown();
+			activeCameraPtr->moveDown();
 			break;
 		case Qt::Key::Key_E:
-			if (movingRenderTargetCamera)
-				renderTargetCamera.moveUp();
-			else camera.moveUp();
-			break;
-		case Qt::Key::Key_I:
-			objects[1].rotation.x += 5.0f;
-			break;
-		case Qt::Key::Key_K:
-			objects[1].rotation.x -= 5.0f;
-			break;
-		case Qt::Key::Key_J:
-			objects[1].rotation.y -= 5.0f;
-			break;
-		case Qt::Key::Key_L:
-			objects[1].rotation.y += 5.0f;
-			break;
-		case Qt::Key::Key_U:
-			objects[1].rotation.z += 5.0f;
-			break;
-		case Qt::Key::Key_O:
-			objects[1].rotation.z -= 5.0f;
+			activeCameraPtr->moveUp();
 			break;
 		case Qt::Key::Key_Space:
 			addSphere();
@@ -320,7 +377,8 @@ void MyGLWindow::keyPressEvent(QKeyEvent* e)
 			lightPos.y -= 0.1f;
 			break;
 		case Qt::Key::Key_R:
-			movingRenderTargetCamera = !movingRenderTargetCamera;
+			activeCameraPtr = activeCameraPtr == &sceneCamera ? 
+				&renderTargetCamera : &sceneCamera;
 			break;
 	}
 	MyGLWindow::updateGL();
@@ -328,6 +386,8 @@ void MyGLWindow::keyPressEvent(QKeyEvent* e)
 
 void MyGLWindow::initScene()
 {
+	activeCameraPtr = &sceneCamera;
+
 	objects = new ShapeData[NUM_OBJECTS];
 
 	// Skybox
@@ -480,7 +540,9 @@ void MyGLWindow::initializeGL()
 
 	// Get uniforms
 	diffuseTextureUniformLoc = glGetUniformLocation(programID, "diffuseTexture");
-
+	normalMapUniformLoc      = glGetUniformLocation(programID, "normalMap");
+	cubemapUniformLoc        = glGetUniformLocation(programID, "cubemap");
+	renderTextureUniformLoc  = glGetUniformLocation(programID, "renderTexture");
 
 	modelMatUniformLocation = glGetUniformLocation(programID, "modelMatrix");
 	mvpUniformLocation = glGetUniformLocation(programID, "mvp");
@@ -492,65 +554,28 @@ void MyGLWindow::initializeGL()
 	specularColorUniformLoc = glGetUniformLocation(programID, "specularColor");
 	
 	useTextureUniformLoc = glGetUniformLocation(programID, "useTexture");
-	normalMapUniformLoc = glGetUniformLocation(programID, "normalMap");
-	cubemapUniformLoc = glGetUniformLocation(programID, "cubemap");
+	
+	
 	useSkyboxUniformLoc = glGetUniformLocation(programID, "useSkybox");
 	reflectivityUniformLoc = glGetUniformLocation(programID, "reflectivity");
 	useNormalUniformLoc = glGetUniformLocation(programID, "useNormal");
 	fresnelValueUniformLoc = glGetUniformLocation(programID, "fresnel");
-	renderTextureUniformLoc = glGetUniformLocation(programID, "renderTexture");
 
 	// Diffuse texture
-	Texture tri = makeTexture("tri.png");
-	setActiveDiffuseTexture("tri.png");
+	Texture tri = makeTexture("tri");
+	setActiveDiffuseTexture("tri");
 
 	// Normal map
-	Texture normal = makeTexture("ShapesNormal.png");
-	setActiveNormalMap("ShapesNormal.png");
+	Texture normal = makeTexture("ShapesNormal");
+	setActiveNormalMap("ShapesNormal");
 
 	// Cubemap
-	QImage left = QGLWidget::convertToGLFormat(QImage("Skybox_Dawn_Left.png", "png"));
-	QImage right = QGLWidget::convertToGLFormat(QImage("Skybox_Dawn_Right.png", "png"));
-	QImage forward = QGLWidget::convertToGLFormat(QImage("Skybox_Dawn_Forward.png", "png"));
-	QImage back = QGLWidget::convertToGLFormat(QImage("Skybox_Dawn_Back.png", "png"));
-	QImage up = QGLWidget::convertToGLFormat(QImage("Skybox_Dawn_Up.png", "png"));
-	QImage down = QGLWidget::convertToGLFormat(QImage("Skybox_Dawn_Down.png", "png"));
-	GLuint cubemapID;
-	glActiveTexture(GL_TEXTURE2);
-	glGenTextures(1, &cubemapID);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapID);
-	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA, 1024, 1024, 0, GL_RGBA, GL_UNSIGNED_BYTE, right.bits());
-	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA, 1024, 1024, 0, GL_RGBA, GL_UNSIGNED_BYTE, left.bits());
-	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA, 1024, 1024, 0, GL_RGBA, GL_UNSIGNED_BYTE, down.bits());
-	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA, 1024, 1024, 0, GL_RGBA, GL_UNSIGNED_BYTE, up.bits());
-	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA, 1024, 1024, 0, GL_RGBA, GL_UNSIGNED_BYTE, forward.bits());
-	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA, 1024, 1024, 0, GL_RGBA, GL_UNSIGNED_BYTE, back.bits());
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glUniform1i(cubemapUniformLoc, 2);
+	Cubemap cubemap = makeCubemap("Skybox_Dawn");
+	setActiveCubemap("Skybox_Dawn");
 
 	// Render texture
-	glActiveTexture(GL_TEXTURE3);
-	glGenTextures(1, &renderTextureID);
-	glBindTexture(GL_TEXTURE_2D, renderTextureID);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 1024, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-	// Framebuffer
-	glGenFramebuffers(1, &frameBufferObjectID);
-	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObjectID);
-	glReadBuffer(GL_COLOR_ATTACHMENT0);
-	glDrawBuffer(GL_COLOR_ATTACHMENT0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, renderTextureID, 0);
-
-	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	if (status != GL_FRAMEBUFFER_COMPLETE)
-		cout << "Framebuffer incomplete!" << endl;
-	else cout << "Framebuffer complete." << endl;
+	Framebuffer framebuffer = makeFramebuffer("RenderTexture", 1024, 1024);
+	setActiveFramebuffer(framebuffer);
 
 	// Clear to black
 	glClearColor(0, 0, 0, 1);
@@ -615,13 +640,13 @@ void MyGLWindow::draw(Camera cam, bool flipped)
 void MyGLWindow::paintGL()
 {
 	// Render to framebuffer
-	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObjectID);
+	glBindFramebuffer(GL_FRAMEBUFFER, activeFramebuffer->framebufferObjectID);
 	glViewport(0, 0, 1024, 1024);
 	draw(renderTargetCamera, true);
 
 	// Render to screen
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, width(), height());
-	//glUniform1i(tex0UniformLoc, 3);
-	draw(camera, false);
+	glUniform1i(renderTextureUniformLoc, activeFramebuffer->renderTextureID);
+	draw(sceneCamera, false);
 }

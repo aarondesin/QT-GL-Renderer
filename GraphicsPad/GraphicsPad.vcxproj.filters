@@ -17,6 +17,8 @@
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Cubemap.h" />
+    <ClInclude Include="Framebuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="VertexShader.glsl" />
