@@ -1,3 +1,5 @@
+#Visual Studio
+*.ipch
 # Windows image file caches
 Thumbs.db
 ehthumbs.db

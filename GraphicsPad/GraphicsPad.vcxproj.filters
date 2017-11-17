@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Mainer.cpp" />
+    <ClCompile Include="MyGLWindow.cpp" />
+    <ClCompile Include="ShapeGenerator.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="OBJLoader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MyGLWindow.h" />
+    <ClInclude Include="Vertex.h" />
+    <ClInclude Include="ShapeData.h" />
+    <ClInclude Include="ShapeGenerator.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="OBJLoader.h" />
+    <ClInclude Include="Renderable.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="Texture.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="VertexShader.glsl" />
+    <Text Include="FragmentShader.glsl" />
+  </ItemGroup>
+</Project>
