@@ -190,10 +190,12 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Framebuffer.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MyGLWindow.h" />
     <ClInclude Include="OBJLoader.h" />
     <ClInclude Include="Renderable.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="ShapeData.h" />
     <ClInclude Include="ShapeGenerator.h" />
     <ClInclude Include="Cubemap.h" />

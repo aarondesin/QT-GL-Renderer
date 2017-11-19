@@ -13,6 +13,9 @@ struct ShapeData
 	GLuint numVertices;
 	GLushort* indices;
 	GLuint numIndices;
+	GLuint vertexArrayObjectID;
+	GLuint vertexBufferID;
+	GLuint indexBufferID;
 	glm::vec3 position;
 	glm::vec3 scale;
 	glm::vec3 rotation;

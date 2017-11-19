@@ -12,10 +12,10 @@ protected:
 	void MyGLWindow::mouseMoveEvent(QMouseEvent*);
 	void MyGLWindow::keyPressEvent(QKeyEvent* e);
 	void MyGLWindow::initScene();
-	void MyGLWindow::sendDataToOpenGL();
-	void MyGLWindow::updateScene();
-	void MyGLWindow::setupVertexArrays();
-	void MyGLWindow::addSphere();
+	//void MyGLWindow::sendDataToOpenGL();
+	void MyGLWindow::updateUniforms();
+	//void MyGLWindow::setupVertexArrays();
+	void MyGLWindow::spawnRenderable();
 	void MyGLWindow::draw(Camera cam, bool flipped);
 public:
 };

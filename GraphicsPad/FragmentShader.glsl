@@ -9,26 +9,36 @@ in vec3 throughTangent;
 in vec3 throughBitangent;
 
 uniform sampler2D diffuseTexture;
+uniform float diffuseStrength;
+
 uniform sampler2D normalMap;
+uniform float normalStrength;
+
 uniform samplerCube cubemap;
 uniform sampler2D renderTexture;
+
+uniform vec3 ambientLight;
+uniform vec3 lightPos;
+uniform vec3 diffuseColor;
+uniform vec3 specularColor;
+uniform float specularPower;
 
 in vec3 vertexModelPosition;
 in vec3 vertexPosition;
 
-uniform vec3 ambientLight;
+
 uniform float selfIlum;
-uniform vec3 lightPos;
+
 uniform vec3 camPos;
 
 const float falloffConstantCoef = 0.05;
 const float falloffLinearCoef = 0.5;
 const float falloffExpCoef = 0.05;
 
-uniform vec3 diffuseColor;
 
-const float specularPower = 100.0;
-uniform vec3 specularColor;
+
+
+
 
 uniform float useTexture;
 
