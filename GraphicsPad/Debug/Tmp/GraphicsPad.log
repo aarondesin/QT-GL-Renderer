@@ -1,5 +1,87 @@
-﻿  MyGLWindow.cpp
+﻿  Mainer.cpp
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\texture.h(12): error C3861: 'glActiveTexture': identifier not found
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\texture.h(19): error C2065: 'GL_CLAMP_TO_EDGE': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\texture.h(26): error C3861: 'glActiveTexture': identifier not found
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\texture.h(32): error C3861: 'glActiveTexture': identifier not found
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(18): error C2065: 'GL_TEXTURE_CUBE_MAP': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(19): error C3861: 'glActiveTexture': identifier not found
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(20): error C2065: 'GL_TEXTURE_CUBE_MAP_NEGATIVE_X': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(22): error C2065: 'GL_TEXTURE_CUBE_MAP_POSITIVE_X': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(24): error C2065: 'GL_TEXTURE_CUBE_MAP_NEGATIVE_Y': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(26): error C2065: 'GL_TEXTURE_CUBE_MAP_POSITIVE_Y': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(28): error C2065: 'GL_TEXTURE_CUBE_MAP_NEGATIVE_Z': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(30): error C2065: 'GL_TEXTURE_CUBE_MAP_POSITIVE_Z': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(33): error C2065: 'GL_CLAMP_TO_EDGE': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(37): error C3861: 'glActiveTexture': identifier not found
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(38): error C2065: 'GL_TEXTURE_CUBE_MAP': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(39): error C2065: 'GL_TEXTURE_CUBE_MAP': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(43): error C3861: 'glActiveTexture': identifier not found
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(44): error C2065: 'GL_TEXTURE_CUBE_MAP': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(44): error C2065: 'GL_TEXTURE_WRAP_R': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(45): error C2065: 'GL_TEXTURE_CUBE_MAP': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(46): error C2065: 'GL_TEXTURE_CUBE_MAP': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(17): error C3861: 'glGenFramebuffers': identifier not found
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(18): error C2065: 'GL_FRAMEBUFFER': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(18): error C3861: 'glBindFramebuffer': identifier not found
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(19): error C2065: 'GL_COLOR_ATTACHMENT0': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(20): error C2065: 'GL_COLOR_ATTACHMENT0': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(21): error C2065: 'GL_FRAMEBUFFER': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(21): error C2065: 'GL_COLOR_ATTACHMENT0': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(21): error C3861: 'glFramebufferTexture2D': identifier not found
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(23): error C2065: 'GL_FRAMEBUFFER': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(23): error C3861: 'glCheckFramebufferStatus': identifier not found
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(24): error C2065: 'GL_FRAMEBUFFER_COMPLETE': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(29): error C2065: 'GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(29): error C2131: expression did not evaluate to a constant
+  c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(29): note: failure was caused by non-constant arguments or reference to a non-constant symbol
+  c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(29): note: see usage of 'GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT'
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(32): error C2065: 'GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(32): error C2131: expression did not evaluate to a constant
+  c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(32): note: failure was caused by non-constant arguments or reference to a non-constant symbol
+  c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(32): note: see usage of 'GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER'
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(35): error C2065: 'GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(35): error C2131: expression did not evaluate to a constant
+  c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(35): note: failure was caused by non-constant arguments or reference to a non-constant symbol
+  c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(35): note: see usage of 'GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT'
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(38): error C2065: 'GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS': undeclared identifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(38): error C2131: expression did not evaluate to a constant
+  c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(38): note: failure was caused by non-constant arguments or reference to a non-constant symbol
+  c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(38): note: see usage of 'GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS'
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(18): error C3646: 'vertexBufferSize': unknown override specifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(18): error C2059: syntax error: '('
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(19): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(22): error C3646: 'indexBufferSize': unknown override specifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(22): error C2059: syntax error: '('
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(23): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
   Generating Code...
-  Skipping... (no relevant changes detected)
-  Mainer.cpp
-  GraphicsPad.vcxproj -> C:\Users\Aaron\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\Debug\GraphicsPad.exe
+  Compiling...
+  MyGLWindow.cpp
+  Generating Code...
+  Compiling...
+  ShapeGenerator.cpp
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(12): error C3646: 'numVertices': unknown override specifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(12): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(13): error C2143: syntax error: missing ';' before '*'
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(13): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(13): error C2238: unexpected token(s) preceding ';'
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(14): error C3646: 'numIndices': unknown override specifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(14): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(15): error C3646: 'vertexArrayObjectID': unknown override specifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(15): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(16): error C3646: 'vertexBufferID': unknown override specifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(16): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(17): error C3646: 'indexBufferID': unknown override specifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(17): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(18): error C3646: 'vertexBufferSize': unknown override specifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(18): error C2059: syntax error: '('
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(19): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(22): error C3646: 'indexBufferSize': unknown override specifier
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(22): error C2059: syntax error: '('
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(23): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(10): error C2614: 'ShapeData': illegal member initialization: 'numVertices' is not a base or member
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(10): error C2614: 'ShapeData': illegal member initialization: 'indices' is not a base or member
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(10): error C2614: 'ShapeData': illegal member initialization: 'numIndices' is not a base or member
+c:\users\aaron\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(10): fatal error C1903: unable to recover from previous error(s); stopping compilation
+  INTERNAL COMPILER ERROR in 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\bin\HostX86\x86\CL.exe'
+      Please choose the Technical Support command on the Visual C++
+      Help menu, or open the Technical Support help file for more information

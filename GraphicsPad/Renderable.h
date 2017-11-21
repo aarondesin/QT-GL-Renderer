@@ -10,7 +10,6 @@ public:
 	glm::vec3 position;
 	glm::vec3 scale;
 	glm::vec3 rotation;
-	//GLuint vertexBufferObjectID;
 	glm::mat4 getModelToWorldMatrix()
 	{
 		glm::mat4 translateMatrix = glm::translate(glm::mat4(), position);

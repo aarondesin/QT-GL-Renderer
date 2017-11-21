@@ -6,6 +6,7 @@
 #define BACK 4
 #define FORWARD 5
 
+using namespace std;
 
 struct Cubemap
 {

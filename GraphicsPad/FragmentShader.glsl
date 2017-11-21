@@ -8,11 +8,17 @@ in vec2 throughUV;
 in vec3 throughTangent;
 in vec3 throughBitangent;
 
+const float falloffConstantCoef = 0.05;
+const float falloffLinearCoef = 0.5;
+const float falloffExpCoef = 0.05;
+
 uniform sampler2D diffuseTexture;
 uniform float diffuseStrength;
 
 uniform sampler2D normalMap;
 uniform float normalStrength;
+
+uniform float emissionStrength;
 
 uniform samplerCube cubemap;
 uniform sampler2D renderTexture;
@@ -26,34 +32,14 @@ uniform float specularPower;
 in vec3 vertexModelPosition;
 in vec3 vertexPosition;
 
-
-uniform float selfIlum;
-
 uniform vec3 camPos;
-
-const float falloffConstantCoef = 0.05;
-const float falloffLinearCoef = 0.5;
-const float falloffExpCoef = 0.05;
-
-
-
-
-
-
-uniform float useTexture;
-
-
-uniform float useNormal;
-
 
 uniform float indexOfRefraction;
 
 uniform mat4 modelMatrix;
 
-
-uniform float useSkybox;
 uniform float reflectivity;
-uniform float fresnel;
+uniform float fresnelValue;
 
 void main()
 {
@@ -65,12 +51,11 @@ void main()
 	mat3 normalRotation = mat3(throughTangent, throughBitangent, throughNormal);
 	mat3 tangentToObject = normalRotation;
 	vec3 sampledNormalInWorldSpace = normalize(tangentToObject * sampledNormal);
-	vec3 normal = normalize(throughNormal + mix(vec3(0.0, 0.0, 0.0), sampledNormalInWorldSpace, useNormal));
+	vec3 normal = normalize(throughNormal + mix(vec3(0.0, 0.0, 0.0), sampledNormalInWorldSpace, normalStrength));
 
 	// Get texture color
 	vec4 texColor = texture(diffuseTexture, throughUV);
-	//vec4 texColor = texture(renderTexture, throughUV);
-	color = mix(color, texColor, useTexture);
+	color = mix(color, texColor, diffuseStrength);
 
 	// Attenuation values
 	float d = distance (lightPos, vertexPosition);
@@ -92,13 +77,9 @@ void main()
 	float specularValue = pow (clamp (dot (reflectedLightVec, camVec), 0.0, 1.0), specularPower);
 	vec4 specular = vec4((specularValue * specularColor), 1.0) * falloff;
 	
-	vec4 totalLight = mix (ambient + diffuse + specular, vec4(1.0, 1.0, 1.0, 1.0), selfIlum);
+	vec4 totalLight = mix (ambient + diffuse + specular, vec4(1.0, 1.0, 1.0, 1.0), emissionStrength);
 
 	color = totalLight * color;
-
-	// Cubemap
-	vec4 cubemapSample = texture(cubemap, normalize(vertexModelPosition));
-	color = mix (color, cubemapSample, useSkybox);
 
 	// Reflectivity
 	vec3 reflectedCamVec = normalize (reflect(-camVec, normal));
@@ -110,7 +91,7 @@ void main()
 	vec3 refractedCamVec = normalize(refract(-camVec, normal, indexOfRefraction));
 	vec4 fresnelSkyboxSample = texture(cubemap, refractedCamVec);
 	//vec4 fresnelLightSample = clamp(dot(-refractedCamVec, lightVec), 0.0, 1.0) * vec4(diffuseColor, 1.0);
-	color = mix  (color, clamp(fresnelSkyboxSample, 0.0, 1.0), fresnel);
+	color = mix  (color, clamp(fresnelSkyboxSample, 0.0, 1.0), fresnelValue);
 
 	// Final mix
 	outColor = color;

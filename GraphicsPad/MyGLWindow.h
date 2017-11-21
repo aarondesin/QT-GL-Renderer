@@ -3,6 +3,13 @@
 #include <QtOpenGL\qglwidget>
 #include <QtGui\qkeyevent>
 #include <Camera.h>
+#include <string>
+#include <Texture.h>
+#include <Cubemap.h>
+#include <Framebuffer.h>
+#include <ShapeData.h>
+#include <Renderable.h>
+using namespace std;
 
 class MyGLWindow : public QGLWidget
 {
@@ -17,7 +24,15 @@ protected:
 	//void MyGLWindow::setupVertexArrays();
 	void MyGLWindow::spawnRenderable();
 	void MyGLWindow::draw(Camera cam, bool flipped);
-public:
+	void MyGLWindow::checkErrors(string location);
+	QImage MyGLWindow::makeImage(string filename);
+	Texture MyGLWindow::makeTexture(string filename);
+	Cubemap MyGLWindow::makeCubemap(string filename);
+	Framebuffer MyGLWindow::makeFramebuffer(string filename, int width, int height);
+	void MyGLWindow::addGeometry(string name, ShapeData geometry);
+	void MyGLWindow::initMaterials();
+	void MyGLWindow::initGeometries();
+	void MyGLWindow::addRenderable(Renderable renderable);
 };
 
 #endif
