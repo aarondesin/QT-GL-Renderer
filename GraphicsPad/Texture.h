@@ -1,6 +1,10 @@
+//#include <GL/glew.h>
+
 #pragma once
 
-using namespace std;
+#define GL_CLAMP_TO_EDGE 0x812F
+
+//extern PFNGLACTIVETEXTUREPROC glActiveTexture;
 
 struct Texture
 {

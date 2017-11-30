@@ -1,7 +1,8 @@
+#pragma once
+
 #include <glm\glm.hpp>
 #include <ShapeData.h>
 
-#pragma once
 struct Light
 {
 public:

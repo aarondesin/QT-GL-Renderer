@@ -1,7 +1,8 @@
-#include <ShapeData.h>
-#include <Material.h>
-
 #pragma once
+
+#include "ShapeData.h"
+#include "Material.h"
+
 struct Renderable
 {
 public:

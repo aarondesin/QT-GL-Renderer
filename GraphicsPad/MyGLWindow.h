@@ -1,14 +1,18 @@
+#pragma once
+
 #ifndef MY_GL_WINDOW
 #define MY_GL_WINDOW
+
+
 #include <QtOpenGL\qglwidget>
 #include <QtGui\qkeyevent>
 #include <Camera.h>
 #include <string>
-#include <Texture.h>
-#include <Cubemap.h>
-#include <Framebuffer.h>
-#include <ShapeData.h>
-#include <Renderable.h>
+#include "Texture.h"
+#include "Cubemap.h"
+#include "Framebuffer.h"
+#include "ShapeData.h"
+#include "Renderable.h"
 using namespace std;
 
 class MyGLWindow : public QGLWidget

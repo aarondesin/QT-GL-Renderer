@@ -1,8 +1,12 @@
 #pragma once
-#include <GL\glew.h>
+//#include <GL/glew.h>
 #include <glm\glm.hpp>
 #include <glm\gtx\transform.hpp>
 #include <Vertex.h>
+
+typedef unsigned int GLuint;
+typedef unsigned short GLushort;
+typedef ptrdiff_t GLsizeiptr;
 
 struct ShapeData
 {

@@ -9,6 +9,8 @@ using glm::vec3;
 using glm::vec4;
 
 #define ushort GLushort
+typedef unsigned int GLuint;
+typedef unsigned short GLushort;
 #define PI 3.14159265359
 #define ARRAY_SIZE(ARRAY) sizeof(ARRAY)/VERTEX_BYTE_SIZE
 #define VERTEX_BYTE_SIZE sizeof(float) * 15

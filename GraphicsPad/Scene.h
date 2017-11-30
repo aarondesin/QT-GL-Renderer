@@ -1,9 +1,10 @@
+#pragma once
+
 #include <glm\glm.hpp>
 
-#include <Camera.h>
-#include <Renderable.h>
+#include "Camera.h"
+#include "Renderable.h"
 
-#pragma once
 struct Scene
 {
 public:

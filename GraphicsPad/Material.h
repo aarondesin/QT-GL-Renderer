@@ -1,8 +1,6 @@
 #pragma once
 
-#include <Texture.h>
-
-using namespace std;
+#include "Texture.h"
 
 struct Material 
 {
