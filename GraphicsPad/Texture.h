@@ -1,6 +1,9 @@
 #pragma once
 
+#include <iostream>
 #include <global.h>
+
+using namespace std;
 
 class Texture
 {
@@ -9,7 +12,6 @@ public:
 	static int getNextTextureID() { return nextTextureID++; }
 	Texture(int width, int height, GLenum format, const GLvoid* pixels)
 	{
-		
 		textureID = nextTextureID++;
 		glActiveTexture(GL_TEXTURE0 + textureID);
 
@@ -22,8 +24,14 @@ public:
 		setWrapMode(GL_CLAMP_TO_EDGE);
 		
 	}
-	Texture(QImage* image) : 
-		Texture (image->width(), image->height(), GL_RGBA, image->bits()){}
+	/*Texture(QImage* image) : 
+		Texture (image->width(), image->height(), GL_RGBA, image->bits())
+	{
+		if (image == NULL) 
+		{
+			cout << "NULL REFERENCE: Image is null!" << endl;
+		}
+	}*/
 	void setFilter(GLenum filter)
 	{
 		glActiveTexture(textureID);

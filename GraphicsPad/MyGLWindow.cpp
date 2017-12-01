@@ -97,18 +97,39 @@ QImage* MyGLWindow::makeImage(string filename)
 {
 	QString filenameAsQString = QString::fromStdString(filename + ".png");
 	QImage loadedImage = QImage(filenameAsQString, "png");
-	if (loadedImage.isNull()) cout << "Failed to load image \"" << filenameAsQString.constData() << "\"!" << endl;
-	QImage* image = &QGLWidget::convertToGLFormat(loadedImage);
-	images.insert(std::pair<string, QImage*>(filename, image));
+
+	if (loadedImage.isNull())
+	{
+		cout << "Failed to load image \"" << filenameAsQString.constData() << "\"!" << endl;
+		throw std::exception();
+	}
+
+	QImage image = QGLWidget::convertToGLFormat(loadedImage);
+	QImage* imagePtr = &image;
+
+	if (imagePtr == NULL) 
+	{
+		cout << "Failed to convert image \"" << filename << "\"!" << endl;
+		throw std::exception();
+	}
+
+	images.insert(std::pair<string, QImage*>(filename, imagePtr));
 	cout << "--IMAGE: " << filename << "--" << endl;
 	checkErrors("makeImage");
-	return image;
+	return imagePtr;
 }
 
 Texture* MyGLWindow::makeTexture(string filename)
 {
 	QImage* image = makeImage(filename);
-	Texture* texture = new Texture(image);
+
+	if (image == NULL)
+	{
+		cout << "NULL REFERENCE: Image is null!" << endl;
+		throw exception();
+	}
+
+	Texture* texture = new Texture(image->width(), image->height(), GL_RGBA, image->bits());
 	textures.insert(std::pair<string, Texture*>(filename, texture));
 	cout << "--TEXTURE (" << texture->getTextureID() << "): " << filename << "--" << endl;
 	MyGLWindow::checkErrors("makeTexture");
@@ -287,14 +308,14 @@ void MyGLWindow::updateUniforms()
 
 	// Update camera position
 	glUniform3f(cameraPosUniformLoc,
-		activeScene->activeCamera->getPosition().x,
-		activeScene->activeCamera->getPosition().y,
-		activeScene->activeCamera->getPosition().z);
+		activeScene->getActiveCamera()->getPosition().x,
+		activeScene->getActiveCamera()->getPosition().y,
+		activeScene->getActiveCamera()->getPosition().z);
 }
 
 void MyGLWindow::mouseMoveEvent(QMouseEvent* e)
 {
-	activeScene->activeCamera->mouseUpdate(glm::vec2(e->x(), e->y()));
+	activeScene->getActiveCamera()->mouseUpdate(glm::vec2(e->x(), e->y()));
 	repaint();
 }
 
@@ -338,22 +359,22 @@ void MyGLWindow::keyPressEvent(QKeyEvent* e)
 	switch (e->key())
 	{
 		case Qt::Key::Key_W:
-			activeScene->activeCamera->moveForward();
+			activeScene->getActiveCamera()->moveForward();
 			break;
 		case Qt::Key::Key_S:
-			activeScene->activeCamera->moveBackward();
+			activeScene->getActiveCamera()->moveBackward();
 			break;
 		case Qt::Key::Key_A:
-			activeScene->activeCamera->strafeLeft();
+			activeScene->getActiveCamera()->strafeLeft();
 			break;
 		case Qt::Key::Key_D:
-			activeScene->activeCamera->strafeRight();
+			activeScene->getActiveCamera()->strafeRight();
 			break;
 		case Qt::Key::Key_Q:
-			activeScene->activeCamera->moveDown();
+			activeScene->getActiveCamera()->moveDown();
 			break;
 		case Qt::Key::Key_E:
-			activeScene->activeCamera->moveUp();
+			activeScene->getActiveCamera()->moveUp();
 			break;
 		case Qt::Key::Key_Space:
 			spawnRenderable();
@@ -398,19 +419,19 @@ void MyGLWindow::initMaterials()
 	standardMaterial->specularPower = 100.0f;
 	materials.insert(std::pair<string, Material*>("standard", standardMaterial));
 
-	Material* flatMaterial;
+	Material* flatMaterial = new Material();
 	flatMaterial->diffuseStrength = 0.0f;
 	flatMaterial->normalStrength = 0.0f;
 	materials.insert(std::pair<string, Material*>("flat", flatMaterial));
 
-	Material* reflectiveMaterial;
+	Material* reflectiveMaterial = new Material();
 	reflectiveMaterial->diffuseStrength = 0.0f;
 	reflectiveMaterial->normal = textures["ShapeNormals"];
 	reflectiveMaterial->normalStrength = 1.0f;
 	reflectiveMaterial->reflectivity = 1.0f;
 	materials.insert(std::pair<string, Material*>("reflective", reflectiveMaterial));
 
-	Material* f2Material;
+	Material* f2Material = new Material();
 	f2Material->diffuseStrength = 1.0f;
 	f2Material->normal = textures["F2_Normal"];
 	f2Material->normalStrength = 1.0f;
@@ -439,12 +460,12 @@ void MyGLWindow::initScene()
 	activeScene->ambientLight = glm::vec3(1.0f, 1.0f, 1.0f);
 	activeScene->activeLight->position = glm::vec3(0.0f, 5.0f, 0.0f);
 
-	Renderable* skybox;
+	Renderable* skybox = new Renderable();
 	skybox->geometry = geometries["cube"];
 	skybox->scale = glm::vec3(100.0f, 100.0f, 100.0f);
 	activeScene->skybox = skybox;
 
-	Renderable* cube;
+	Renderable* cube = new Renderable();
 	cube->geometry = geometries["cube"];
 	cube->material = materials["standard"];
 	cube->position = glm::vec3(0.0f, 2.5f, 0.0f);
@@ -452,7 +473,7 @@ void MyGLWindow::initScene()
 	cube->scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	activeScene->addRenderable(cube);
 
-	Renderable* sphere;
+	Renderable* sphere = new Renderable();
 	sphere->geometry = geometries["sphere"];
 	sphere->material = materials["flat"];
 	sphere->position = glm::vec3(3.0f, 2.0f, 1.0f);
@@ -625,11 +646,11 @@ void MyGLWindow::initializeGL()
 
 void drawSkybox(Camera cam, bool flipped)
 {
-	glm::vec3 camPosBackup = activeScene->activeCamera->getPosition();
+	glm::vec3 camPosBackup = activeScene->getActiveCamera()->getPosition();
 	GLuint vaoID = activeScene->skybox->geometry->vertexArrayObjectID;
 	glBindVertexArray(vaoID);
 
-	activeScene->activeCamera->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	activeScene->getActiveCamera()->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	float scaleVal = flipped ? 1.0f : -1.0f;
 	glm::mat4 camMat = cam.getWorldToViewMatrix() * glm::scale(glm::vec3(1.0f, scaleVal, 1.0f));
 	glm::mat4 modelMat = glm::mat4();
@@ -640,7 +661,7 @@ void drawSkybox(Camera cam, bool flipped)
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	activeScene->activeCamera->setPosition(camPosBackup);
+	activeScene->getActiveCamera()->setPosition(camPosBackup);
 }
 
 void MyGLWindow::draw(Camera cam, bool flipped)
@@ -651,10 +672,10 @@ void MyGLWindow::draw(Camera cam, bool flipped)
 
 	// View to projection
 	glm::mat4 projMat = glm::perspective(
-		activeScene->activeCamera->fov,
+		activeScene->getActiveCamera()->fov,
 		((float)width() / (float)height()),
-		activeScene->activeCamera->clipNear,
-		activeScene->activeCamera->clipFar);
+		activeScene->getActiveCamera()->clipNear,
+		activeScene->getActiveCamera()->clipFar);
 
 	drawSkybox(cam, false);
 
@@ -689,12 +710,12 @@ void MyGLWindow::paintGL()
 		// Render to framebuffer
 		glBindFramebuffer(GL_FRAMEBUFFER, activeFramebuffer->framebufferObjectID);
 		glViewport(0, 0, 1024, 1024);
-		draw(activeScene->renderTargetCamera, true);
+		draw(*activeScene->getRenderTargetCamera(), true);
 	}
 
 	// Render to screen
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, width(), height());
 	//glUniform1i(renderTextureUniformLoc, activeFramebuffer->renderTextureID);
-	draw(activeScene->sceneCamera, false);
+	draw(*activeScene->getActiveCamera(), false);
 }

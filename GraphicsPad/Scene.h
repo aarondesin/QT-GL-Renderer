@@ -11,9 +11,6 @@ struct Scene
 public:
 	Scene(string sceneName) { name = sceneName; }
 	string name;
-	Camera sceneCamera;
-	Camera renderTargetCamera;
-	Camera* activeCamera = &sceneCamera;
 	Light diffuseLight;
 	Light* activeLight = &diffuseLight;
 	Renderable* skybox;
@@ -24,6 +21,11 @@ public:
 	{
 		activeCamera = (activeCamera == &sceneCamera ? &renderTargetCamera : &sceneCamera);
 	}
+	Camera* getActiveCamera() { return *activeCamera; }
+	Camera* getRenderTargetCamera() { return renderTargetCamera; }
 protected:
 	vector<Renderable*> renderables;
+	Camera* sceneCamera;
+	Camera* renderTargetCamera;
+	Camera** activeCamera = &sceneCamera;
 };
