@@ -1,10 +1,10 @@
 ﻿  MyGLWindow.cpp
-  Note: including file: C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\glew\include\gl\glew.h
-  Note: including file:  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\GL/glu.h
-  Note: including file:   C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\winapifamily.h
-  Note: including file:    C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\winpackagefamily.h
-  Note: including file:   C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\GL/gl.h
-  Note: including file: C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\MyGLWindow.h
+  Note: including file: C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\global.h
+  Note: including file:  C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\glew\include\GL/glew.h
+  Note: including file:   C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\GL/glu.h
+  Note: including file:    C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\winapifamily.h
+  Note: including file:     C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\winpackagefamily.h
+  Note: including file:    C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\GL/gl.h
   Note: including file:  C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtOpenGL\qglwidget
   Note: including file:   c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\qt\include\qtopengl\qgl.h
   Note: including file:    C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qwidget.h
@@ -404,6 +404,7 @@
   Note: including file:    C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qdrag.h
   Note: including file:    C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qset.h
   Note: including file:    C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qfile.h
+  Note: including file: C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\MyGLWindow.h
   Note: including file:  C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\Camera.h
   Note: including file:   C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\glm\glm\glm.hpp
   Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core/_fixes.hpp
@@ -477,8 +478,6 @@
   Note: including file:  c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\Cubemap.h
   Note: including file:  c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\Framebuffer.h
   Note: including file:   C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\iostream
-c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(12): error C2365: '__glewGenFramebuffers': redefinition; previous definition was 'data variable'
-  c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glew\include\gl\glew.h(13819): note: see declaration of '__glewGenFramebuffers'
   Note: including file:  c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\ShapeData.h
   Note: including file:   C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\glm\glm\glm.hpp
   Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core/_fixes.hpp
@@ -507,6 +506,376 @@ c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\frame
   Note: including file: c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\Scene.h
   Note: including file:  C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\glm\glm\glm.hpp
   Note: including file:   c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core/_fixes.hpp
+  Generating Code...
+  Compiling...
+  ShapeGenerator.cpp
+  Note: including file: C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\ShapeGenerator.h
+  Note: including file:  C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\glm\glm\glm.hpp
+  Note: including file:   c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core/_fixes.hpp
+  Note: including file:    C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\cmath
+  Note: including file:     C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\yvals.h
+  Note: including file:      C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xkeycheck.h
+  Note: including file:      C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\crtdefs.h
+  Note: including file:       C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
+  Note: including file:        C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\sal.h
+  Note: including file:         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\ConcurrencySal.h
+  Note: including file:        C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vadefs.h
+  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt.h
+  Note: including file:        C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
+  Note: including file:      C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\use_ansi.h
+  Note: including file:     C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\math.h
+  Note: including file:     C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtgmath.h
+  Note: including file:      C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtr1common
+  Note: including file:       C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\cstdlib
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\stdlib.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_malloc.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_search.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\stddef.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_wstdlib.h
+  Note: including file:         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\limits.h
+  Note: including file:          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
+  Note: including file:   C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\climits
+  Note: including file:   C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\cfloat
+  Note: including file:    C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\float.h
+  Note: including file:   C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\limits
+  Note: including file:    C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\ymath.h
+  Note: including file:    C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\cwchar
+  Note: including file:     C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\wchar.h
+  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_memcpy_s.h
+  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\errno.h
+  Note: including file:       C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime_string.h
+  Note: including file:        C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
+  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_wconio.h
+  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_stdio_config.h
+  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_wctype.h
+  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_wdirect.h
+  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_wio.h
+  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_share.h
+  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_wprocess.h
+  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_wstdio.h
+  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_wstring.h
+  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_wtime.h
+  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\sys/stat.h
+  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\sys/types.h
+  Note: including file:    C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xstddef
+  Note: including file:     C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\cstddef
+  Note: including file:     C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\initializer_list
+  Note: including file:   C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\cstdio
+  Note: including file:    C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\stdio.h
+  Note: including file:   c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core/setup.hpp
+  Note: including file:   c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/_detail.hpp
+  Note: including file:    C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\cassert
+  Note: including file:     C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\assert.h
+  Note: including file:   c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/type.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_half.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_half.inl
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_float.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_int.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_gentype.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_size.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_vec1.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_vec.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\_swizzle.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\_swizzle_func.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_vec1.inl
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_vec2.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_vec2.inl
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_vec3.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_vec3.inl
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_vec4.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_vec4.inl
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat2x2.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat2x2.inl
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat2x3.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat2x3.inl
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat2x4.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat2x4.inl
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat3x2.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat3x2.inl
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat3x3.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat3x3.inl
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat3x4.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat3x4.inl
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat4x2.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat4x2.inl
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat4x3.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat4x3.inl
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat4x4.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat4x4.inl
+  Note: including file:   c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_trigonometric.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_trigonometric.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\_vectorize.hpp
+  Note: including file:   c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_exponential.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_exponential.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\_vectorize.hpp
+  Note: including file:   c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_common.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\_fixes.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_common.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\_vectorize.hpp
+  Note: including file:   c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_packing.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_packing.inl
+  Note: including file:   c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_geometric.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_geometric.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\_vectorize.hpp
+  Note: including file:   c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_matrix.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_matrix.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\_vectorize.hpp
+  Note: including file:   c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_vector_relational.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_vector_relational.inl
+  Note: including file:   c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_integer.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_integer.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\_vectorize.hpp
+  Note: including file:     C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\intrin.h
+  Note: including file:      C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
+  Note: including file:      C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\setjmp.h
+  Note: including file:       C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
+  Note: including file:      C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\immintrin.h
+  Note: including file:       C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\wmmintrin.h
+  Note: including file:        C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\nmmintrin.h
+  Note: including file:         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\smmintrin.h
+  Note: including file:          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tmmintrin.h
+  Note: including file:           C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\pmmintrin.h
+  Note: including file:            C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\emmintrin.h
+  Note: including file:             C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmmintrin.h
+  Note: including file:              C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\mmintrin.h
+  Note: including file:              C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\malloc.h
+  Note: including file:      C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\ammintrin.h
+  Note: including file:      C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\mm3dnow.h
+  Note: including file:       C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
+  Note: including file:   c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_noise.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_noise.inl
+  Note: including file:  C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\ShapeData.h
+  Note: including file:   C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\glm\glm\glm.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core/_fixes.hpp
+  Note: including file:   C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\glm\glm\gtx\transform.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\gtx\../glm.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core/_fixes.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\gtx\../gtc/matrix_transform.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\gtc\../glm.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core/_fixes.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\gtc\matrix_transform.inl
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\gtx\transform.inl
+  Note: including file:   C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\Vertex.h
+  Note: including file:    C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\glm\glm\glm.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core/_fixes.hpp
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(268): warning C4018: '<': signed/unsigned mismatch
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(270): warning C4018: '<': signed/unsigned mismatch
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(294): warning C4018: '<': signed/unsigned mismatch
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(296): warning C4018: '<': signed/unsigned mismatch
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(318): warning C4018: '<': signed/unsigned mismatch
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(321): warning C4018: '<': signed/unsigned mismatch
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(330): warning C4146: unary minus operator applied to unsigned type, result still unsigned
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(385): warning C4018: '<': signed/unsigned mismatch
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(389): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(391): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(395): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(397): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(401): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(403): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(407): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(409): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(606): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(607): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(608): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapegenerator.cpp(621): warning C4244: 'initializing': conversion from 'GLuint' to 'float', possible loss of data
+  Note: including file: c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\TeapotData.h
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\teapotdata.h(202): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\teapotdata.h(202): warning C4305: 'initializing': truncation from 'double' to 'float'
+  OBJLoader.cpp
+  Note: including file: c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\OBJLoader.h
+  Note: including file:  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\iostream
+  Note: including file:   C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\istream
+  Note: including file:    C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\ostream
+  Note: including file:     C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\ios
+  Note: including file:      C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xlocnum
+  Note: including file:       C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\climits
+  Note: including file:        C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\yvals.h
+  Note: including file:         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xkeycheck.h
+  Note: including file:         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\crtdefs.h
+  Note: including file:          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
+  Note: including file:           C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\sal.h
+  Note: including file:            C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\ConcurrencySal.h
+  Note: including file:           C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vadefs.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt.h
+  Note: including file:           C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
+  Note: including file:         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\use_ansi.h
+  Note: including file:        C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\limits.h
+  Note: including file:         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
+  Note: including file:       C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\cmath
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\math.h
+  Note: including file:        C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtgmath.h
+  Note: including file:         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtr1common
+  Note: including file:          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\cstdlib
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\stdlib.h
+  Note: including file:            C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_malloc.h
+  Note: including file:            C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_search.h
+  Note: including file:             C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\stddef.h
+  Note: including file:            C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_wstdlib.h
+  Note: including file:       C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\cstdio
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\stdio.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_wstdio.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_stdio_config.h
+  Note: including file:       C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\streambuf
+  Note: including file:        C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xiosbase
+  Note: including file:         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xlocale
+  Note: including file:          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\cstring
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\string.h
+  Note: including file:            C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_memory.h
+  Note: including file:             C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_memcpy_s.h
+  Note: including file:              C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\errno.h
+  Note: including file:              C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime_string.h
+  Note: including file:               C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
+  Note: including file:            C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_wstring.h
+  Note: including file:          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdexcept
+  Note: including file:           C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\exception
+  Note: including file:            C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\type_traits
+  Note: including file:             C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xstddef
+  Note: including file:              C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\cstddef
+  Note: including file:              C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\initializer_list
+  Note: including file:            C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\malloc.h
+  Note: including file:            C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime_exception.h
+  Note: including file:             C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\eh.h
+  Note: including file:              C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_terminate.h
+  Note: including file:           C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xstring
+  Note: including file:            C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory0
+  Note: including file:             C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\cstdint
+  Note: including file:              C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdint.h
+  Note: including file:               C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
+  Note: including file:             C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\limits
+  Note: including file:              C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\ymath.h
+  Note: including file:              C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\cfloat
+  Note: including file:               C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\float.h
+  Note: including file:              C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\cwchar
+  Note: including file:               C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\wchar.h
+  Note: including file:                C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_wconio.h
+  Note: including file:                C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_wctype.h
+  Note: including file:                C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_wdirect.h
+  Note: including file:                C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_wio.h
+  Note: including file:                 C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_share.h
+  Note: including file:                C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_wprocess.h
+  Note: including file:                C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\corecrt_wtime.h
+  Note: including file:                C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\sys/stat.h
+  Note: including file:                 C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\sys/types.h
+  Note: including file:             C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\new
+  Note: including file:              C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime_new.h
+  Note: including file:               C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
+  Note: including file:             C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xutility
+  Note: including file:              C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\utility
+  Note: including file:               C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\iosfwd
+  Note: including file:                C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\crtdbg.h
+  Note: including file:                 C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime_new_debug.h
+  Note: including file:             C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xatomic0.h
+  Note: including file:             C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\intrin.h
+  Note: including file:              C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
+  Note: including file:              C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\setjmp.h
+  Note: including file:               C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
+  Note: including file:              C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\immintrin.h
+  Note: including file:               C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\wmmintrin.h
+  Note: including file:                C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\nmmintrin.h
+  Note: including file:                 C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\smmintrin.h
+  Note: including file:                  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tmmintrin.h
+  Note: including file:                   C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\pmmintrin.h
+  Note: including file:                    C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\emmintrin.h
+  Note: including file:                     C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmmintrin.h
+  Note: including file:                      C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\mmintrin.h
+  Note: including file:              C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\ammintrin.h
+  Note: including file:              C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\mm3dnow.h
+  Note: including file:               C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
+  Note: including file:          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\typeinfo
+  Note: including file:           C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime_typeinfo.h
+  Note: including file:            C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
+  Note: including file:          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xlocinfo
+  Note: including file:           C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xlocinfo.h
+  Note: including file:            C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\ctype.h
+  Note: including file:            C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\locale.h
+  Note: including file:          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xfacet
+  Note: including file:         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\system_error
+  Note: including file:          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\cerrno
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\share.h
+  Note: including file:  C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\ShapeData.h
+  Note: including file:   C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\glm\glm\glm.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core/_fixes.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core/setup.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/_detail.hpp
+  Note: including file:     C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\cassert
+  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt\assert.h
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/type.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_half.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_half.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_float.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_int.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_gentype.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_size.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_vec1.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_vec.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\_swizzle.hpp
+  Note: including file:       c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\_swizzle_func.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_vec1.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_vec2.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_vec2.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_vec3.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_vec3.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_vec4.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_vec4.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat2x2.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat2x2.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat2x3.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat2x3.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat2x4.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat2x4.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat3x2.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat3x2.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat3x3.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat3x3.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat3x4.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat3x4.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat4x2.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat4x2.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat4x3.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat4x3.inl
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat4x4.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\type_mat4x4.inl
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_trigonometric.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_trigonometric.inl
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\_vectorize.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_exponential.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_exponential.inl
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\_vectorize.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_common.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\_fixes.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_common.inl
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\_vectorize.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_packing.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_packing.inl
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_geometric.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_geometric.inl
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\_vectorize.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_matrix.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_matrix.inl
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\_vectorize.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_vector_relational.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_vector_relational.inl
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_integer.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_integer.inl
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\_vectorize.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_noise.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_noise.inl
+  Note: including file:   C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\glm\glm\gtx\transform.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\gtx\../glm.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core/_fixes.hpp
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\gtx\../gtc/matrix_transform.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\gtc\../glm.hpp
+  Note: including file:      c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core/_fixes.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\gtc\matrix_transform.inl
+  Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\gtx\transform.inl
+  Note: including file:   C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\Vertex.h
+  Note: including file:    C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\glm\glm\glm.hpp
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core/_fixes.hpp
+  Note: including file: C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\string
+  Note: including file: C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\list
+  Note: including file:  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory
   Mainer.cpp
   Note: including file: C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\Qt\qapplication.h
   Note: including file:  C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qcoreapplication.h
@@ -650,269 +1019,6 @@ c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\frame
   Note: including file:  C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qsize.h
   Note: including file:  C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qcursor.h
   Note: including file: C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\MyGLWindow.h
-  Note: including file:  C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtOpenGL\qglwidget
-  Note: including file:   c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\qt\include\qtopengl\qgl.h
-  Note: including file:    C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qwidget.h
-  Note: including file:     C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qmargins.h
-  Note: including file:     C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qpaintdevice.h
-  Note: including file:      C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qrect.h
-  Note: including file:     C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qpalette.h
-  Note: including file:      C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qcolor.h
-  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qrgb.h
-  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qstringlist.h
-  Note: including file:        C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qdatastream.h
-  Note: including file:         C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qiodevice.h
-  Note: including file:        C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qregexp.h
-  Note: including file:        C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qstringmatcher.h
-  Note: including file:      C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qbrush.h
-  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qpair.h
-  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qvector.h
-  Note: including file:        C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector
-  Note: including file:        C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/QPointF
-  Note: including file:        C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/QPoint
-  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qmatrix.h
-  Note: including file:        C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qpolygon.h
-  Note: including file:        C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qregion.h
-  Note: including file:        C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qline.h
-  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qtransform.h
-  Note: including file:        C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qpainterpath.h
-  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qimage.h
-  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qpixmap.h
-  Note: including file:        C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qsharedpointer.h
-  Note: including file:         C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qshareddata.h
-  Note: including file:         C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qsharedpointer_impl.h
-  Note: including file:     C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qfont.h
-  Note: including file:     C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qfontmetrics.h
-  Note: including file:     C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qfontinfo.h
-  Note: including file:     C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qsizepolicy.h
-  Note: including file:     C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qkeysequence.h
-  Note: including file:    C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qpaintengine.h
-  Note: including file:     C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qpainter.h
-  Note: including file:      C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qtextoption.h
-  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qmetatype.h
-  Note: including file:      C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qdrawutil.h
-  Note: including file:      C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qpen.h
-  Note: including file:    C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtOpenGL/qglcolormap.h
-  Note: including file:    C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qmap.h
-  Note: including file:     C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map
-  Note: including file:      C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple
-  Note: including file:      C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree
-  Note: including file:    C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qt_windows.h
-  Note: including file:     C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\windows.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\winapifamily.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\winpackagefamily.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\sdkddkver.h
-  Note: including file:      C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\excpt.h
-  Note: including file:       C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\windef.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\minwindef.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\specstrings.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\specstrings_strict.h
-  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\specstrings_undef.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\driverspecs.h
-  Note: including file:          c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\sdv_driverspecs.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winnt.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\kernelspecs.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\basetsd.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\guiddef.h
-  Note: including file:         c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\pshpack4.h
-  Note: including file:         c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\poppack.h
-  Note: including file:         c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\pshpack4.h
-  Note: including file:         c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\poppack.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack4.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:         c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\pshpack4.h
-  Note: including file:         c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\pshpack2.h
-  Note: including file:         c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\poppack.h
-  Note: including file:         c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\pshpack2.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack2.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:         c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\poppack.h
-  Note: including file:         c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\pshpack8.h
-  Note: including file:         c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\poppack.h
-  Note: including file:         c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\poppack.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\apiset.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\ktmtypes.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winbase.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\apisetcconv.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\minwinbase.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\processenv.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\fileapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\debugapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\utilapiset.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\handleapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\errhandlingapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\fibersapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\namedpipeapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\profileapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\heapapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\ioapiset.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\synchapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\interlockedapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\processthreadsapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\sysinfoapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\memoryapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\enclaveapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\threadpoollegacyapiset.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\threadpoolapiset.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\jobapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\jobapi2.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\wow64apiset.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\libloaderapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\securitybaseapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\namespaceapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\systemtopologyapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\processtopologyapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\securityappcontainer.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\realtimeapiset.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\winerror.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\timezoneapi.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\wingdi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack2.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack2.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack4.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack4.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winuser.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack2.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\tvout.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winnls.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\datetimeapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\stringapiset.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winnls.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\wincon.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\consoleapi.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winver.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\verrsrc.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winreg.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\reason.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winnetwk.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\wnnc.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\cderr.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\dde.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\ddeml.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\dlgs.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\lzexpand.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmsystem.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmsyscom.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mciapi.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmsyscom.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmiscapi.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmsyscom.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmiscapi2.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmsyscom.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\playsoundapi.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmsyscom.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmeapi.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmsyscom.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\timeapi.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmsyscom.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\joystickapi.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmsyscom.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\nb30.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\rpc.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\rpcdce.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\rpcdcep.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\rpcnsi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\rpcnterr.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\rpcasync.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\shellapi.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winperf.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack8.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winsock.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\inaddr.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\wincrypt.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\bcrypt.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\ncrypt.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\dpapi.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winefs.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winscard.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\wtypes.h
-  Note: including file:        c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\rpcndr.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack8.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\rpcnsip.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\rpcsal.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:        c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\wtypesbase.h
-  Note: including file:         c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\guiddef.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winioctl.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\winsmcrd.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winspool.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\prsht.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack4.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\ole2.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack8.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\objbase.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack8.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\combaseapi.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack8.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\unknwnbase.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\objidlbase.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\guiddef.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\cguid.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\coml2api.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\objidl.h
-  Note: including file:          c:\program files (x86)\windows kits\10\include\10.0.10586.0\um\unknwn.h
-  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\propidlbase.h
-  Note: including file:          c:\program files (x86)\windows kits\10\include\10.0.10586.0\um\oaidl.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\urlmon.h
-  Note: including file:         c:\program files (x86)\windows kits\10\include\10.0.10586.0\um\oleidl.h
-  Note: including file:         c:\program files (x86)\windows kits\10\include\10.0.10586.0\um\servprov.h
-  Note: including file:         c:\program files (x86)\windows kits\10\include\10.0.10586.0\um\msxml.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\propidl.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\oleauto.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack8.h
-  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\commdlg.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\prsht.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\stralign.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winsvc.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mcx.h
-  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\imm.h
-  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\ime_cmodes.h
-  Note: including file:    C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\GL/gl.h
-  Note: including file:  C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui\qkeyevent
-  Note: including file:   c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\qt\include\qtgui\qevent.h
-  Note: including file:    C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qmime.h
-  Note: including file:     C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qmimedata.h
-  Note: including file:      C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qvariant.h
-  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qhash.h
-  Note: including file:    C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qdrag.h
-  Note: including file:    C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qset.h
-  Note: including file:    C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qfile.h
   Note: including file:  C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\Camera.h
   Note: including file:   C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\glm\glm\glm.hpp
   Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core/_fixes.hpp
@@ -983,19 +1089,276 @@ c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\frame
   Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\./core/func_noise.hpp
   Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core\func_noise.inl
   Note: including file:  c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\Texture.h
-c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\texture.h(16): error C3861: 'glActiveTexture': identifier not found
-c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\texture.h(30): error C3861: 'glActiveTexture': identifier not found
-c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\texture.h(36): error C3861: 'glActiveTexture': identifier not found
+  Note: including file:   C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\global.h
+  Note: including file:    C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\glew\include\GL/glew.h
+  Note: including file:     C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\GL/glu.h
+  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\winapifamily.h
+  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\winpackagefamily.h
+  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\GL/gl.h
+  Note: including file:    C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtOpenGL\qglwidget
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\qt\include\qtopengl\qgl.h
+  Note: including file:      C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qwidget.h
+  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qmargins.h
+  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qpaintdevice.h
+  Note: including file:        C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qrect.h
+  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qpalette.h
+  Note: including file:        C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qcolor.h
+  Note: including file:         C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qrgb.h
+  Note: including file:         C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qstringlist.h
+  Note: including file:          C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qdatastream.h
+  Note: including file:           C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qiodevice.h
+  Note: including file:          C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qregexp.h
+  Note: including file:          C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qstringmatcher.h
+  Note: including file:        C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qbrush.h
+  Note: including file:         C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qpair.h
+  Note: including file:         C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qvector.h
+  Note: including file:          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector
+  Note: including file:          C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/QPointF
+  Note: including file:          C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/QPoint
+  Note: including file:         C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qmatrix.h
+  Note: including file:          C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qpolygon.h
+  Note: including file:          C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qregion.h
+  Note: including file:          C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qline.h
+  Note: including file:         C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qtransform.h
+  Note: including file:          C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qpainterpath.h
+  Note: including file:         C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qimage.h
+  Note: including file:         C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qpixmap.h
+  Note: including file:          C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qsharedpointer.h
+  Note: including file:           C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qshareddata.h
+  Note: including file:           C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qsharedpointer_impl.h
+  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qfont.h
+  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qfontmetrics.h
+  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qfontinfo.h
+  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qsizepolicy.h
+  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qkeysequence.h
+  Note: including file:      C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qpaintengine.h
+  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qpainter.h
+  Note: including file:        C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qtextoption.h
+  Note: including file:         C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qmetatype.h
+  Note: including file:        C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qdrawutil.h
+  Note: including file:        C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qpen.h
+  Note: including file:      C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtOpenGL/qglcolormap.h
+  Note: including file:      C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qmap.h
+  Note: including file:       C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map
+  Note: including file:        C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple
+  Note: including file:        C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree
+  Note: including file:      C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qt_windows.h
+  Note: including file:       C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\windows.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\sdkddkver.h
+  Note: including file:        C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\excpt.h
+  Note: including file:         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vcruntime.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\windef.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\minwindef.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\specstrings.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\specstrings_strict.h
+  Note: including file:            C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\specstrings_undef.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\driverspecs.h
+  Note: including file:            c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\sdv_driverspecs.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winnt.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\kernelspecs.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\basetsd.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\guiddef.h
+  Note: including file:           c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\pshpack4.h
+  Note: including file:           c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\poppack.h
+  Note: including file:           c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\pshpack4.h
+  Note: including file:           c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\poppack.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack4.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:           c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\pshpack4.h
+  Note: including file:           c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\pshpack2.h
+  Note: including file:           c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\poppack.h
+  Note: including file:           c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\pshpack2.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack2.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:           c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\poppack.h
+  Note: including file:           c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\pshpack8.h
+  Note: including file:           c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\poppack.h
+  Note: including file:           c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\poppack.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\apiset.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\ktmtypes.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winbase.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\apisetcconv.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\minwinbase.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\processenv.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\fileapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\debugapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\utilapiset.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\handleapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\errhandlingapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\fibersapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\namedpipeapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\profileapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\heapapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\ioapiset.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\synchapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\interlockedapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\processthreadsapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\sysinfoapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\memoryapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\enclaveapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\threadpoollegacyapiset.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\threadpoolapiset.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\jobapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\jobapi2.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\wow64apiset.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\libloaderapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\securitybaseapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\namespaceapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\systemtopologyapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\processtopologyapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\securityappcontainer.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\realtimeapiset.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\winerror.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\timezoneapi.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\wingdi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack2.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack2.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack4.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack4.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winuser.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack2.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\tvout.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winnls.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\datetimeapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\stringapiset.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winnls.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\wincon.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\consoleapi.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winver.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\verrsrc.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winreg.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\reason.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winnetwk.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\wnnc.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\cderr.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\dde.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\ddeml.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\dlgs.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\lzexpand.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmsystem.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmsyscom.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mciapi.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmsyscom.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmiscapi.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmsyscom.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmiscapi2.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmsyscom.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\playsoundapi.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmsyscom.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmeapi.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmsyscom.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\timeapi.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmsyscom.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\joystickapi.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mmsyscom.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\nb30.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\rpc.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\rpcdce.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\rpcdcep.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\rpcnsi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\rpcnterr.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\rpcasync.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\shellapi.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winperf.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack8.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winsock.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\inaddr.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\wincrypt.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\bcrypt.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\ncrypt.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\dpapi.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winefs.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winscard.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\wtypes.h
+  Note: including file:          c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\rpcndr.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack8.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\rpcnsip.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\rpcsal.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:          c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\wtypesbase.h
+  Note: including file:           c:\program files (x86)\windows kits\10\include\10.0.10586.0\shared\guiddef.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winioctl.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\winsmcrd.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winspool.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\prsht.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack4.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\ole2.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack8.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\objbase.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack8.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\combaseapi.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack8.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\unknwnbase.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\objidlbase.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\guiddef.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\cguid.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\coml2api.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\objidl.h
+  Note: including file:            c:\program files (x86)\windows kits\10\include\10.0.10586.0\um\unknwn.h
+  Note: including file:           C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\propidlbase.h
+  Note: including file:            c:\program files (x86)\windows kits\10\include\10.0.10586.0\um\oaidl.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\urlmon.h
+  Note: including file:           c:\program files (x86)\windows kits\10\include\10.0.10586.0\um\oleidl.h
+  Note: including file:           c:\program files (x86)\windows kits\10\include\10.0.10586.0\um\servprov.h
+  Note: including file:           c:\program files (x86)\windows kits\10\include\10.0.10586.0\um\msxml.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\propidl.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\oleauto.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack8.h
+  Note: including file:          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\commdlg.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\prsht.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\pshpack1.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\poppack.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\stralign.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\winsvc.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\mcx.h
+  Note: including file:        C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\imm.h
+  Note: including file:         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\ime_cmodes.h
+  Note: including file:      C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um\GL/gl.h
+  Note: including file:    C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui\qkeyevent
+  Note: including file:     c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\qt\include\qtgui\qevent.h
+  Note: including file:      C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qmime.h
+  Note: including file:       C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qmimedata.h
+  Note: including file:        C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qvariant.h
+  Note: including file:         C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qhash.h
+  Note: including file:      C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtGui/qdrag.h
+  Note: including file:      C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qset.h
+  Note: including file:      C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\Qt\include\QtCore/qfile.h
   Note: including file:  c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\Cubemap.h
-c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(30): error C3861: 'glActiveTexture': identifier not found
-c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(48): error C3861: 'glActiveTexture': identifier not found
-c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\cubemap.h(54): error C3861: 'glActiveTexture': identifier not found
   Note: including file:  c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\Framebuffer.h
   Note: including file:   C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\iostream
-c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(12): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(12): error C2146: syntax error: missing ';' before identifier 'glGenFramebuffers'
-c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(27): error C3861: 'glBindFramebuffer': identifier not found
-c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\framebuffer.h(30): error C3861: 'glFramebufferTexture2D': identifier not found
   Note: including file:  c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\ShapeData.h
   Note: including file:   C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\Middleware\glm\glm\glm.hpp
   Note: including file:    c:\users\u1088224\documents\github\adesin_shaders_finalproject\middleware\glm\glm\core/_fixes.hpp
@@ -1013,3 +1376,6 @@ c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\frame
   Note: including file:  c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\Renderable.h
   Note: including file:   c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\Material.h
   Generating Code...
+     Creating library C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\Debug\GraphicsPad.lib and object C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\Debug\GraphicsPad.exp
+  GraphicsPad.vcxproj -> C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\Debug\GraphicsPad.exe
+  GraphicsPad.vcxproj -> C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\Debug\GraphicsPad.pdb (Full PDB)

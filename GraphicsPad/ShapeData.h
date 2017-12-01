@@ -1,5 +1,4 @@
 #pragma once
-//#include <GL/glew.h>
 #include <glm\glm.hpp>
 #include <glm\gtx\transform.hpp>
 #include <Vertex.h>

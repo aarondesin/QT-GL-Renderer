@@ -1,18 +1,11 @@
 #pragma once
 
-
-
+#include <global.h>
 #include <iostream>
+//#include <GLFunctions.h>
 
-#define GL_COLOR_ATTACHMENT0 0x8CE0
-#define GL_FRAMEBUFFER 0x8D40
 
-//extern PFNGLBINDBUFFERPROC glBindFramebuffer;
-//extern PFNGLFRAMEBUFFERTEXTURE2DPROC glFramebufferTexture2D;
-extern PFNGLGENFRAMEBUFFERSPROC glGenFramebuffers(GLsizei, GLuint*);
-//#define glGenFramebuffer GLEW_GET_FUN(__glewGenFramebuffers)
-
-//#define glBindFramebuffer GLEW_GET_FUN(__glewBindFramebuffer)
+using namespace std;
 
 struct Framebuffer
 {
@@ -29,8 +22,8 @@ public:
 		glDrawBuffer(GL_COLOR_ATTACHMENT0);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, renderTextureID, NULL);
 
-		//status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		/*if (status != GL_FRAMEBUFFER_COMPLETE)
+		status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+		if (status != GL_FRAMEBUFFER_COMPLETE)
 		{
 			string err;
 			switch (status)
@@ -53,7 +46,7 @@ public:
 			}
 			std::cout << "Framebuffer incomplete! " << err << endl;
 		}
-		else std::cout << "Framebuffer complete." << endl;*/
+		else std::cout << "Framebuffer complete." << endl;
 	}
 	GLuint framebufferObjectID;
 	GLuint renderTextureID;

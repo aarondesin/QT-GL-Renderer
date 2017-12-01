@@ -1,6 +1,5 @@
 #pragma once
-#define GLEW_STATIC
-#include <gl\glew.h>
+#include<global.h>
 #include <MyGLWindow.h>
 #include <glm\glm.hpp>
 #include <glm\gtx\transform.hpp>
