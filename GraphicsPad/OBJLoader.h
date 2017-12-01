@@ -1,13 +1,14 @@
 #include <iostream>
 #include <ShapeData.h>
+#include <vector>
 using namespace std;
 class OBJLoader
 {
 public:
-	ShapeData loadOBJFile(string filename);
-	void processLine(string line);
+	static ShapeData OBJLoader::loadOBJFile(string filename);
 protected:
-	glm::vec2 parseVec2(string* input, int startIndex);
-	glm::vec4 parseVec4(string* input, int startIndex);
+	static glm::vec2 OBJLoader::parseVec2(vector<string> input, int startIndex);
+	static glm::vec3 OBJLoader::parseVec3(vector<string> input, int startIndex);
+	static glm::vec4 OBJLoader::parseVec4(vector<string> input, int startIndex);
 };
 

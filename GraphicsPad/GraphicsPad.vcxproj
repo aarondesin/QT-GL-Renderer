@@ -90,7 +90,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)..\Middleware\glm;$(ProjectDir);$(ProjectDir)..\Middleware\Qt\include;$(ProjectDir)..\Middleware\glew\include</AdditionalIncludeDirectories>
-      <AdditionalOptions>/showIncludes %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeaderFile>stdafx.h, global.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -159,10 +159,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Framebuffer.cpp" />
     <ClCompile Include="Mainer.cpp" />
     <ClCompile Include="MyGLWindow.cpp" />
     <ClCompile Include="OBJLoader.cpp" />
     <ClCompile Include="ShapeGenerator.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <Text Include="VertexShader.glsl">
       <FileType>CppCode</FileType>
     </Text>

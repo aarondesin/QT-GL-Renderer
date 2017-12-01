@@ -23,15 +23,15 @@ protected:
 	void MyGLWindow::updateUniforms();
 	void MyGLWindow::spawnRenderable();
 	void MyGLWindow::draw(Camera cam, bool flipped);
+	void MyGLWindow::installShaders();
 	void MyGLWindow::checkErrors(string location);
-	QImage MyGLWindow::makeImage(string filename);
-	Texture MyGLWindow::makeTexture(string filename);
-	Cubemap MyGLWindow::makeCubemap(string filename);
-	Framebuffer MyGLWindow::makeFramebuffer(string filename, int width, int height);
-	void MyGLWindow::addGeometry(string name, ShapeData geometry);
+	QImage* MyGLWindow::makeImage(string filename);
+	Texture* MyGLWindow::makeTexture(string filename);
+	Cubemap* MyGLWindow::makeCubemap(string filename);
+	Framebuffer* MyGLWindow::makeFramebuffer(string filename, bool useColor, bool useDepth, int width, int height);
+	void MyGLWindow::addGeometry(string name, ShapeData* geometry);
 	void MyGLWindow::initMaterials();
 	void MyGLWindow::initGeometries();
-	void MyGLWindow::addRenderable(Renderable renderable);
 };
 
 #endif

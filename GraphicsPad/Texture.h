@@ -2,16 +2,19 @@
 
 #include <global.h>
 
-struct Texture
+class Texture
 {
 public:
-	Texture() : textureID(-1) {}
-	Texture(GLuint id, int width, int height, GLenum format, const GLvoid* pixels)
+	static int nextTextureID;
+	static int getNextTextureID() { return nextTextureID++; }
+	Texture(int width, int height, GLenum format, const GLvoid* pixels)
 	{
-		textureID = id;
-		glActiveTexture(id);
-		glGenTextures(1, &id);
-		glBindTexture(GL_TEXTURE_2D, id);
+		
+		textureID = nextTextureID++;
+		glActiveTexture(GL_TEXTURE0 + textureID);
+
+		glGenTextures(1, &textureID);
+		glBindTexture(GL_TEXTURE_2D, textureID);
 		glTexImage2D(GL_TEXTURE_2D, 0, format,
 			width, height, 0,
 			format, GL_UNSIGNED_BYTE, pixels);
@@ -19,8 +22,8 @@ public:
 		setWrapMode(GL_CLAMP_TO_EDGE);
 		
 	}
-	Texture(GLuint id, QImage image) : 
-		Texture (id, image.width(), image.height(), GL_RGBA, image.bits()){}
+	Texture(QImage* image) : 
+		Texture (image->width(), image->height(), GL_RGBA, image->bits()){}
 	void setFilter(GLenum filter)
 	{
 		glActiveTexture(textureID);

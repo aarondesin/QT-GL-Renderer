@@ -9,13 +9,12 @@
 
 struct Cubemap
 {
-	Cubemap() : cubemapID(-1) {}
-	Cubemap(GLuint id, QImage* images)
+	Cubemap(QImage* images)
 	{
-		cubemapID = id;
-		glGenTextures(1, &id);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, id);
+		cubemapID = Texture::getNextTextureID();
 		glActiveTexture(cubemapID);
+		glGenTextures(1, &cubemapID);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapID);
 		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA, images[LEFT].width(), 
 			images[LEFT].height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, images[LEFT].bits());
 		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA, images[RIGHT].width(),
