@@ -2,49 +2,135 @@
 
 #include <iostream>
 #include <global.h>
+#include <GLHelper.h>
 
 using namespace std;
 
 class Texture
 {
-public:
+private:
 	static int nextTextureID;
-	static int getNextTextureID() { return nextTextureID++; }
-	Texture(int width, int height, GLenum format, const GLvoid* pixels)
+public:
+	static const int MAX_TEXTURE_ID = 15;
+	static int getNextTextureID() 
+	{ 
+		int i = nextTextureID; 
+		nextTextureID++;
+		return i;
+	}
+	Texture() {
+		throw exception();
+	}
+	Texture(string texName, int width, int height, GLenum internalFormat, GLenum format, const GLvoid* pixels)
 	{
-		textureID = nextTextureID++;
-		glActiveTexture(GL_TEXTURE0 + textureID);
+		// Check format
+		switch (format)
+		{
+			case GL_DEPTH_COMPONENT: case GL_DEPTH_STENCIL:
+			case GL_RED: case GL_RG: case GL_RGB: case GL_RGBA:
+				break;
+			default:
+				throw exception();
+		}
 
-		glGenTextures(1, &textureID);
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, format,
+		
+		glGenTextures(1, textureID);
+		glBindTexture(GL_TEXTURE_2D, *textureID);
+
+		if (texName.length() <= 0) throw exception();
+		name = texName;
+
+		textureID = new GLuint(getNextTextureID());
+
+		GLenum activeTexture = (GLenum)(GL_TEXTURE0 + textureID);
+		if (activeTexture < GL_TEXTURE0 || activeTexture > GL_TEXTURE31)
+		{
+			cout << "Invalid texture ID! " << activeTexture << endl;
+			throw exception();
+		}
+
+		glActiveTexture(activeTexture);
+
+		GLHelper::checkErrors("texture init");
+
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat,
 			width, height, 0,
 			format, GL_UNSIGNED_BYTE, pixels);
+
+		GLHelper::checkErrors("texture set");
+
 		setFilter(GL_LINEAR);
 		setWrapMode(GL_CLAMP_TO_EDGE);
-		
+
+		GLHelper::checkErrors("texture constructor");
 	}
-	/*Texture(QImage* image) : 
-		Texture (image->width(), image->height(), GL_RGBA, image->bits())
+	Texture(string texName, QImage* image, GLenum internalFormat, GLenum format) : 
+		Texture (texName, image->width(), image->height(), internalFormat, format, image->bits())
 	{
 		if (image == NULL) 
 		{
 			cout << "NULL REFERENCE: Image is null!" << endl;
 		}
-	}*/
+	}
 	void setFilter(GLenum filter)
 	{
-		glActiveTexture(textureID);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+		switch (filter) 
+		{
+		case GL_NEAREST: case GL_LINEAR:
+			break;
+		default:
+			throw exception();
+		}
+
+		glActiveTexture(GL_TEXTURE0+*textureID);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+
+		GLHelper::checkErrors("texture.setFilter");
 	}
 	void setWrapMode(GLenum wrapMode)
 	{
-		glActiveTexture(textureID);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapMode);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode);
+		// Check wrap mode
+		switch (wrapMode)
+		{
+		case GL_MIRRORED_REPEAT: case GL_CLAMP_TO_EDGE:
+		case GL_CLAMP_TO_BORDER: case GL_REPEAT:
+			break;
+		default:
+			throw exception();
+		}
+
+		glActiveTexture(GL_TEXTURE0+*textureID);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapMode);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode);
+
+		GLHelper::checkErrors("texture.setWrapMode");
 	}
-	GLuint getTextureID() { return textureID; }
+	void setTextureID(GLuint texID)
+	{
+		if (texID > MAX_TEXTURE_ID || texID < -1)
+		{
+			cout << "Invalid texture ID! " << texID << endl;
+			throw exception();
+		}
+
+		*textureID = texID;
+	}
+	GLint getTextureID()
+	{
+		if (*textureID > MAX_TEXTURE_ID || textureID < 0)
+		{
+			cout << "Invalid texture ID! " << textureID << endl;
+			throw exception();
+		}
+
+		return *textureID;
+	}
+	~Texture() 
+	{
+		delete textureID;
+	}
 protected:
-	GLuint textureID;
+	string name;
+	GLuint* textureID;
 };

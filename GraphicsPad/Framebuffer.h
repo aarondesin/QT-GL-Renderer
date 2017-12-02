@@ -8,10 +8,15 @@ using namespace std;
 
 class Framebuffer
 {
+protected:
+	Texture* renderTexture;
+	Texture* depthTexture;
+	GLuint framebufferObjectID;
+	GLenum status;
 public:
+	Framebuffer() { throw exception(); }
 	static int nextFramebufferObjectID;
-	Framebuffer() : framebufferObjectID(-1), renderTextureID(-1) {}
-	Framebuffer(bool useColor, bool useDepth, int width, int height)
+	Framebuffer(string name, bool useColor, bool useDepth, int width, int height)
 	{
 		if (!useDepth && !useColor)
 		{
@@ -21,27 +26,32 @@ public:
 
 		framebufferObjectID = nextFramebufferObjectID++;
 
+		glGenFramebuffers(1, &framebufferObjectID);
+		glBindFramebuffer(GL_FRAMEBUFFER, framebufferObjectID);
+
 		if (useColor)
 		{
-			Texture renderTexture = Texture(width, height, GL_RGB, NULL);
-			renderTextureID = renderTexture.getTextureID();
-
-			glGenFramebuffers(1, &framebufferObjectID);
-			glBindFramebuffer(GL_FRAMEBUFFER, framebufferObjectID);
+			renderTexture = &Texture(name, width, height, GL_RGB, GL_RGB, NULL);
 			glReadBuffer(GL_COLOR_ATTACHMENT0);
 			glDrawBuffer(GL_COLOR_ATTACHMENT0);
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, renderTextureID, 0);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, renderTexture->getTextureID(), 0);
 		}
 
 		if (useDepth)
 		{
-			Texture depthTexture = Texture(width, height, GL_RGB, NULL);
-
+			depthTexture = &Texture(name, width, height, GL_DEPTH_COMPONENT16, GL_R, NULL);
+			glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture->getTextureID(), 0);
 		}
 
 		status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	}
-	GLuint framebufferObjectID;
-	GLuint renderTextureID;
-	GLenum status;
+	~Framebuffer() 
+	{ 
+		delete renderTexture;
+		delete depthTexture;
+		framebufferObjectID = 0;
+		status = 0;
+	}
+	GLenum getStatus() { return status; }
+	GLint getFramebufferObjectID() { return framebufferObjectID; }
 };

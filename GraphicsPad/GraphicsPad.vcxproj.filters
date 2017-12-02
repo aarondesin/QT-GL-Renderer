@@ -24,6 +24,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="global.h" />
+    <ClInclude Include="GLHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="VertexShader.glsl" />

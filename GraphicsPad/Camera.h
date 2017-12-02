@@ -10,7 +10,8 @@ class Camera
 	static const float MOVEMENT_SPEED;
 	glm::vec3 strafeDirection;
 public:
-	Camera();
+	Camera() : position(glm::vec3(0.0f, 0.0f, 0.0f)), 
+		viewDirection (glm::vec3(0.0f, 0.0f, 1.0f)) {}
 	void mouseUpdate(const glm::vec2& newMousePosition);
 	glm::mat4 getWorldToViewMatrix() const;
 

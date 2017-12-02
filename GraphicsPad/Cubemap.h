@@ -1,5 +1,7 @@
 #pragma once
 
+#include <GLHelper.h>
+
 #define LEFT 0
 #define RIGHT 1
 #define UP 2
@@ -9,10 +11,12 @@
 
 struct Cubemap
 {
+public:
+	Cubemap() { throw exception(); }
 	Cubemap(QImage* images)
 	{
 		cubemapID = Texture::getNextTextureID();
-		glActiveTexture(cubemapID);
+		glActiveTexture(GL_TEXTURE0+cubemapID);
 		glGenTextures(1, &cubemapID);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapID);
 		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA, images[LEFT].width(), 
@@ -29,19 +33,25 @@ struct Cubemap
 			images[FORWARD].height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, images[FORWARD].bits());
 		setFilter(GL_LINEAR);
 		setWrapMode(GL_CLAMP_TO_EDGE);
+
+		GLHelper::checkErrors("cubemap constructor");
 	}
 	void setFilter(GLenum filter)
 	{
-		glActiveTexture(cubemapID);
+		glActiveTexture(GL_TEXTURE0 + cubemapID);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, filter);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, filter);
 	}
 	void setWrapMode(GLenum wrapMode)
 	{
-		glActiveTexture(cubemapID);
+		glActiveTexture(GL_TEXTURE0+cubemapID);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, wrapMode);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, wrapMode);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, wrapMode);
 	}
 	GLuint cubemapID;
+	~Cubemap()
+	{
+
+	}
 };
