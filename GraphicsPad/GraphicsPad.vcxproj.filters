@@ -24,6 +24,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="GLHelper.h" />
+    <ClInclude Include="Skybox.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="VertexShader.glsl" />

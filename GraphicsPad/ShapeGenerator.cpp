@@ -27,7 +27,7 @@ glm::vec4 randomColor()
 	return ret;
 }
 
-ShapeData ShapeGenerator::make2DTriangle()
+ShapeData* ShapeGenerator::make2DTriangle()
 {
 	Vertex stackVerts[] =
 	{
@@ -53,7 +53,7 @@ ShapeData ShapeGenerator::make2DTriangle()
 	return copyToShapeData(stackVerts, ARRAY_SIZE(stackVerts), stackIndices, ARRAY_SIZE(stackIndices));
 }
 
-ShapeData ShapeGenerator::makeHudQuad()
+ShapeData* ShapeGenerator::makeHudQuad()
 {
 	float closestZ = 0.999f;
 	Vertex stackVerts[] =
@@ -86,30 +86,30 @@ ShapeData ShapeGenerator::makeHudQuad()
 	return copyToShapeData(stackVerts, ARRAY_SIZE(stackVerts), stackIndices, ARRAY_SIZE(stackIndices));
 }
 
-ShapeData ShapeGenerator::makeLine()
+ShapeData* ShapeGenerator::makeLine()
 {
-	ShapeData ret;
+	ShapeData* ret = new ShapeData;
 	glm::vec4 white(1,1,1,1);
 
-	ret.numVertices = 2;
-	ret.vertices = new Vertex[ret.numVertices];
+	ret->numVertices = 2;
+	ret->vertices = new Vertex[ret->numVertices];
 
-	Vertex& first = ret.vertices[0];
+	Vertex& first = ret->vertices[0];
 	first.position = vec3(0,0,0);
 	first.color = white;
-	Vertex& second = ret.vertices[1];
+	Vertex& second = ret->vertices[1];
 	second.position = vec3(1,0,0);
 	second.color = white;
 
-	ret.numIndices = 2;
-	ret.indices = new ushort[ret.numIndices];
-	ret.indices[0] = 0;
-	ret.indices[1] = 1;
+	ret->numIndices = 2;
+	ret->indices = new ushort[ret->numIndices];
+	ret->indices[0] = 0;
+	ret->indices[1] = 1;
 
 	return ret;
 }
 
-ShapeData ShapeGenerator::makeCone(uint tesselation)
+ShapeData* ShapeGenerator::makeCone(uint tesselation)
 {
 	// Cone head
 	vec3 coneTip(CONE_HEIGHT, 0.0f, 0.0f);
@@ -119,18 +119,18 @@ ShapeData ShapeGenerator::makeCone(uint tesselation)
 	vec4 thisVert(0, coneRadius, 0, 0);
 	glm::mat4 rotator = glm::rotate(360.0f / tesselation, glm::vec3(1.0f, 0.0f, 0.0f));
 
-	ShapeData ret;
+	ShapeData* ret = new ShapeData;
 	// 2 verts at same position around the rim so I can vary the normals
 	// + 2 -> one for cone tip and one for cone base center
-	ret.numVertices = 2 * tesselation + 2;
-	ret.vertices = new Vertex[ret.numVertices];
+	ret->numVertices = 2 * tesselation + 2;
+	ret->vertices = new Vertex[ret->numVertices];
 
 	uint coneTipIndex = tesselation * 2;
 	uint coneBaseCenterIndex = coneTipIndex + 1;
 	for(uint i = 0; i < tesselation; i++)
 	{
 		// Side facing triangle vert
-		Vertex& v = ret.vertices[i];
+		Vertex& v = ret->vertices[i];
 		v.color = randomColor();
 		v.position = vec3(thisVert);
 		// Just want its position in the YZ plane, ignore x value;
@@ -141,60 +141,60 @@ ShapeData ShapeGenerator::makeCone(uint tesselation)
 	for(uint i = tesselation; i < tesselation * 2; i++)
 	{
 		// Cone bottom facing vert. Everything is same except the normal
-		Vertex& v = ret.vertices[i - tesselation];
-		Vertex& v2 = ret.vertices[i];
+		Vertex& v = ret->vertices[i - tesselation];
+		Vertex& v2 = ret->vertices[i];
 		v2.color = v.color;
 		v2.position = v.position;
 		v2.normal = glm::vec3(-1.0f, 0.0f, 0.0f);
 	}
 
-	ret.vertices[coneTipIndex].position = coneTip;
-	ret.vertices[coneTipIndex].color = randomColor();
-	ret.vertices[coneTipIndex].normal = glm::vec3(1.0f, 0.0f, 0.0f);
+	ret->vertices[coneTipIndex].position = coneTip;
+	ret->vertices[coneTipIndex].color = randomColor();
+	ret->vertices[coneTipIndex].normal = glm::vec3(1.0f, 0.0f, 0.0f);
 
-	ret.vertices[coneBaseCenterIndex].position = glm::vec3(0, 0.0f, 0.0f);
-	ret.vertices[coneBaseCenterIndex].color = randomColor();
-	ret.vertices[coneBaseCenterIndex].normal = glm::vec3(-1.0f, 0.0f, 0.0f);
+	ret->vertices[coneBaseCenterIndex].position = glm::vec3(0, 0.0f, 0.0f);
+	ret->vertices[coneBaseCenterIndex].color = randomColor();
+	ret->vertices[coneBaseCenterIndex].normal = glm::vec3(-1.0f, 0.0f, 0.0f);
 
 
 	const uint NUM_VERTS_PER_TRI = 3;
-	ret.numIndices = NUM_VERTS_PER_TRI * tesselation * 2;
-	ret.indices = new ushort[ret.numIndices];
+	ret->numIndices = NUM_VERTS_PER_TRI * tesselation * 2;
+	ret->indices = new ushort[ret->numIndices];
 
 	uint indiceIndex = 0;
 	for(uint i = 0; i < tesselation; i++)
 	{
 		// Side face
-		ret.indices[indiceIndex++] = i;
-		ret.indices[indiceIndex++] = (i + 1) % tesselation;
-		ret.indices[indiceIndex++] = coneTipIndex;
+		ret->indices[indiceIndex++] = i;
+		ret->indices[indiceIndex++] = (i + 1) % tesselation;
+		ret->indices[indiceIndex++] = coneTipIndex;
 	}
 	for(uint i = tesselation; i < tesselation * 2; i++)
 	{
 		// Bottom face
-		ret.indices[indiceIndex++] = i;
-		ret.indices[indiceIndex++] = (i + 1) % tesselation;
-		ret.indices[indiceIndex++] = coneBaseCenterIndex;
+		ret->indices[indiceIndex++] = i;
+		ret->indices[indiceIndex++] = (i + 1) % tesselation;
+		ret->indices[indiceIndex++] = coneBaseCenterIndex;
 	}
-	assert(indiceIndex == ret.numIndices);
+	assert(indiceIndex == ret->numIndices);
 
 	// Cynlindar stem
 	return ret;
 }
 
-ShapeData ShapeGenerator::makeCylinder(uint tesselation)
+ShapeData* ShapeGenerator::makeCylinder(uint tesselation)
 {
-	ShapeData ret;
-	ret.numVertices = tesselation * 2 + 2; // + 2 for top and bottom center
-	ret.vertices = new Vertex[ret.numVertices];
+	ShapeData* ret = new ShapeData;
+	ret->numVertices = tesselation * 2 + 2; // + 2 for top and bottom center
+	ret->vertices = new Vertex[ret->numVertices];
 
 	vec4 thisVert(0, 1, 0, 0);
 	glm::mat4 rotator = glm::rotate(360.0f / tesselation, glm::vec3(1.0f, 0.0f, 0.0f));
 
 	for(uint i = 0; i < tesselation; i++)
 	{
-		Vertex& v0 = ret.vertices[i];
-		Vertex& v1 = ret.vertices[i + tesselation];
+		Vertex& v0 = ret->vertices[i];
+		Vertex& v1 = ret->vertices[i + tesselation];
 
 		v0.position = vec3(thisVert);
 		v0.position.x = 1.0f;
@@ -207,13 +207,13 @@ ShapeData ShapeGenerator::makeCylinder(uint tesselation)
 
 		thisVert = rotator * thisVert;
 	}
-	uint topCenterVertIndex = ret.numVertices - 2;
-	uint bottomCenterVertIndex = ret.numVertices - 1;
-	ret.vertices[topCenterVertIndex].position.x = 1.0f;
-	ret.vertices[topCenterVertIndex].normal.x = +1.0f;
-	ret.vertices[topCenterVertIndex].color = randomColor();
-	ret.vertices[bottomCenterVertIndex].normal.x = -1.0f;
-	ret.vertices[bottomCenterVertIndex].color = randomColor();
+	uint topCenterVertIndex = ret->numVertices - 2;
+	uint bottomCenterVertIndex = ret->numVertices - 1;
+	ret->vertices[topCenterVertIndex].position.x = 1.0f;
+	ret->vertices[topCenterVertIndex].normal.x = +1.0f;
+	ret->vertices[topCenterVertIndex].color = randomColor();
+	ret->vertices[bottomCenterVertIndex].normal.x = -1.0f;
+	ret->vertices[bottomCenterVertIndex].color = randomColor();
 
 	const uint NUM_TRIS_PER_SIDE_FACE = 2;
 	const uint NUM_TRIS_PER_END_FACE = 1;
@@ -221,55 +221,55 @@ ShapeData ShapeGenerator::makeCylinder(uint tesselation)
 	const uint NUM_VERTS_PER_TRI = 3;
 	const uint NUM_SIDE_INDICES = tesselation * NUM_TRIS_PER_SIDE_FACE * NUM_VERTS_PER_TRI;
 	const uint NUM_END_INDICES = tesselation * NUM_TRIS_PER_END_FACE * NUM_VERTS_PER_TRI * NUM_ENDS;
-	ret.numIndices = NUM_SIDE_INDICES + NUM_END_INDICES;
-	ret.indices = new ushort[ret.numIndices];
+	ret->numIndices = NUM_SIDE_INDICES + NUM_END_INDICES;
+	ret->indices = new ushort[ret->numIndices];
 
 	uint indiceIndex = 0;
 	for(uint i = 0; i < tesselation; i++)
 	{
 		// Top
-		ret.indices[indiceIndex++] = i;
-		ret.indices[indiceIndex++] = (i + 1) % tesselation;
-		ret.indices[indiceIndex++] = topCenterVertIndex;
+		ret->indices[indiceIndex++] = i;
+		ret->indices[indiceIndex++] = (i + 1) % tesselation;
+		ret->indices[indiceIndex++] = topCenterVertIndex;
 	} 
 	for(uint i = 0; i < tesselation; i++)
 	{
 		// Bottom
-		ret.indices[indiceIndex++] = i + tesselation;
-		ret.indices[indiceIndex++] = (i + 1 < tesselation) ? i + 1 + tesselation : tesselation;
-		ret.indices[indiceIndex++] = bottomCenterVertIndex;
+		ret->indices[indiceIndex++] = i + tesselation;
+		ret->indices[indiceIndex++] = (i + 1 < tesselation) ? i + 1 + tesselation : tesselation;
+		ret->indices[indiceIndex++] = bottomCenterVertIndex;
 	}
 
 	// Side
 	for(uint i = 0; i < tesselation; i++)
 	{
 		// Face 1
-		ret.indices[indiceIndex++] = i;
-		ret.indices[indiceIndex++] = (i + 1) % tesselation;
-		ret.indices[indiceIndex++] = i + tesselation;
+		ret->indices[indiceIndex++] = i;
+		ret->indices[indiceIndex++] = (i + 1) % tesselation;
+		ret->indices[indiceIndex++] = i + tesselation;
 
 		// Face 2
-		ret.indices[indiceIndex++] = (i + 1) % tesselation;
-		ret.indices[indiceIndex++] =  (i + 1 < tesselation) ? (i + 1 + tesselation) : i + 1;
-		ret.indices[indiceIndex++] = i + tesselation;
+		ret->indices[indiceIndex++] = (i + 1) % tesselation;
+		ret->indices[indiceIndex++] =  (i + 1 < tesselation) ? (i + 1 + tesselation) : i + 1;
+		ret->indices[indiceIndex++] = i + tesselation;
 	}
-	assert(indiceIndex == ret.numIndices);
+	assert(indiceIndex == ret->numIndices);
 	return ret;
 }
 
-ShapeData ShapeGenerator::makePlaneVerts(uint dimensions)
+ShapeData* ShapeGenerator::makePlaneVerts(uint dimensions)
 {
-	ShapeData ret;
+	ShapeData* ret = new ShapeData;
 	uint vertsPerDimension = dimensions + 1; // + 1 for last row/col of verts
-	ret.numVertices = vertsPerDimension * vertsPerDimension;
-	ret.vertices = new Vertex[ret.numVertices];
+	ret->numVertices = vertsPerDimension * vertsPerDimension;
+	ret->vertices = new Vertex[ret->numVertices];
 	float half = dimensions / 2.0f;
 	glm::vec3 runner(-half, 0.0f, -half);
 	for(int i = 0; i < vertsPerDimension; i++)
 	{
 		for(int j = 0; j < vertsPerDimension; j++)
 		{
-			Vertex& thisVert = ret.vertices[i * vertsPerDimension + j];
+			Vertex& thisVert = ret->vertices[i * vertsPerDimension + j];
 			thisVert.position = runner;
 			thisVert.color = randomColor();
 			thisVert.normal = glm::vec3(0, 1, 0);
@@ -284,36 +284,36 @@ ShapeData ShapeGenerator::makePlaneVerts(uint dimensions)
 	return ret;
 }
 
-ShapeData ShapeGenerator::makePlaneIndices(uint dimensions)
+ShapeData* ShapeGenerator::makePlaneIndices(uint dimensions)
 {
-	ShapeData ret;
+	ShapeData* ret = new ShapeData;
 	uint vertsPerDimension = dimensions + 1;
-	ret.numIndices = dimensions * dimensions * 2 * 3; // 2 triangles per square, 3 indices per triangle
-	ret.indices = new unsigned short[ret.numIndices];
+	ret->numIndices = dimensions * dimensions * 2 * 3; // 2 triangles per square, 3 indices per triangle
+	ret->indices = new unsigned short[ret->numIndices];
 	int runner = 0;
 	for(int row = 0; row < dimensions; row++)
 	{
 		for(int col = 0; col < dimensions; col++)
 		{
-			ret.indices[runner++] = vertsPerDimension * row + col;
-			ret.indices[runner++] = vertsPerDimension * row + col + vertsPerDimension;
-			ret.indices[runner++] = vertsPerDimension * row + col + vertsPerDimension + 1;
+			ret->indices[runner++] = vertsPerDimension * row + col;
+			ret->indices[runner++] = vertsPerDimension * row + col + vertsPerDimension;
+			ret->indices[runner++] = vertsPerDimension * row + col + vertsPerDimension + 1;
 
-			ret.indices[runner++] = vertsPerDimension * row + col;
-			ret.indices[runner++] = vertsPerDimension * row + col + vertsPerDimension + 1;
-			ret.indices[runner++] = vertsPerDimension * row + col + 1;
+			ret->indices[runner++] = vertsPerDimension * row + col;
+			ret->indices[runner++] = vertsPerDimension * row + col + vertsPerDimension + 1;
+			ret->indices[runner++] = vertsPerDimension * row + col + 1;
 		}
 	}
-	assert(runner = ret.numIndices);
+	assert(runner = ret->numIndices);
 	return ret;
 }
 
-ShapeData ShapeGenerator::makePlaneUnseamedIndices(uint tesselation)
+ShapeData* ShapeGenerator::makePlaneUnseamedIndices(uint tesselation)
 {
-	ShapeData ret;
+	ShapeData* ret = new ShapeData;
 	uint dimensions = tesselation * tesselation; 
-	ret.numIndices = dimensions * 2 * 3; // 2 triangles per square, 3 indices per triangle
-	ret.indices = new unsigned short[ret.numIndices];
+	ret->numIndices = dimensions * 2 * 3; // 2 triangles per square, 3 indices per triangle
+	ret->indices = new unsigned short[ret->numIndices];
 	int runner = 0;
 	for(int row = 0; row < tesselation; row++)
 	{
@@ -321,20 +321,20 @@ ShapeData ShapeGenerator::makePlaneUnseamedIndices(uint tesselation)
 		for(int col = 0; col < tesselation; col++)
 		{
 			// Bottom left triangle
-			ret.indices[runner++] = tesselation * row + col;
+			ret->indices[runner++] = tesselation * row + col;
 			// One row down unless it's the bottom row, 
-			ret.indices[runner++] = (row + 1 == tesselation ? 0 : tesselation * row + tesselation) + col;
+			ret->indices[runner++] = (row + 1 == tesselation ? 0 : tesselation * row + tesselation) + col;
 			// Move to vert right of this one unless it's the last vert,
 			// which we connect to the first vert in the row
 			// the % dimensions at the end accounts for the last row hooking to the first row
-			ret.indices[runner++] = (tesselation * row + col + tesselation + (col + 1 == tesselation ? -tesselation + 1 : 1)) % dimensions;
+			ret->indices[runner++] = (tesselation * row + col + tesselation + (col + 1 == tesselation ? -tesselation + 1 : 1)) % dimensions;
 
 			// Upper right triangle
-			ret.indices[runner++] = tesselation * row + col;
+			ret->indices[runner++] = tesselation * row + col;
 			if(col + 1 == tesselation && row + 1 == tesselation)
 			{
 				// Very last vert
-				ret.indices[runner++] = 0;
+				ret->indices[runner++] = 0;
 			}
 			else if(col + 1 == tesselation)
 			{
@@ -343,84 +343,86 @@ ShapeData ShapeGenerator::makePlaneUnseamedIndices(uint tesselation)
 				if(row + 1 == tesselation)
 				{
 					// Tie to zeroeth row
-					ret.indices[runner++] = col + 1;
+					ret->indices[runner++] = col + 1;
 				}
 				else
 				{
 					// Tie to next row
-					ret.indices[runner++] = tesselation * row + col + 1;
+					ret->indices[runner++] = tesselation * row + col + 1;
 				}
 			}
 			else
 			{
 				// Regular interior vert
 				// the % dimensions at the end accounts for the last row hooking to the first row
-				ret.indices[runner++] = (tesselation * row + col + tesselation + 1) % dimensions;
+				ret->indices[runner++] = (tesselation * row + col + tesselation + 1) % dimensions;
 			}
-			ret.indices[runner++] = tesselation * row + col + (col + 1 == tesselation ? -col : 1);
+			ret->indices[runner++] = tesselation * row + col + (col + 1 == tesselation ? -col : 1);
 		}
 	}
 	return ret;
 }
 
-ShapeData ShapeGenerator::makePlane(uint dimensions)
+ShapeData* ShapeGenerator::makePlane(uint dimensions)
 {
-	ShapeData ret = makePlaneVerts(dimensions);
-	ShapeData ret2 = makePlaneIndices(dimensions);
-	ret.numIndices = ret2.numIndices;
-	ret.indices = ret2.indices;
+	ShapeData* ret = makePlaneVerts(dimensions);
+	ShapeData* ret2 = makePlaneIndices(dimensions);
+	ret->numIndices = ret2->numIndices;
+	ret->indices = ret2->indices;
 	return ret;
 }
 
-ShapeData ShapeGenerator::makeWireframePlane(uint dimensions)
+ShapeData* ShapeGenerator::makeWireframePlane(uint dimensions)
 {
-	ShapeData ret;
+	ShapeData* ret = new ShapeData;
 	if(dimensions % 2 == 0)
 		dimensions++;
-	ret.numVertices = dimensions * 2 * 2; // 2 verts per line, 2 dimensions
+	ret->numVertices = dimensions * 2 * 2; // 2 verts per line, 2 dimensions
 	const int HALF = dimensions / 2;
-	ret.vertices = new Vertex[ret.numVertices];
+	ret->vertices = new Vertex[ret->numVertices];
 	int runner = 0;
 	glm::vec4 white(1.0f, 1.0f, 1.0f, 1.0f);
-	for(int i = 0; i < ret.numVertices; i += 4, runner++)
+	for(int i = 0; i < ret->numVertices; i += 4, runner++)
 	{
 		// Set up criss cross line endpoints
-		Vertex& v1 = ret.vertices[i + 0];
+		Vertex& v1 = ret->vertices[i + 0];
 		v1.position.x = -HALF;
 		v1.position.y = 0;
 		v1.position.z = HALF + -runner;
 		v1.color = white;
 
-		Vertex& v2 = ret.vertices[i + 1];
+		Vertex& v2 = ret->vertices[i + 1];
 		v2.position.x = HALF;
 		v2.position.y = 0;
 		v2.position.z = HALF + -runner;
 		v2.color = white;
 
-		Vertex& v3 = ret.vertices[i + 2];
+		Vertex& v3 = ret->vertices[i + 2];
 		v3.position.x = -HALF + runner;
 		v3.position.y = 0;
 		v3.position.z = HALF;
 		v3.color = white;
 
-		Vertex& v4 = ret.vertices[i + 3];
+		Vertex& v4 = ret->vertices[i + 3];
 		v4.position.x = -HALF + runner;
 		v4.position.y = 0;
 		v4.position.z = -HALF;
 		v4.color = white;
 	}
-	ret.numIndices = (dimensions + dimensions) * 2;
-	ret.indices = new ushort[ret.numIndices];
-	for(uint i = 0; i < ret.numIndices; i++)
-		ret.indices[i] = i;
+	ret->numIndices = (dimensions + dimensions) * 2;
+	ret->indices = new ushort[ret->numIndices];
+	for(uint i = 0; i < ret->numIndices; i++)
+		ret->indices[i] = i;
 	return ret;
 }
 
-ShapeData ShapeGenerator::makeCube()
+ShapeData* ShapeGenerator::makeCube()
 {
 	using glm::vec2;
 	using glm::vec3;
 	using glm::vec4;
+	//Vertex* stackVerts = new Vertex[24]
+	//{
 	Vertex stackVerts[] = 
 	{
 		// Top
@@ -556,6 +558,7 @@ ShapeData ShapeGenerator::makeCube()
 		vec3(+1.0f, +0.0f, +0.0f),		  // Tangent
 	};
 	unsigned short stackIndices[] = {
+	//unsigned short* stackIndices = new unsigned short[36] {
 		0,   1,  2,  0,  2,  3, // Top
 		4,   5,  6,  4,  6,  7, // Front
 		8,   9, 10,  8, 10, 11, // Right 
@@ -564,11 +567,18 @@ ShapeData ShapeGenerator::makeCube()
 		20, 22, 21, 20, 23, 22, // Bottom
 	};
 
+	ShapeData* result = new ShapeData;
+	result->indices = stackIndices;
+	result->vertices = stackVerts;
+	result->numIndices = 36;
+	result->numVertices = 24;
+	return result;
+
 	//return copyToShapeData(stackVerts, ARRAY_SIZE(stackVerts), stackIndices, ARRAY_SIZE(stackIndices));
-	return copyToShapeData(stackVerts, 120, stackIndices, 36);
+	//return copyToShapeData(stackVerts, 120, stackIndices, 36);
 }
 
-ShapeData ShapeGenerator::copyToShapeData(
+/*ShapeData ShapeGenerator::copyToShapeData(
 	Vertex* verts, size_t numVerts,
 	ushort* indices, uint numIndices)
 {
@@ -581,14 +591,31 @@ ShapeData ShapeGenerator::copyToShapeData(
 	ret.indices = new ushort[ret.numIndices];
 	memcpy(ret.indices, indices, sizeof(ushort) * numIndices);
 	return ret;
+}*/
+
+ShapeData* ShapeGenerator::copyToShapeData(
+	Vertex* verts, size_t numVerts,
+	ushort* indices, uint numIndices)
+{
+	ShapeData* ret = new ShapeData;
+	ret->numVertices = numVerts;
+	//ret->vertices = new Vertex[ret.numVertices];
+	ret->vertices = verts;
+	//memcpy(ret->vertices, verts, sizeof(Vertex) * numVerts);
+
+	ret->numIndices = numIndices;
+	//ret->indices = new ushort[ret->numIndices];
+	ret->indices = indices;
+	//memcpy(ret->indices, indices, sizeof(ushort) * numIndices);
+	return ret;
 }
 
-ShapeData ShapeGenerator::makeSphere(uint tesselation)
+ShapeData* ShapeGenerator::makeSphere(uint tesselation)
 {
-	ShapeData ret = makePlaneVerts(tesselation);
-	ShapeData ret2 = makePlaneIndices(tesselation);
-	ret.indices = ret2.indices;
-	ret.numIndices = ret2.numIndices;
+	ShapeData* ret = makePlaneVerts(tesselation);
+	ShapeData* ret2 = makePlaneIndices(tesselation);
+	ret->indices = ret2->indices;
+	ret->numIndices = ret2->numIndices;
 
 	uint dimensions = tesselation + 1;
 	const float RADIUS = 1.0f;
@@ -602,7 +629,7 @@ ShapeData ShapeGenerator::makeSphere(uint tesselation)
 		{ 
 			double theta = -(SLICE_ANGLE / 2.0) * row;
 			size_t vertIndex = col * dimensions + row;
-			Vertex& v = ret.vertices[vertIndex];
+			Vertex& v = ret->vertices[vertIndex];
 			v.position.x = RADIUS * cos(phi) * sin(theta);
 			v.position.y = RADIUS * sin(phi) * sin(theta);
 			v.position.z = RADIUS * cos(theta);
@@ -612,12 +639,12 @@ ShapeData ShapeGenerator::makeSphere(uint tesselation)
 	return ret;
 }
 
-ShapeData ShapeGenerator::makeTorus(uint tesselation)
+ShapeData* ShapeGenerator::makeTorus(uint tesselation)
 {
-	ShapeData ret;
+	ShapeData* ret = new ShapeData;
 	uint dimensions = tesselation * tesselation; 
-	ret.numVertices = dimensions;
-	ret.vertices = new Vertex[ret.numVertices];
+	ret->numVertices = dimensions;
+	ret->vertices = new Vertex[ret->numVertices];
 	float sliceAngle = 360 / tesselation;
 	const float torusRadius = 1.0f;
 	const float pipeRadius = 0.5f;
@@ -631,7 +658,7 @@ ShapeData ShapeGenerator::makeTorus(uint tesselation)
 		glm::mat3 normalTransform = (glm::mat3)transform;
 		for(uint round2 = 0; round2 < tesselation; round2++)
 		{
-			Vertex& v = ret.vertices[round1 * tesselation + round2];
+			Vertex& v = ret->vertices[round1 * tesselation + round2];
 			glm::vec4 glmVert(
 				pipeRadius * cos(glm::radians(sliceAngle * round2)), 
 				pipeRadius * sin(glm::radians(sliceAngle * round2)), 
@@ -645,13 +672,13 @@ ShapeData ShapeGenerator::makeTorus(uint tesselation)
 		}
 	}
 
-	ShapeData ret2 = makePlaneUnseamedIndices(tesselation);
-	ret.numIndices = ret2.numIndices;
-	ret.indices = ret2.indices;
+	ShapeData* ret2 = makePlaneUnseamedIndices(tesselation);
+	ret->numIndices = ret2->numIndices;
+	ret->indices = ret2->indices;
 	return ret;
 }
 
-ShapeData ShapeGenerator::makeArrow()
+ShapeData* ShapeGenerator::makeArrow()
 {
 	using glm::vec2;
 	using glm::vec3;
@@ -918,20 +945,20 @@ void ShapeGenerator::makeTeapot(
 	moveLid(grid, verts, lidTransform);
 }
 
-ShapeData ShapeGenerator::makeTeapot(uint tesselation, const glm::mat4& lidTransform)
+ShapeData* ShapeGenerator::makeTeapot(uint tesselation, const glm::mat4& lidTransform)
 {
-	ShapeData ret;
+	ShapeData* ret = new ShapeData;
 	float* Vs = NULL;
 	float* Ns = NULL;
 	float* TCs = NULL;
 
-	makeTeapot(tesselation, lidTransform, ret.numVertices, Vs, Ns, TCs, ret.indices, ret.numIndices);
-	ret.vertices = new Vertex[ret.numVertices];
+	makeTeapot(tesselation, lidTransform, ret->numVertices, Vs, Ns, TCs, ret->indices, ret->numIndices);
+	ret->vertices = new Vertex[ret->numVertices];
 	glm::vec4 white(1,1,1,1);
 	glm::mat3 rotator = glm::mat3(glm::rotate(-90.0f, 1.0f, 0.0f, 0.0f));
-	for(uint i = 0; i < ret.numVertices; i++)
+	for(uint i = 0; i < ret->numVertices; i++)
 	{
-		Vertex& v = ret.vertices[i];
+		Vertex& v = ret->vertices[i];
 		v.position.x = Vs[i * 3 + 0];
 		v.position.y = Vs[i * 3 + 1];
 		v.position.z = Vs[i * 3 + 2];

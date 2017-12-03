@@ -41,9 +41,9 @@ vector<string> splitStringByCharacter (string str, charArray chars)
 	return tokens;
 }
 
-ShapeData OBJLoader::loadOBJFile(string filename)
+ShapeData* OBJLoader::loadOBJFile(string filename)
 {
-	ShapeData result;
+	ShapeData* result = new ShapeData;
 
 	vector<glm::vec3> positions;
 	vector<glm::vec3> normals;
@@ -198,19 +198,19 @@ ShapeData OBJLoader::loadOBJFile(string filename)
 		}
 	}
 
-	result.numVertices = vertices.size();
-	result.numIndices = indices.size();
+	result->numVertices = vertices.size();
+	result->numIndices = indices.size();
 
 	vertices.shrink_to_fit();
-	result.vertices = new Vertex[result.numVertices];
-	std::memcpy(result.vertices, vertices.data(), sizeof(Vertex) * result.numVertices);
+	result->vertices = new Vertex[result->numVertices];
+	std::memcpy(result->vertices, vertices.data(), sizeof(Vertex) * result->numVertices);
 	
 	indices.shrink_to_fit();
-	result.indices = new unsigned short[result.numIndices];
-	std::memcpy(result.indices, indices.data(), sizeof(unsigned short) * result.numIndices);
+	result->indices = new unsigned short[result->numIndices];
+	std::memcpy(result->indices, indices.data(), sizeof(unsigned short) * result->numIndices);
 
 	std::cout << endl << "OBJLoader: Loaded model \"" << filename << "\"" << endl;
-	std::cout << result.numVertices << " vertices, " << result.numIndices << " indices" << endl;
+	std::cout << result->numVertices << " vertices, " << result->numIndices << " indices" << endl;
 	std::cout << normals.size() << " normals, " << uvs.size() << " UVs" << endl << endl;
 
 	return result;

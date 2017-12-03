@@ -16,6 +16,7 @@
 #include "Cubemap.h"
 #include "Framebuffer.h"
 #include "Material.h"
+#include <Skybox.h>
 #include <map>
 #include <list>
 #include <OBJLoader.h>
@@ -28,30 +29,30 @@ const float RANDOM_PLACEMENT_OFFSET = 40.0f;
 GLint programID = -1;
 
 Scene scene("Main");
-Scene* activeScene;
+Scene* activeScene = &scene;
 
 Framebuffer *activeFramebuffer;
 
 // All images
-map<string, QImage> images;
+map<string, QImage>* images = NULL;
 
 // All textures
 const int MAX_TEXTURES = 10;
-map<string, Texture*> textures;
+map<string, Texture*>* textures = NULL;
 
 // All cubemaps
 const int MAX_CUBEMAPS = 3;
-map<string, Cubemap*> cubemaps;
+map<string, Cubemap*>* cubemaps = NULL;
 
 // All framebuffers
 const int MAX_FRAMEBUFFERS = 2;
-map<string, Framebuffer*> framebuffers;
+map<string, Framebuffer*>* framebuffers = NULL;
 
 // All geometries
-map<string, ShapeData*> geometries;
+map<string, ShapeData*>* geometries = NULL;
 
 // All materials
-map<string, Material*> materials;
+map<string, Material*>* materials = NULL;
 
 // Uniform locations
 GLint cameraPosUniformLoc;
@@ -73,6 +74,52 @@ GLint reflectivityUniformLoc;
 GLint emissionStrengthUniformLoc;
 GLint indexOfRefractionUniformLoc;
 GLint fresnelValueUniformLoc;
+
+ShapeData* getGeometry(string name)
+{
+	if (geometries == NULL)
+	{
+		cout << "Geometries map has not been initialized!" << endl;
+		return NULL;
+	}
+
+	ShapeData* result = geometries->at(name);
+	return result;
+}
+
+Material* getMaterial(string name)
+{
+	if (materials == NULL)
+	{
+		cout << "Materials map has not been initialized!" << endl;
+		return NULL;
+	}
+
+	return materials->at(name);
+}
+
+Texture* getTexture(string name)
+{
+	if (textures == NULL)
+	{
+		cout << "Textures map has not been initialized!" << endl;
+		return NULL;
+	}
+
+	return textures->at(name);
+}
+
+Cubemap* getCubemap(string name)
+{
+	if (cubemaps == NULL)
+	{
+		cout << "Cubemaps map has not been initialized!" << endl;
+		return NULL;
+	}
+
+	return cubemaps->at(name);
+}
+
 
 GLint getUniformLocation(const GLchar* uniformName)
 {
@@ -108,7 +155,8 @@ QImage MyGLWindow::makeImage(string filename)
 	std::pair<string, QImage> pair = 
 		std::pair<string, QImage>(filename, image);
 
-	images.emplace(pair);
+	if (images == NULL) images = new map<string, QImage>;
+	images->emplace(pair);
 	cout << "--IMAGE: " << filename << "--" << endl;
 	GLHelper::checkErrors("makeImage");
 	return image;
@@ -129,12 +177,12 @@ Texture* MyGLWindow::makeTexture(string filename)
 
 	Texture* texture = new Texture(filename, image.width(), image.height(), GL_RGBA, GL_RGBA, image.bits());
 
-	//Texture* texture = new Texture(filename, image->width(), image->height(), GL_RGBA, GL_RGBA, image->bits());
 	GLHelper::checkErrors("makeTexture - texture construction");
 
 
 	std::pair<string, Texture*> pair = (std::pair<string, Texture*>(filename, texture));
-	textures.emplace(pair);
+	if (textures == NULL) textures = new map<string, Texture*>;
+	textures->emplace(pair);
 	cout << "--TEXTURE (" << texture->getTextureID() << "): " << filename << "--" << endl;
 	GLHelper::checkErrors("makeTexture - function complete");
 
@@ -151,7 +199,10 @@ Cubemap* MyGLWindow::makeCubemap(string filename)
 	QImage forward = makeImage(filename + "_Forward");
 	QImage images[] = { left, right, up, down, back, forward };
 	Cubemap* cubemap = new Cubemap((QImage*)images);
-	cubemaps.emplace(std::pair<string, Cubemap*>(filename, cubemap));
+
+
+	if (cubemaps == NULL) cubemaps = new map<string, Cubemap*>;
+	cubemaps->emplace(std::pair<string, Cubemap*>(filename, cubemap));
 	cout << "--CUBEMAP (" << cubemap->cubemapID << "): " << filename << "--" << endl;
 	GLHelper::checkErrors("makeCubemap");
 	return cubemap;
@@ -188,7 +239,8 @@ Framebuffer* MyGLWindow::makeFramebuffer(string name, bool useColor, bool useDep
 		throw std::exception();
 	}
 
-	framebuffers.emplace(std::pair<string, Framebuffer*>(name, framebuffer));
+	if (framebuffers == NULL) framebuffers = new map<string, Framebuffer*>;
+	framebuffers->emplace(std::pair<string, Framebuffer*>(name, framebuffer));
 
 	//cout << "--FRAMEBUFFER (" << framebuffer.framebufferObjectID << "): " << name << "--" << endl;
 	cout << "done." << endl;
@@ -198,6 +250,12 @@ Framebuffer* MyGLWindow::makeFramebuffer(string name, bool useColor, bool useDep
 
 void MyGLWindow::addGeometry(string name, ShapeData* geometry)
 {
+	if (geometry == NULL)
+	{
+		cout << "addGeometry: given null geometry!" << endl;
+		return;
+	}
+
 	glGenBuffers(1, &geometry->vertexBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, geometry->vertexBufferID);
 	glBufferData(GL_ARRAY_BUFFER, geometry->vertexBufferSize(),
@@ -229,9 +287,35 @@ void MyGLWindow::addGeometry(string name, ShapeData* geometry)
 
 	GLHelper::checkErrors("addGeometry - VAO creation");
 
-	geometries.emplace(std::pair<string, ShapeData*>(name, geometry));
+	if (geometries == NULL) geometries = new map<string, ShapeData*>;
+	//geometries[name] = geometry;
+	geometries->emplace(std::pair<string, ShapeData*>(name, geometry));
 	cout << "Added geometry: " << name << endl;
 	GLHelper::checkErrors("addGeometry");
+}
+
+void MyGLWindow::addTexture(string name, Texture* texture)
+{
+	if (texture == NULL)
+	{
+		cout << "addTexture: given null texture!" << endl;
+		return;
+	}
+
+	if (textures == NULL) textures = new map<string, Texture*>;
+	textures->emplace(std::pair<string, Texture*>(name, texture));
+}
+
+void MyGLWindow::addMaterial(string name, Material* material)
+{
+	if (material == NULL)
+	{
+		cout << "addMaterial: given null material!" << endl;
+		return;
+	}
+
+	if (materials == NULL) materials = new map<string, Material*>;
+	materials->emplace(std::pair<string, Material*>(name, material));
 }
 
 void setActiveDiffuseTexture(Texture* diffuse)
@@ -246,7 +330,7 @@ void setActiveDiffuseTexture(Texture* diffuse)
 
 void setActiveDiffuseTexture(string filename)
 {
-	Texture* diffuse = textures.at(filename);
+	Texture* diffuse = textures->at(filename);
 	setActiveDiffuseTexture(diffuse);
 }
 
@@ -262,7 +346,7 @@ void setActiveNormalMap(Texture* normalMap)
 
 void setActiveNormalMap(string filename)
 {
-	Texture* normalMap = textures.at(filename);
+	Texture* normalMap = textures->at(filename);
 	setActiveNormalMap(normalMap);
 }
 
@@ -278,7 +362,7 @@ void setActiveCubemap(Cubemap* cubemap)
 
 void setActiveCubemap(string filename)
 {
-	Cubemap* cubemap = cubemaps.at(filename);
+	Cubemap* cubemap = cubemaps->at(filename);
 	setActiveCubemap(cubemap);
 }
 
@@ -289,21 +373,46 @@ void setActiveFramebuffer(Framebuffer* framebuffer)
 
 void setActiveFramebuffer(string name)
 {
-	Framebuffer* framebuffer = framebuffers.at(name);
+	Framebuffer* framebuffer = framebuffers->at(name);
 	setActiveFramebuffer(framebuffer);
 }
 
 void setActiveMaterial(Material* material)
 {
-	glUniform1i(diffuseTextureUniformLoc, material->diffuse->getTextureID());
+	if (material->diffuse != NULL)
+	{
+		diffuseTextureUniformLoc = getUniformLocation("diffuseTexture");
+		glUniform1i(diffuseTextureUniformLoc, material->diffuse->getTextureID());
+	}
+
+	diffuseStrengthUniformLoc = getUniformLocation("diffuseStrength");
 	glUniform1f(diffuseStrengthUniformLoc, material->diffuseStrength);
-	glUniform1i(normalMapUniformLoc, material->normal->getTextureID());
+
+	if (material->normal != NULL)
+	{
+		normalMapUniformLoc = getUniformLocation("normalMap");
+		glUniform1i(normalMapUniformLoc, material->normal->getTextureID());
+	}
+
+	normalStrengthUniformLoc = getUniformLocation("normalStrength");
 	glUniform1f(normalStrengthUniformLoc, material->normalStrength);
+
+	specularPowerUniformLoc = getUniformLocation("specularPower");
 	glUniform1f(specularPowerUniformLoc, material->specularPower);
+
+	emissionStrengthUniformLoc = getUniformLocation("emissionStrength");
 	glUniform1f(emissionStrengthUniformLoc, material->emissionStrength);
+
+	reflectivityUniformLoc = getUniformLocation("reflectivity");
 	glUniform1f(reflectivityUniformLoc, material->reflectivity);
+
+	indexOfRefractionUniformLoc = getUniformLocation("indexOfRefraction");
 	glUniform1f(indexOfRefractionUniformLoc, material->indexOfRefraction);
+
+	fresnelValueUniformLoc = getUniformLocation("fresnelValue");
 	glUniform1f(fresnelValueUniformLoc, material->fresnelValue);
+
+	GLHelper::checkErrors("setActiveMaterial");
 }
 
 void MyGLWindow::updateUniforms()
@@ -337,6 +446,8 @@ void MyGLWindow::updateUniforms()
 		activeScene->getActiveCamera()->getPosition().x,
 		activeScene->getActiveCamera()->getPosition().y,
 		activeScene->getActiveCamera()->getPosition().z);
+
+	GLHelper::checkErrors("update scene uniforms");
 }
 
 void MyGLWindow::mouseMoveEvent(QMouseEvent* e)
@@ -352,14 +463,14 @@ void MyGLWindow::spawnRenderable()
 	switch (randomType)
 	{
 	case 0:
-		renderable->geometry = geometries.at("sphere");
+		renderable->geometry = getGeometry("sphere");
 		break;
 	case 1:
-		renderable->geometry = geometries.at("cube");
+		renderable->geometry = getGeometry("cube");
 		break;
 	}
 
-	renderable->material = materials.at("standard");
+	renderable->material = materials->at("standard");
 
 	glm::vec3 randPosition = glm::vec3(
 		rand() / (float)RAND_MAX - 0.5f, 
@@ -436,81 +547,85 @@ void MyGLWindow::initMaterials()
 	lightMaterial->diffuseStrength = 0.0f;
 	lightMaterial->emissionStrength = 1.0f;
 	lightMaterial->normalStrength = 0.0f;
+	addMaterial("light", lightMaterial);
 
 	Material* standardMaterial = new Material;
-	standardMaterial->diffuse = textures.at("tri");
+	standardMaterial->diffuse = getTexture("tri");
 	standardMaterial->diffuseStrength = 1.0f;
-	standardMaterial->normal = textures.at("ShapesNormal");
+	standardMaterial->normal = getTexture("ShapesNormal");
 	standardMaterial->normalStrength = 1.0f;
 	standardMaterial->specularPower = 100.0f;
-	materials.emplace(std::pair<string, Material*>("standard", standardMaterial));
+	addMaterial("standard", standardMaterial);
 
 	Material* flatMaterial = new Material;
 	flatMaterial->diffuseStrength = 0.0f;
 	flatMaterial->normalStrength = 0.0f;
-	materials.emplace(std::pair<string, Material*>("flat", flatMaterial));
+	addMaterial("flat", flatMaterial);
 
 	Material* reflectiveMaterial = new Material;
 	reflectiveMaterial->diffuseStrength = 0.0f;
-	reflectiveMaterial->normal = textures.at("ShapesNormal");
+	reflectiveMaterial->normal = getTexture("ShapesNormal");
 	reflectiveMaterial->normalStrength = 1.0f;
 	reflectiveMaterial->reflectivity = 1.0f;
-	materials.emplace(std::pair<string, Material*>("reflective", reflectiveMaterial));
+	addMaterial("reflective", reflectiveMaterial);
 
-	Material* f2Material = new Material();
-	f2Material->diffuse = textures.at("Textures/BristolF2_Albedo");
+	Material* f2Material = new Material;
+	f2Material->diffuse = getTexture("Textures/BristolF2_Albedo");
 	f2Material->diffuseStrength = 1.0f;
-	f2Material->normal = textures.at("Textures/BristolF2_Normal");
+	f2Material->normal = getTexture("Textures/BristolF2_Normal");
 	f2Material->normalStrength = 1.0f;
 	f2Material->reflectivity = 1.0f;
-	materials.emplace(std::pair<string, Material*>("f2", f2Material));
+	addMaterial("f2", f2Material);
 }
 
 void MyGLWindow::initGeometries()
 {
-	ShapeData* cube = &ShapeGenerator::makeCube();
+	//ShapeData* cube = ShapeGenerator::makeCube();
+	ShapeData* cube = OBJLoader::loadOBJFile("Models/Cube.obj");
 	MyGLWindow::addGeometry("cube", cube);
 
-	ShapeData* sphere = &ShapeGenerator::makeSphere();
+	//ShapeData* sphere = ShapeGenerator::makeSphere();
+	ShapeData* sphere = OBJLoader::loadOBJFile("Models/Sphere16.obj");
 	MyGLWindow::addGeometry("sphere", sphere);
 
-	ShapeData* plane = &ShapeGenerator::makePlane(20U);
+	//ShapeData* plane = ShapeGenerator::makePlane(20U);
+	ShapeData* plane = OBJLoader::loadOBJFile("Models/Plane.obj");
 	MyGLWindow::addGeometry("plane", plane);
 
-	/*ShapeData* model = &OBJLoader::loadOBJFile("Models/BristolF2.obj");
-	MyGLWindow::addGeometry("f2", model);*/
+	ShapeData* model = OBJLoader::loadOBJFile("Models/BristolF2.obj");
+	MyGLWindow::addGeometry("f2", model);
 }
 
 void MyGLWindow::initScene()
 {
 	activeScene = &scene;
 	activeScene->ambientLight = glm::vec3(1.0f, 1.0f, 1.0f);
-	activeScene->activeLight->position = glm::vec3(0.0f, 5.0f, 0.0f);
+	activeScene->diffuseLight->geometry = getGeometry("sphere");
+	activeScene->diffuseLight->position = glm::vec3(0.0f, 5.0f, 0.0f);
 
-	Renderable* skybox = new Renderable;
-	skybox->geometry = geometries.at("cube");
-	skybox->scale = glm::vec3(100.0f, 100.0f, 100.0f);
-	activeScene->skybox = skybox;
+	activeScene->skybox = new Skybox;
+	activeScene->skybox->geometry = getGeometry("cube");
+	activeScene->skybox->cubemap = getCubemap("Textures/Skybox_Dawn512");
 
 	Renderable* cube = new Renderable;
-	cube->geometry = geometries.at("cube");
-	cube->material = materials.at("standard");
+	cube->geometry = getGeometry("cube");
+	cube->material = getMaterial("standard");
 	cube->position = glm::vec3(0.0f, 2.5f, 0.0f);
 	cube->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	cube->scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	activeScene->addRenderable(cube);
 
 	Renderable* sphere = new Renderable;
-	sphere->geometry = geometries.at("sphere");
-	sphere->material = materials.at("flat");
+	sphere->geometry = getGeometry("sphere");
+	sphere->material = getMaterial("flat");
 	sphere->position = glm::vec3(3.0f, 2.0f, 1.0f);
 	sphere->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	sphere->scale = glm::vec3(2.0f, 2.0f, 2.0f);
 	activeScene->addRenderable(sphere);
 
 	Renderable* plane = new Renderable;
-	plane->geometry = geometries.at("plane");
-	plane->material = materials.at("reflective");
+	plane->geometry = getGeometry("plane");
+	plane->material = getMaterial("reflective");
 	plane->position = glm::vec3(0.0f, 0.0f, 0.0f);
 	plane->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	plane->scale = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -634,8 +749,9 @@ void MyGLWindow::initializeGL()
 	GLHelper::checkErrors("initializeGL -- load default normal texture");
 
 	// Cubemap
-	Cubemap* cubemap = makeCubemap("Skybox_Dawn");
-	setActiveCubemap("Skybox_Dawn");
+	//Cubemap* cubemap = makeCubemap("Skybox_Dawn");
+	Cubemap* cubemap2 = makeCubemap("Textures/Skybox_Dawn512");
+	//setActiveCubemap("Skybox_Dawn");
 
 	GLHelper::checkErrors("initializeGL -- load default skybox texture");
 
@@ -673,12 +789,14 @@ void MyGLWindow::initializeGL()
 
 	GLHelper::checkErrors("initializeGL -- find uniforms");
 
+	/*
 	// Render texture
 	Framebuffer* framebuffer = makeFramebuffer("RenderTexture", true, false, 1024, 1024);
 	setActiveFramebuffer(framebuffer);
 
 	// Shadow map
 	Framebuffer* shadowMap = makeFramebuffer("ShadowMap", false, true, 1024, 1024);
+	*/
 
 	// Clear to black
 	glClearColor(0, 0, 0, 1);
@@ -686,33 +804,48 @@ void MyGLWindow::initializeGL()
 	GLHelper::checkErrors("initializeGL");
 }
 
-void MyGLWindow::drawSkybox(Camera cam, bool flipped)
+void MyGLWindow::drawSkybox(Camera* cam, bool flipped)
 {
-	glm::vec3 camPosBackup = activeScene->getActiveCamera()->getPosition();
-	GLuint vaoID = activeScene->skybox->geometry->vertexArrayObjectID;
+	Scene* scene = activeScene;
+	glm::vec3 camPosBackup = scene->getActiveCamera()->getPosition();
+	ShapeData* geo = scene->skybox->geometry;
+	GLuint vaoID = geo->vertexArrayObjectID;
 	glBindVertexArray(vaoID);
 
-	activeScene->getActiveCamera()->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	GLHelper::checkErrors("drawSkybox -- bind vertex array");
+
+	setActiveCubemap(activeScene->skybox->cubemap);
+
+	scene->getActiveCamera()->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	float scaleVal = flipped ? 1.0f : -1.0f;
-	glm::mat4 camMat = cam.getWorldToViewMatrix() * glm::scale(glm::vec3(1.0f, scaleVal, 1.0f));
+	glm::mat4 camMat = cam->getWorldToViewMatrix() * glm::scale(glm::vec3(1.0f, scaleVal, 1.0f));
 	glm::mat4 modelMat = glm::mat4();
 
+	glUniformMatrix4fv(modelMatUniformLocation, 1, GL_FALSE, &modelMat[0][0]);
+	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &camMat[0][0]);
 
+	GLHelper::checkErrors("drawSkybox -- calculate matrices");
 
-	glDrawElements(GL_TRIANGLES, activeScene->skybox->geometry->numIndices, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(GL_TRIANGLES, geo->numIndices, GL_UNSIGNED_SHORT, 0);
+
+	GLHelper::checkErrors("drawSkybox -- draw elements");
+
+	glBindVertexArray(0);
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	activeScene->getActiveCamera()->setPosition(camPosBackup);
+	scene->getActiveCamera()->setPosition(camPosBackup);
 
 	GLHelper::checkErrors("drawSkybox");
 }
 
-void MyGLWindow::draw(Camera cam, bool flipped)
+void MyGLWindow::draw(Camera* cam, bool flipped)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	updateUniforms();
+
+	GLHelper::checkErrors("draw -- update uniforms");
 
 	// View to projection
 	glm::mat4 projMat = glm::perspective(
@@ -724,9 +857,9 @@ void MyGLWindow::draw(Camera cam, bool flipped)
 	drawSkybox(cam, false);
 
 	float scaleVal = flipped ? -1.0f : 1.0f;
-	glm::mat4 camMat = cam.getWorldToViewMatrix() * glm::scale(glm::vec3(1.0f, scaleVal, 1.0f));
+	glm::mat4 camMat = cam->getWorldToViewMatrix() * glm::scale(glm::vec3(1.0f, scaleVal, 1.0f));
 
-	vector<Renderable*>* renderables = &activeScene->getRenderables();
+	vector<Renderable*>* renderables = activeScene->getRenderables();
 	vector<Renderable*>::iterator renderablesIterator = 
 		renderables->begin();
 	for (; renderablesIterator != renderables->end(); ++renderablesIterator)
@@ -734,16 +867,25 @@ void MyGLWindow::draw(Camera cam, bool flipped)
 		// Send geometry data and matrices
 		Renderable* renderable = *renderablesIterator;
 		glBindVertexArray(renderable->geometry->vertexArrayObjectID);
+
+		GLHelper::checkErrors("draw -- bind renderable VAO");
+
 		glm::mat4 modelToWorldMatrix = renderable->getModelToWorldMatrix();
 		glm::mat4 modelViewProjectionMatrix = projMat * camMat * modelToWorldMatrix;
 		glUniformMatrix4fv(modelMatUniformLocation, 1, GL_FALSE, &modelToWorldMatrix[0][0]);
 		glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
 
+		GLHelper::checkErrors("draw -- send renderable matrices");
+
 		// Send material data
 		setActiveMaterial(renderable->material);
 
+		GLHelper::checkErrors("draw -- set render material");
+
 		// Draw renderable
 		glDrawElements(GL_TRIANGLES, renderable->geometry->numIndices, GL_UNSIGNED_SHORT, 0);
+
+		GLHelper::checkErrors("draw -- draw renderable elements");
 	}
 
 	GLHelper::checkErrors("draw");
@@ -764,7 +906,7 @@ void MyGLWindow::paintGL()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, width(), height());
 	//glUniform1i(renderTextureUniformLoc, activeFramebuffer->renderTextureID);
-	draw(*(activeScene->getActiveCamera()), false);
+	draw(activeScene->getActiveCamera(), false);
 
 	GLHelper::checkErrors("paintGL");
 }

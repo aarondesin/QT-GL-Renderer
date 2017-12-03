@@ -6,15 +6,17 @@
 struct Renderable
 {
 public:
+	ShapeData* geometry = NULL;
+	Material* material = NULL;
+	glm::vec3 position;
+	glm::vec3 scale;
+	glm::vec3 rotation;
+
 	Renderable() :
 		position(glm::vec3(0.0f, 0.0f, 0.0f)),
 		rotation(glm::vec3(0.0f, 0.0f, 0.0f)),
 		scale(glm::vec3(1.0f, 1.0f, 1.0f)) {}
-	ShapeData* geometry;
-	Material* material;
-	glm::vec3 position;
-	glm::vec3 scale;
-	glm::vec3 rotation;
+
 	glm::mat4 getModelToWorldMatrix()
 	{
 		glm::mat4 translateMatrix = glm::translate(glm::mat4(), position);
@@ -28,8 +30,11 @@ public:
 
 	~Renderable()
 	{
-		//delete geometry;
-		//delete material;
+		delete geometry;
+		delete material;
+		position = glm::vec3(0.0f, 0.0f, 0.0f);
+		rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+		scale = glm::vec3(0.0f, 0.0f, 0.0f);
 	}
 };
 

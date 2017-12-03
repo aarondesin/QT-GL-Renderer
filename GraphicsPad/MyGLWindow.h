@@ -22,14 +22,16 @@ protected:
 	void MyGLWindow::initScene();
 	void MyGLWindow::updateUniforms();
 	void MyGLWindow::spawnRenderable();
-	void MyGLWindow::drawSkybox(Camera cam, bool flipped);
-	void MyGLWindow::draw(Camera cam, bool flipped);
+	void MyGLWindow::drawSkybox(Camera* cam, bool flipped);
+	void MyGLWindow::draw(Camera* cam, bool flipped);
 	void MyGLWindow::installShaders();
 	QImage MyGLWindow::makeImage(string filename);
 	Texture* MyGLWindow::makeTexture(string filename);
 	Cubemap* MyGLWindow::makeCubemap(string filename);
 	Framebuffer* MyGLWindow::makeFramebuffer(string filename, bool useColor, bool useDepth, int width, int height);
+	void MyGLWindow::addTexture(string name, Texture* texture);
 	void MyGLWindow::addGeometry(string name, ShapeData* geometry);
+	void MyGLWindow::addMaterial(string name, Material* material);
 	void MyGLWindow::initMaterials();
 	void MyGLWindow::initGeometries();
 };

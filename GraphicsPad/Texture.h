@@ -122,6 +122,7 @@ public:
 	}
 	~Texture() 
 	{
-		//delete textureID;
+		name = "";
+		textureID = -1;
 	}
 };

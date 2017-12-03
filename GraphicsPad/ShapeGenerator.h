@@ -13,24 +13,24 @@ class __declspec(dllexport) ShapeGenerator
 public:
 	// Makes a line from (-1, 0, 0) to (1, 0, 0)
 	// Must render with GL_LINES
-	static ShapeData makeLine();
-	static ShapeData make2DTriangle();
-	static ShapeData makeHudQuad();
-	static ShapeData makeCone(uint tesselation = 10);
-	static ShapeData makeCylinder(uint tesselation = 10);
+	static ShapeData* makeLine();
+	static ShapeData* make2DTriangle();
+	static ShapeData* makeHudQuad();
+	static ShapeData* makeCone(uint tesselation = 10);
+	static ShapeData* makeCylinder(uint tesselation = 10);
 	// Render GL_TRIANGLES
-	static ShapeData makePlane(uint dimensions = 1);
+	static ShapeData* makePlane(uint dimensions = 1);
 	// Render GL_LINES
-	static ShapeData makeWireframePlane(uint dimensions = 1);
-	static ShapeData makeCube();
-	static ShapeData makeSphere(uint tesselation = 10);
-	static ShapeData makeTorus(uint tesselation = 10);
-	static ShapeData makeArrow();
-	static ShapeData makeTeapot(uint tesselation = 10, const glm::mat4& lidTransform = glm::mat4());
+	static ShapeData* makeWireframePlane(uint dimensions = 1);
+	static ShapeData* makeCube();
+	static ShapeData* makeSphere(uint tesselation = 10);
+	static ShapeData* makeTorus(uint tesselation = 10);
+	static ShapeData* makeArrow();
+	static ShapeData* makeTeapot(uint tesselation = 10, const glm::mat4& lidTransform = glm::mat4());
 
 	static const float CONE_HEIGHT;
 private:
-	static ShapeData copyToShapeData(
+	static ShapeData* copyToShapeData(
 		Vertex* verts, size_t numVerts,
 		ushort* indices, uint numIndices);
 	static void makeTeapot(
@@ -42,9 +42,9 @@ private:
 		unsigned short*& indices, 
 		unsigned int& numIndices);
 
-	static ShapeData makePlaneVerts(uint tesselation);
-	static ShapeData makePlaneIndices(uint tesselation);
-	static ShapeData makePlaneUnseamedIndices(uint tesselation);
+	static ShapeData* makePlaneVerts(uint tesselation);
+	static ShapeData* makePlaneIndices(uint tesselation);
+	static ShapeData* makePlaneUnseamedIndices(uint tesselation);
 
 	// Teapot:
 	static void generatePatches(float * v, float * n, float *tc, unsigned short* el, int grid);

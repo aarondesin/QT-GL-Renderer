@@ -10,8 +10,8 @@ using namespace std;
 struct Framebuffer
 {
 protected:
-	Texture* renderTexture;
-	Texture* depthTexture;
+	Texture* renderTexture = NULL;
+	Texture* depthTexture = NULL;
 	GLuint framebufferObjectID;
 	GLenum status;
 public:
@@ -32,19 +32,22 @@ public:
 
 		if (useColor)
 		{
-			renderTexture = &Texture(name, width, height, GL_RGB, GL_RGB, NULL);
+			renderTexture = new Texture(name, width, height, GL_RGB, GL_RGB, NULL);
 			glReadBuffer(GL_COLOR_ATTACHMENT0);
 			glDrawBuffer(GL_COLOR_ATTACHMENT0);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, renderTexture->getTextureID(), 0);
+			//glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture->getTextureID(), 0);
 		}
 
 		if (useDepth)
 		{
-			depthTexture = &Texture(name, width, height, GL_DEPTH_COMPONENT16, GL_R, NULL);
+			depthTexture = new Texture(name, width, height, GL_DEPTH_COMPONENT16, GL_R, NULL);
 			glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture->getTextureID(), 0);
 		}
 
 		status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+		GLHelper::checkErrors("Framebuffer constructor");
 	}
 	~Framebuffer() 
 	{ 
