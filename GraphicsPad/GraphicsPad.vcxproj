@@ -159,12 +159,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Framebuffer.cpp" />
+    <ClCompile Include="GLHelper.cpp" />
     <ClCompile Include="Mainer.cpp" />
     <ClCompile Include="MyGLWindow.cpp" />
     <ClCompile Include="OBJLoader.cpp" />
     <ClCompile Include="ShapeGenerator.cpp" />
-    <ClCompile Include="Texture.cpp" />
     <Text Include="VertexShader.glsl">
       <FileType>CppCode</FileType>
     </Text>

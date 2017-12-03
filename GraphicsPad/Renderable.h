@@ -10,8 +10,8 @@ public:
 		position(glm::vec3(0.0f, 0.0f, 0.0f)),
 		rotation(glm::vec3(0.0f, 0.0f, 0.0f)),
 		scale(glm::vec3(1.0f, 1.0f, 1.0f)) {}
-	ShapeData geometry;
-	Material material;
+	ShapeData* geometry;
+	Material* material;
 	glm::vec3 position;
 	glm::vec3 scale;
 	glm::vec3 rotation;

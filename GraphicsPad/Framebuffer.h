@@ -3,10 +3,11 @@
 #include <global.h>
 #include <iostream>
 #include <Texture.h>
+#include <GLHelper.h>
 
 using namespace std;
 
-class Framebuffer
+struct Framebuffer
 {
 protected:
 	Texture* renderTexture;
@@ -15,7 +16,7 @@ protected:
 	GLenum status;
 public:
 	Framebuffer() { throw exception(); }
-	static int nextFramebufferObjectID;
+	
 	Framebuffer(string name, bool useColor, bool useDepth, int width, int height)
 	{
 		if (!useDepth && !useColor)
@@ -24,7 +25,7 @@ public:
 			throw std::exception();
 		}
 
-		framebufferObjectID = nextFramebufferObjectID++;
+		framebufferObjectID = GLHelper::getNextFramebufferObjectID();
 
 		glGenFramebuffers(1, &framebufferObjectID);
 		glBindFramebuffer(GL_FRAMEBUFFER, framebufferObjectID);

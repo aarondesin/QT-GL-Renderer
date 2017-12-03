@@ -8,9 +8,9 @@ public:
 	Material() : diffuseStrength(1.0f),
 		normalStrength(1.0f),
 		specularPower(100.0f), emissionStrength(1.0f) {}
-	Texture diffuse;
+	Texture* diffuse;
 	float diffuseStrength = 1.0f;
-	Texture normal;
+	Texture* normal;
 	float normalStrength = 1.0f;
 	float specularPower = 100.0f;
 	float emissionStrength = 0.0f;

@@ -15,7 +15,7 @@ public:
 	Cubemap() { throw exception(); }
 	Cubemap(QImage* images)
 	{
-		cubemapID = Texture::getNextTextureID();
+		cubemapID = GLHelper::getNextTextureID();
 		glActiveTexture(GL_TEXTURE0+cubemapID);
 		glGenTextures(1, &cubemapID);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapID);

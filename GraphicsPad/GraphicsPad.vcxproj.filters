@@ -6,8 +6,7 @@
     <ClCompile Include="ShapeGenerator.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="OBJLoader.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Framebuffer.cpp" />
+    <ClCompile Include="GLHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyGLWindow.h" />

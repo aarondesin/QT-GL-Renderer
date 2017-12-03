@@ -7,6 +7,20 @@ using namespace std;
 class GLHelper
 {
 public:
+	static const int MAX_TEXTURE_ID = 15;
+	static int getNextTextureID()
+	{
+		int i = nextTextureID;
+		nextTextureID++;
+		return i;
+	}
+	static const int MAX_FBO_ID = 3;
+	static int getNextFramebufferObjectID()
+	{
+		int i = nextFramebufferObjectID;
+		nextFramebufferObjectID++;
+		return i;
+	}
 	static void GLHelper::checkErrors(string location)
 	{
 		GLenum err = glGetError();
@@ -34,4 +48,7 @@ public:
 			throw exception();
 		}
 	}
+private:
+	static int nextTextureID;
+	static int nextFramebufferObjectID;
 };
