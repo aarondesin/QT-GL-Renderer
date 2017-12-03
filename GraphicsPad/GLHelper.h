@@ -23,9 +23,9 @@ public:
 	}
 	static void GLHelper::checkErrors(string location)
 	{
-		GLenum err = glGetError();
+		GLenum err;
 		string errMsg = "";
-		while (err != GL_NO_ERROR)
+		while ((err = glGetError()) != GL_NO_ERROR)
 		{
 			switch (err)
 			{
@@ -53,9 +53,7 @@ public:
 			}
 
 			cout << "Error " << err << ": " << errMsg << " after " << location << endl;
-			throw exception();
-
-			err = glGetError();
+			//throw exception();
 		}
 	}
 private:

@@ -28,13 +28,13 @@ const float RANDOM_PLACEMENT_OFFSET = 40.0f;
 
 GLint programID = -1;
 
-Scene scene("Main");
-Scene* activeScene = &scene;
+Scene* scene = new Scene("Main");
+Scene* activeScene = scene;
 
-Framebuffer *activeFramebuffer;
+Framebuffer *activeFramebuffer = NULL;
 
 // All images
-map<string, QImage>* images = NULL;
+map<string, QImage*>* images = NULL;
 
 // All textures
 const int MAX_TEXTURES = 10;
@@ -124,14 +124,16 @@ Cubemap* getCubemap(string name)
 GLint getUniformLocation(const GLchar* uniformName)
 {
 	GLint result = glGetUniformLocation(programID, uniformName);
+	GLHelper::checkErrors("getUniformLocation().glGetUniformLocation()");
 	if (result < 0)
 	{
 		cout << "Failed to find uniform \"" << uniformName << "\"!" << endl;
+		throw exception();
 	}
 	return result;
 }
 
-QImage MyGLWindow::makeImage(string filename)
+QImage* MyGLWindow::makeImage(string filename)
 {
 	GLHelper::checkErrors("makeImage -- before function entry");
 
@@ -148,14 +150,14 @@ QImage MyGLWindow::makeImage(string filename)
 	}
 
 
-	QImage image = QGLWidget::convertToGLFormat(*loadedImage);
+	QImage* image = new QImage(QGLWidget::convertToGLFormat(*loadedImage));
 
 	GLHelper::checkErrors("makeImage -- conversion");
 
-	std::pair<string, QImage> pair = 
-		std::pair<string, QImage>(filename, image);
+	std::pair<string, QImage*> pair = 
+		std::pair<string, QImage*>(filename, image);
 
-	if (images == NULL) images = new map<string, QImage>;
+	if (images == NULL) images = new map<string, QImage*>;
 	images->emplace(pair);
 	cout << "--IMAGE: " << filename << "--" << endl;
 	GLHelper::checkErrors("makeImage");
@@ -166,16 +168,16 @@ Texture* MyGLWindow::makeTexture(string filename)
 {
 	GLHelper::checkErrors("makeTexture -- before function entry");
 
-	QImage image = makeImage(filename);
+	QImage* image = makeImage(filename);
 	GLHelper::checkErrors("makeTexture -- image creation");
 
-	if (image.isNull())
+	if (image->isNull())
 	{
 		cout << "NULL REFERENCE: Image is null!" << endl;
 		throw exception();
 	}
 
-	Texture* texture = new Texture(filename, image.width(), image.height(), GL_RGBA, GL_RGBA, image.bits());
+	Texture* texture = new Texture(filename, image->width(), image->height(), GL_RGBA, GL_RGBA, image->bits());
 
 	GLHelper::checkErrors("makeTexture - texture construction");
 
@@ -191,13 +193,13 @@ Texture* MyGLWindow::makeTexture(string filename)
 
 Cubemap* MyGLWindow::makeCubemap(string filename)
 {
-	QImage left = makeImage(filename + "_Left");
-	QImage right = makeImage(filename + "_Right");
-	QImage up = makeImage(filename + "_Up");
-	QImage down = makeImage(filename + "_Down");
-	QImage back = makeImage(filename + "_Back");
-	QImage forward = makeImage(filename + "_Forward");
-	QImage images[] = { left, right, up, down, back, forward };
+	QImage* left = makeImage(filename + "_Left");
+	QImage* right = makeImage(filename + "_Right");
+	QImage* up = makeImage(filename + "_Up");
+	QImage* down = makeImage(filename + "_Down");
+	QImage* back = makeImage(filename + "_Back");
+	QImage* forward = makeImage(filename + "_Forward");
+	QImage* images[] = { left, right, up, down, back, forward };
 	Cubemap* cubemap = new Cubemap((QImage*)images);
 
 
@@ -257,6 +259,8 @@ void MyGLWindow::addGeometry(string name, ShapeData* geometry)
 	}
 
 	glGenBuffers(1, &geometry->vertexBufferID);
+	GLHelper::checkErrors("MyGLWindow::addGeometry().glGenBuffers()");
+
 	glBindBuffer(GL_ARRAY_BUFFER, geometry->vertexBufferID);
 	glBufferData(GL_ARRAY_BUFFER, geometry->vertexBufferSize(),
 		geometry->vertices, GL_STATIC_DRAW);
@@ -265,7 +269,7 @@ void MyGLWindow::addGeometry(string name, ShapeData* geometry)
 
 	glGenBuffers(1, &geometry->indexBufferID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->indexBufferID);
-	glBufferData(GL_ARRAY_BUFFER, geometry->indexBufferSize(),
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, geometry->indexBufferSize(),
 		geometry->indices, GL_STATIC_DRAW);
 
 	GLHelper::checkErrors("addGeometry - index buffer creation");
@@ -541,6 +545,26 @@ void MyGLWindow::keyPressEvent(QKeyEvent* e)
 	MyGLWindow::updateGL();
 }
 
+void MyGLWindow::initTextures()
+{
+
+	// Diffuse texture
+	Texture* tri = makeTexture("tri");
+	setActiveDiffuseTexture("tri");
+
+	GLHelper::checkErrors("initializeGL -- load default diffuse texture");
+
+	// Normal map
+	Texture* normal = makeTexture("ShapesNormal");
+	setActiveNormalMap("ShapesNormal");
+
+	GLHelper::checkErrors("initializeGL -- load default normal texture");
+
+	// Cubemap
+	//Cubemap* cubemap = makeCubemap("Skybox_Dawn");
+	Cubemap* cubemap2 = makeCubemap("Textures/Skybox_Dawn512");
+}
+
 void MyGLWindow::initMaterials()
 {
 	Material* lightMaterial = new Material;
@@ -569,13 +593,13 @@ void MyGLWindow::initMaterials()
 	reflectiveMaterial->reflectivity = 1.0f;
 	addMaterial("reflective", reflectiveMaterial);
 
-	Material* f2Material = new Material;
+	/*Material* f2Material = new Material;
 	f2Material->diffuse = getTexture("Textures/BristolF2_Albedo");
 	f2Material->diffuseStrength = 1.0f;
 	f2Material->normal = getTexture("Textures/BristolF2_Normal");
 	f2Material->normalStrength = 1.0f;
 	f2Material->reflectivity = 1.0f;
-	addMaterial("f2", f2Material);
+	addMaterial("f2", f2Material);*/
 }
 
 void MyGLWindow::initGeometries()
@@ -592,13 +616,13 @@ void MyGLWindow::initGeometries()
 	ShapeData* plane = OBJLoader::loadOBJFile("Models/Plane.obj");
 	MyGLWindow::addGeometry("plane", plane);
 
-	ShapeData* model = OBJLoader::loadOBJFile("Models/BristolF2.obj");
-	MyGLWindow::addGeometry("f2", model);
+	/*ShapeData* model = OBJLoader::loadOBJFile("Models/BristolF2.obj");
+	MyGLWindow::addGeometry("f2", model);*/
 }
 
 void MyGLWindow::initScene()
 {
-	activeScene = &scene;
+	activeScene = scene;
 	activeScene->ambientLight = glm::vec3(1.0f, 1.0f, 1.0f);
 	activeScene->diffuseLight->geometry = getGeometry("sphere");
 	activeScene->diffuseLight->position = glm::vec3(0.0f, 5.0f, 0.0f);
@@ -709,7 +733,11 @@ void MyGLWindow::installShaders()
 
 	// If either of the shaders is broken, quit out
 	if (!checkShaderStatus(vertexShaderID) || !checkShaderStatus(fragmentShaderID))
-		return;
+	{
+		throw exception();
+	}
+
+	cout << "Shaders compiled successfully." << endl;
 
 	// Init GL program and link shaders to it
 	programID = glCreateProgram();
@@ -718,7 +746,11 @@ void MyGLWindow::installShaders()
 	glLinkProgram(programID);
 
 	if (!checkProgramStatus(programID))
-		return;
+	{
+		throw exception();
+	}
+
+	cout << "Program " << programID << " linking successful." << endl;
 
 	glUseProgram(programID);
 
@@ -732,40 +764,27 @@ void MyGLWindow::initializeGL()
 	GLHelper::checkErrors("initializeGL -- glewInit");
 
 	installShaders();
+	initGeometries();
+	initTextures();
+	initMaterials();
+	initScene();
+	
 
 	glEnable(GL_DEPTH_TEST);
-	initGeometries();
-
-	// Diffuse texture
-	Texture* tri = makeTexture("tri");
-	setActiveDiffuseTexture("tri");
-
-	GLHelper::checkErrors("initializeGL -- load default diffuse texture");
-
-	// Normal map
-	Texture* normal = makeTexture("ShapesNormal");
-	setActiveNormalMap("ShapesNormal");
-
-	GLHelper::checkErrors("initializeGL -- load default normal texture");
-
-	// Cubemap
-	//Cubemap* cubemap = makeCubemap("Skybox_Dawn");
-	Cubemap* cubemap2 = makeCubemap("Textures/Skybox_Dawn512");
+	
 	//setActiveCubemap("Skybox_Dawn");
 
 	GLHelper::checkErrors("initializeGL -- load default skybox texture");
 
 	// F2
-	makeTexture("Textures/BristolF2_Albedo");
+	/*makeTexture("Textures/BristolF2_Albedo");
 	makeTexture("Textures/BristolF2_AO");
 	makeTexture("Textures/BristolF2_MetallicSmoothness");
-	makeTexture("Textures/BristolF2_Normal");
+	makeTexture("Textures/BristolF2_Normal");*/
 
 	GLHelper::checkErrors("initializeGL -- load resources");
 
-	initMaterials();
-	initScene();
-	installShaders();
+	
 
 	// Get uniforms
 	modelMatUniformLocation     = getUniformLocation("modelMatrix");
@@ -799,7 +818,7 @@ void MyGLWindow::initializeGL()
 	*/
 
 	// Clear to black
-	glClearColor(0, 0, 0, 1);
+	glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
 
 	GLHelper::checkErrors("initializeGL");
 }
@@ -830,8 +849,6 @@ void MyGLWindow::drawSkybox(Camera* cam, bool flipped)
 
 	GLHelper::checkErrors("drawSkybox -- draw elements");
 
-	glBindVertexArray(0);
-
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	scene->getActiveCamera()->setPosition(camPosBackup);
@@ -841,7 +858,7 @@ void MyGLWindow::drawSkybox(Camera* cam, bool flipped)
 
 void MyGLWindow::draw(Camera* cam, bool flipped)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	updateUniforms();
 
@@ -886,6 +903,8 @@ void MyGLWindow::draw(Camera* cam, bool flipped)
 		glDrawElements(GL_TRIANGLES, renderable->geometry->numIndices, GL_UNSIGNED_SHORT, 0);
 
 		GLHelper::checkErrors("draw -- draw renderable elements");
+
+		cout << "drew" << endl;
 	}
 
 	GLHelper::checkErrors("draw");
@@ -893,6 +912,8 @@ void MyGLWindow::draw(Camera* cam, bool flipped)
 
 void MyGLWindow::paintGL()
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	if (activeFramebuffer != NULL &&
 		activeFramebuffer->getFramebufferObjectID() != NULL)
 	{
