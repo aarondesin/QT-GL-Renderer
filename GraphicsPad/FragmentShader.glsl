@@ -94,5 +94,6 @@ void main()
 	color = mix  (color, clamp(fresnelSkyboxSample, 0.0, 1.0), fresnelValue);
 
 	// Final mix
-	outColor = color;
+	outColor = clamp(color + 1.0, 0.0, 1.0);
+	//outColor = color;
 }

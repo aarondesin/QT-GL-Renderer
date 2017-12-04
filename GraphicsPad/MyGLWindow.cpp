@@ -127,8 +127,8 @@ GLint getUniformLocation(const GLchar* uniformName)
 	GLHelper::checkErrors("getUniformLocation().glGetUniformLocation()");
 	if (result < 0)
 	{
-		cout << "Failed to find uniform \"" << uniformName << "\"!" << endl;
-		throw exception();
+		cout << "Failed to find uniform \"" << uniformName << "\" in program " << programID << "!" << endl;
+		//throw exception();
 	}
 	return result;
 }
@@ -258,6 +258,9 @@ void MyGLWindow::addGeometry(string name, ShapeData* geometry)
 		return;
 	}
 
+	glGenVertexArrays(1, &geometry->vertexArrayObjectID);
+	glBindVertexArray(geometry->vertexArrayObjectID);
+
 	glGenBuffers(1, &geometry->vertexBufferID);
 	GLHelper::checkErrors("MyGLWindow::addGeometry().glGenBuffers()");
 
@@ -274,8 +277,7 @@ void MyGLWindow::addGeometry(string name, ShapeData* geometry)
 
 	GLHelper::checkErrors("addGeometry - index buffer creation");
 
-	glGenVertexArrays(1, &geometry->vertexArrayObjectID);
-	glBindVertexArray(geometry->vertexArrayObjectID);
+	
 	glEnableVertexAttribArray(0); // Position
 	glEnableVertexAttribArray(1); // Color
 	glEnableVertexAttribArray(2); // Normal
@@ -550,13 +552,13 @@ void MyGLWindow::initTextures()
 
 	// Diffuse texture
 	Texture* tri = makeTexture("tri");
-	setActiveDiffuseTexture("tri");
+	//setActiveDiffuseTexture("tri");
 
 	GLHelper::checkErrors("initializeGL -- load default diffuse texture");
 
 	// Normal map
 	Texture* normal = makeTexture("ShapesNormal");
-	setActiveNormalMap("ShapesNormal");
+	//setActiveNormalMap("ShapesNormal");
 
 	GLHelper::checkErrors("initializeGL -- load default normal texture");
 
@@ -686,6 +688,7 @@ bool checkStatus(GLuint objectID,
 	objectPropertyGetterFunc(objectID, statusType, &status);
 	if (status != GL_TRUE)
 	{
+		cout << "error" << endl;
 		GLint infoLogLength;
 		objectPropertyGetterFunc(objectID, GL_INFO_LOG_LENGTH, &infoLogLength);
 		GLchar* buffer = new GLchar[infoLogLength];
@@ -763,14 +766,15 @@ void MyGLWindow::initializeGL()
 	glewInit();
 	GLHelper::checkErrors("initializeGL -- glewInit");
 
-	installShaders();
+	
 	initGeometries();
 	initTextures();
 	initMaterials();
 	initScene();
-	
+	installShaders();
 
 	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
 	
 	//setActiveCubemap("Skybox_Dawn");
 
@@ -858,7 +862,7 @@ void MyGLWindow::drawSkybox(Camera* cam, bool flipped)
 
 void MyGLWindow::draw(Camera* cam, bool flipped)
 {
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	updateUniforms();
 
@@ -904,7 +908,7 @@ void MyGLWindow::draw(Camera* cam, bool flipped)
 
 		GLHelper::checkErrors("draw -- draw renderable elements");
 
-		cout << "drew" << endl;
+		cout << "drew " << endl;
 	}
 
 	GLHelper::checkErrors("draw");
