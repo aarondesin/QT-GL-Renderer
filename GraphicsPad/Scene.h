@@ -18,7 +18,8 @@ public:
 	Skybox* skybox = NULL;
 
 	Scene() : sceneCamera(new Camera), renderTargetCamera (new Camera), activeCamera(sceneCamera),
-		renderables (new vector<Renderable*>), diffuseLight (new Light), activeLight(diffuseLight) {}
+		renderables (new vector<Renderable*>), diffuseLight (new Light), activeLight(diffuseLight),
+		ambientLight (glm::vec3(+0.1f, +0.1f, +0.1f)) {}
 	Scene(string sceneName) : Scene() { name = sceneName; }
 
 	void addRenderable(Renderable* renderable) { renderables->push_back(renderable); }

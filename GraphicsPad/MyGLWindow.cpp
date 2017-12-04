@@ -258,9 +258,6 @@ void MyGLWindow::addGeometry(string name, ShapeData* geometry)
 		return;
 	}
 
-	glGenVertexArrays(1, &geometry->vertexArrayObjectID);
-	glBindVertexArray(geometry->vertexArrayObjectID);
-
 	glGenBuffers(1, &geometry->vertexBufferID);
 	GLHelper::checkErrors("MyGLWindow::addGeometry().glGenBuffers()");
 
@@ -277,7 +274,8 @@ void MyGLWindow::addGeometry(string name, ShapeData* geometry)
 
 	GLHelper::checkErrors("addGeometry - index buffer creation");
 
-	
+	glGenVertexArrays(1, &geometry->vertexArrayObjectID);
+	glBindVertexArray(geometry->vertexArrayObjectID);
 	glEnableVertexAttribArray(0); // Position
 	glEnableVertexAttribArray(1); // Color
 	glEnableVertexAttribArray(2); // Normal
@@ -387,8 +385,9 @@ void setActiveMaterial(Material* material)
 {
 	if (material->diffuse != NULL)
 	{
-		diffuseTextureUniformLoc = getUniformLocation("diffuseTexture");
-		glUniform1i(diffuseTextureUniformLoc, material->diffuse->getTextureID());
+		setActiveDiffuseTexture(material->diffuse);
+		//diffuseTextureUniformLoc = getUniformLocation("diffuseTexture");
+		//glUniform1i(diffuseTextureUniformLoc, material->diffuse->getTextureID());
 	}
 
 	diffuseStrengthUniformLoc = getUniformLocation("diffuseStrength");
@@ -396,8 +395,9 @@ void setActiveMaterial(Material* material)
 
 	if (material->normal != NULL)
 	{
-		normalMapUniformLoc = getUniformLocation("normalMap");
-		glUniform1i(normalMapUniformLoc, material->normal->getTextureID());
+		setActiveNormalMap(material->normal);
+		//normalMapUniformLoc = getUniformLocation("normalMap");
+		//glUniform1i(normalMapUniformLoc, material->normal->getTextureID());
 	}
 
 	normalStrengthUniformLoc = getUniformLocation("normalStrength");
@@ -424,30 +424,35 @@ void setActiveMaterial(Material* material)
 void MyGLWindow::updateUniforms()
 {
 	// Update ambient lighting strength
+	ambientLightUniformLoc = getUniformLocation("ambientLight");
 	glUniform3f(ambientLightUniformLoc,
 		activeScene->ambientLight.r,
 		activeScene->ambientLight.g,
 		activeScene->ambientLight.b);
 
 	// Update light position
+	lightPosUniformLoc = getUniformLocation("lightPos");
 	glUniform3f(lightPosUniformLoc,
 		activeScene->activeLight->position.x,
 		activeScene->activeLight->position.y,
 		activeScene->activeLight->position.z);
 
 	// Update diffuse lighting
+	diffuseLightUniformLoc = getUniformLocation("diffuseColor");
 	glUniform3f(diffuseLightUniformLoc,
 		activeScene->activeLight->color.r,
 		activeScene->activeLight->color.g,
 		activeScene->activeLight->color.b);
 
 	// Update specular lighting
+	specularColorUniformLoc = getUniformLocation("specularColor");
 	glUniform3f(specularColorUniformLoc,
 		activeScene->activeLight->color.r,
 		activeScene->activeLight->color.g,
 		activeScene->activeLight->color.b);
 
 	// Update camera position
+	cameraPosUniformLoc = getUniformLocation("camPos");
 	glUniform3f(cameraPosUniformLoc,
 		activeScene->getActiveCamera()->getPosition().x,
 		activeScene->getActiveCamera()->getPosition().y,
@@ -565,6 +570,12 @@ void MyGLWindow::initTextures()
 	// Cubemap
 	//Cubemap* cubemap = makeCubemap("Skybox_Dawn");
 	Cubemap* cubemap2 = makeCubemap("Textures/Skybox_Dawn512");
+
+	// F2
+	/*makeTexture("Textures/BristolF2_Albedo");
+	makeTexture("Textures/BristolF2_AO");
+	makeTexture("Textures/BristolF2_MetallicSmoothness");
+	makeTexture("Textures/BristolF2_Normal");*/
 }
 
 void MyGLWindow::initMaterials()
@@ -606,27 +617,28 @@ void MyGLWindow::initMaterials()
 
 void MyGLWindow::initGeometries()
 {
-	//ShapeData* cube = ShapeGenerator::makeCube();
 	ShapeData* cube = OBJLoader::loadOBJFile("Models/Cube.obj");
 	MyGLWindow::addGeometry("cube", cube);
 
-	//ShapeData* sphere = ShapeGenerator::makeSphere();
 	ShapeData* sphere = OBJLoader::loadOBJFile("Models/Sphere16.obj");
 	MyGLWindow::addGeometry("sphere", sphere);
 
-	//ShapeData* plane = ShapeGenerator::makePlane(20U);
 	ShapeData* plane = OBJLoader::loadOBJFile("Models/Plane.obj");
 	MyGLWindow::addGeometry("plane", plane);
 
-	/*ShapeData* model = OBJLoader::loadOBJFile("Models/BristolF2.obj");
-	MyGLWindow::addGeometry("f2", model);*/
+	//ShapeData* model = OBJLoader::loadOBJFile("Models/BristolF2.obj");
+	//MyGLWindow::addGeometry("f2", model);
 }
 
 void MyGLWindow::initScene()
 {
+	Renderable* lightRenderable = new Renderable;
+	lightRenderable->material = getMaterial("light");
+	lightRenderable->geometry = getGeometry("sphere");
+
 	activeScene = scene;
 	activeScene->ambientLight = glm::vec3(1.0f, 1.0f, 1.0f);
-	activeScene->diffuseLight->geometry = getGeometry("sphere");
+	activeScene->diffuseLight->renderable = lightRenderable;
 	activeScene->diffuseLight->position = glm::vec3(0.0f, 5.0f, 0.0f);
 
 	activeScene->skybox = new Skybox;
@@ -654,16 +666,18 @@ void MyGLWindow::initScene()
 	plane->material = getMaterial("reflective");
 	plane->position = glm::vec3(0.0f, 0.0f, 0.0f);
 	plane->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	plane->scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	plane->scale = glm::vec3(5.0f, 5.0f, 5.0f);
 	activeScene->addRenderable(plane);
 
 	/*Renderable* f2 = new Renderable;
-	f2->geometry = geometries.at("f2");
-	f2->material = materials.at("f2");
+	f2->geometry = getGeometry("f2");
+	f2->material = getMaterial("f2");
 	f2->position = glm::vec3(0.0f, 1.0f, 0.0f);
 	f2->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	f2->scale = glm::vec3(0.1f, 0.1f, 0.1f);
 	activeScene->addRenderable(f2);*/
+
+	//updateUniforms();
 }
 
 string readShaderCode(const char* fileName)
@@ -773,25 +787,20 @@ void MyGLWindow::initializeGL()
 	initScene();
 	installShaders();
 
+	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_CULL_FACE);
-	
-	//setActiveCubemap("Skybox_Dawn");
+	glEnable(GL_CULL_FACE);
 
 	GLHelper::checkErrors("initializeGL -- load default skybox texture");
 
-	// F2
-	/*makeTexture("Textures/BristolF2_Albedo");
-	makeTexture("Textures/BristolF2_AO");
-	makeTexture("Textures/BristolF2_MetallicSmoothness");
-	makeTexture("Textures/BristolF2_Normal");*/
+	
 
 	GLHelper::checkErrors("initializeGL -- load resources");
 
 	
 
 	// Get uniforms
-	modelMatUniformLocation     = getUniformLocation("modelMatrix");
+	/*modelMatUniformLocation     = getUniformLocation("modelMatrix");
 	mvpUniformLocation          = getUniformLocation("mvp");
 	cameraPosUniformLoc         = getUniformLocation("camPos");
 
@@ -808,7 +817,7 @@ void MyGLWindow::initializeGL()
 	normalStrengthUniformLoc    = getUniformLocation("normalStrength");
 	reflectivityUniformLoc      = getUniformLocation("reflectivity");
 	indexOfRefractionUniformLoc = getUniformLocation("indexOfRefraction");
-	fresnelValueUniformLoc      = getUniformLocation("fresnelValue");
+	fresnelValueUniformLoc      = getUniformLocation("fresnelValue");*/
 
 	GLHelper::checkErrors("initializeGL -- find uniforms");
 
@@ -842,8 +851,9 @@ void MyGLWindow::drawSkybox(Camera* cam, bool flipped)
 	scene->getActiveCamera()->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	float scaleVal = flipped ? 1.0f : -1.0f;
 	glm::mat4 camMat = cam->getWorldToViewMatrix() * glm::scale(glm::vec3(1.0f, scaleVal, 1.0f));
-	glm::mat4 modelMat = glm::mat4();
+	glm::mat4 modelMat = activeScene->skybox->getModelToWorldMatrix();
 
+	
 	glUniformMatrix4fv(modelMatUniformLocation, 1, GL_FALSE, &modelMat[0][0]);
 	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &camMat[0][0]);
 
@@ -860,11 +870,37 @@ void MyGLWindow::drawSkybox(Camera* cam, bool flipped)
 	GLHelper::checkErrors("drawSkybox");
 }
 
+void drawRenderable(Renderable* renderable, glm::mat4 camMat, glm::mat4 projMat)
+{
+	glBindVertexArray(renderable->geometry->vertexArrayObjectID);
+
+	GLHelper::checkErrors("draw -- bind renderable VAO");
+
+	glm::mat4 modelToWorldMatrix = renderable->getModelToWorldMatrix();
+	glm::mat4 modelViewProjectionMatrix = projMat * camMat * modelToWorldMatrix;
+	glUniformMatrix4fv(modelMatUniformLocation, 1, GL_FALSE, &modelToWorldMatrix[0][0]);
+	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
+
+	GLHelper::checkErrors("draw -- send renderable matrices");
+
+	// Send material data
+	setActiveMaterial(renderable->material);
+
+	GLHelper::checkErrors("draw -- set render material");
+
+	// Draw renderable
+	glDrawElements(GL_TRIANGLES, renderable->geometry->numIndices, GL_UNSIGNED_SHORT, 0);
+
+	GLHelper::checkErrors("draw -- draw renderable elements");
+
+	//cout << "drew " << endl;
+}
+
 void MyGLWindow::draw(Camera* cam, bool flipped)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	updateUniforms();
+	//updateUniforms();
 
 	GLHelper::checkErrors("draw -- update uniforms");
 
@@ -883,32 +919,12 @@ void MyGLWindow::draw(Camera* cam, bool flipped)
 	vector<Renderable*>* renderables = activeScene->getRenderables();
 	vector<Renderable*>::iterator renderablesIterator = 
 		renderables->begin();
+	drawRenderable(activeScene->activeLight->renderable, camMat, projMat);
 	for (; renderablesIterator != renderables->end(); ++renderablesIterator)
 	{
 		// Send geometry data and matrices
 		Renderable* renderable = *renderablesIterator;
-		glBindVertexArray(renderable->geometry->vertexArrayObjectID);
-
-		GLHelper::checkErrors("draw -- bind renderable VAO");
-
-		glm::mat4 modelToWorldMatrix = renderable->getModelToWorldMatrix();
-		glm::mat4 modelViewProjectionMatrix = projMat * camMat * modelToWorldMatrix;
-		glUniformMatrix4fv(modelMatUniformLocation, 1, GL_FALSE, &modelToWorldMatrix[0][0]);
-		glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
-
-		GLHelper::checkErrors("draw -- send renderable matrices");
-
-		// Send material data
-		setActiveMaterial(renderable->material);
-
-		GLHelper::checkErrors("draw -- set render material");
-
-		// Draw renderable
-		glDrawElements(GL_TRIANGLES, renderable->geometry->numIndices, GL_UNSIGNED_SHORT, 0);
-
-		GLHelper::checkErrors("draw -- draw renderable elements");
-
-		cout << "drew " << endl;
+		drawRenderable(renderable, camMat, projMat);
 	}
 
 	GLHelper::checkErrors("draw");
@@ -917,6 +933,11 @@ void MyGLWindow::draw(Camera* cam, bool flipped)
 void MyGLWindow::paintGL()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	updateUniforms();
+
+	modelMatUniformLocation = getUniformLocation("modelMatrix");
+	mvpUniformLocation = getUniformLocation("mvp");
 
 	if (activeFramebuffer != NULL &&
 		activeFramebuffer->getFramebufferObjectID() != NULL)

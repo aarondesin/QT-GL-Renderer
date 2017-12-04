@@ -43,7 +43,8 @@ uniform float fresnelValue;
 
 void main()
 {
-	vec4 vertexColor = throughColor;
+	outColor = vec4(1.0, 1.0, 1.0, 1.0);
+	/*vec4 vertexColor = throughColor;
 	vec4 color = vertexColor;
 
 	// Normal map
@@ -76,8 +77,11 @@ void main()
 	vec3 reflectedLightVec = reflect(-lightVec, normal);
 	float specularValue = pow (clamp (dot (reflectedLightVec, camVec), 0.0, 1.0), specularPower);
 	vec4 specular = vec4((specularValue * specularColor), 1.0) * falloff;
+
+	//float e = clamp(emissionStrength + 1.0, 0.0, 1.0);
 	
 	vec4 totalLight = mix (ambient + diffuse + specular, vec4(1.0, 1.0, 1.0, 1.0), emissionStrength);
+	//vec4 totalLight = mix (ambient + diffuse + specular, vec4(1.0, 1.0, 1.0, 1.0), e);
 
 	color = totalLight * color;
 
@@ -94,6 +98,6 @@ void main()
 	color = mix  (color, clamp(fresnelSkyboxSample, 0.0, 1.0), fresnelValue);
 
 	// Final mix
-	outColor = clamp(color + 1.0, 0.0, 1.0);
-	//outColor = color;
+	outColor = color;
+	//outColor = ambient;*/
 }
