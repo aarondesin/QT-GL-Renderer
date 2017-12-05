@@ -42,6 +42,11 @@ uniform mat4 modelMatrix;
 uniform float reflectivity;
 uniform float fresnelValue;
 
+uniform sampler2D ambientOcclusion;
+uniform float ambientOcclusionScale;
+
+uniform sampler2D metallicSmoothness;
+
 void main()
 {
 	vec4 vertexColor = throughColor;
@@ -54,8 +59,11 @@ void main()
 	vec3 sampledNormalInWorldSpace = normalize(tangentToObject * sampledNormal);
 	vec3 normal = normalize(throughNormal + mix(vec3(0.0, 0.0, 0.0), sampledNormalInWorldSpace, normalStrength));
 
+	// AO
+	vec4 ambientOcclusion = texture(ambientOcclusion, throughUV);
+
 	// Get texture color
-	vec4 texColor = texture(diffuseTexture, throughUV);
+	vec4 texColor = texture(diffuseTexture, throughUV) * ambientOcclusion;
 	color = mix(color, texColor, diffuseStrength);
 
 	// Get cubemap color
@@ -70,16 +78,22 @@ void main()
 
 	// Ambient light
 	vec4 ambient = vec4 (ambientLight, 1.0);
+	ambient = mix (ambient, ambient * ambientOcclusion, ambientOcclusionScale);
 
 	// Diffuse light
 	vec3 lightVec = normalize(lightPos - vertexPosition);
 	float diffuseValue = clamp (dot (lightVec, normal), 0.0, 1.0);
 	vec4 diffuse = vec4((diffuseValue * diffuseColor), 1.0) * falloff;
 
+	// Sample MS
+	vec4 metallicSmoothness = texture(metallicSmoothness, throughUV);
+	float metallic = metallicSmoothness.r;
+	float smoothness = metallicSmoothness.a;
+
 	// Specular light
 	vec3 camVec = normalize (camPos - vertexPosition);
 	vec3 reflectedLightVec = reflect(-lightVec, normal);
-	float specularValue = pow (clamp (dot (reflectedLightVec, camVec), 0.0, 1.0), specularPower);
+	float specularValue = pow (clamp (dot (reflectedLightVec, camVec), 0.0, 1.0), specularPower * smoothness);
 	vec4 specular = vec4((specularValue * specularColor), 1.0) * falloff;
 
 	vec4 totalLight = mix (ambient + diffuse + specular, vec4(1.0, 1.0, 1.0, 1.0), emissionStrength);
@@ -90,7 +104,7 @@ void main()
 	vec3 reflectedCamVec = normalize (reflect(-camVec, normal));
 	reflectedCamVec.y = -reflectedCamVec.y;
 	vec4 reflectionSample = texture(cubemap, reflectedCamVec);
-	color = mix (color, reflectionSample, reflectivity);
+	color = mix (color, reflectionSample, clamp((metallic * reflectivity), 0.0, 1.0));
 
 	// Fresnel
 	vec3 refractedCamVec = normalize(refract(-camVec, normal, indexOfRefraction));
@@ -98,7 +112,5 @@ void main()
 	color = mix  (color, clamp(fresnelSkyboxSample, 0.0, 1.0), fresnelValue);
 
 	// Final mix
-	outColor = vec4 (useCubemap, useCubemap, useCubemap, 1.0);
-	//outColor = color;
-	//outColor = vec4(normal, 1.0);
+	outColor = color;
 }

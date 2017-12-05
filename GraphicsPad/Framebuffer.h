@@ -14,11 +14,14 @@ protected:
 	Texture* depthTexture = NULL;
 	GLuint framebufferObjectID;
 	GLenum status;
+	GLint width, height;
 public:
 	Framebuffer() { throw exception(); }
-	
-	Framebuffer(string name, bool useColor, bool useDepth, int width, int height)
+	Framebuffer(string name, bool useColor, bool useDepth, int w, int h)
 	{
+		width = w;
+		height = h;
+
 		if (!useDepth && !useColor)
 		{
 			cout << "Framebuffer must use either color or depth attachments!" << endl;
@@ -35,6 +38,8 @@ public:
 			renderTexture = new Texture(name, width, height, GL_RGB, GL_RGB, NULL);
 			glReadBuffer(GL_COLOR_ATTACHMENT0);
 			glDrawBuffer(GL_COLOR_ATTACHMENT0);
+			glActiveTexture(GL_TEXTURE0 + renderTexture->getTextureID());
+			glBindTexture(GL_TEXTURE_2D, renderTexture->getTextureID());
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, renderTexture->getTextureID(), 0);
 			//glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTexture->getTextureID(), 0);
 		}
@@ -58,4 +63,8 @@ public:
 	}
 	GLenum getStatus() { return status; }
 	GLint getFramebufferObjectID() { return framebufferObjectID; }
+	GLint getWidth() { return width; }
+	GLint getHeight() { return height; }
+	GLint getRenderTextureID() { return renderTexture->getTextureID(); }
+	GLint getDepthTextureID() { return depthTexture->getTextureID(); }
 };

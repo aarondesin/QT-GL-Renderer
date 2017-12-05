@@ -15,6 +15,9 @@ public:
 	float indexOfRefraction = 1.0f;
 	float fresnelValue = 0.0f;
 	float useCubemap = 0.0f;
+	Texture* ambientOcclusion = NULL;
+	float occlusionScale = 1.0f;
+	Texture* metallicSmoothness = NULL;
 
 	Material() : diffuseStrength(1.0f),
 		normalStrength(1.0f),
