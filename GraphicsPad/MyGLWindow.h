@@ -22,7 +22,7 @@ protected:
 	void MyGLWindow::initScene();
 	void MyGLWindow::updateUniforms();
 	void MyGLWindow::spawnRenderable();
-	void MyGLWindow::drawSkybox(Camera* cam, bool flipped);
+	void MyGLWindow::drawSkybox(Camera* cam, glm::mat4 projMat, bool flipped);
 	void MyGLWindow::draw(Camera* cam, bool flipped);
 	void MyGLWindow::installShaders();
 	QImage* MyGLWindow::makeImage(string filename);

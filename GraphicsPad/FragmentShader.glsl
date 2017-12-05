@@ -20,10 +20,11 @@ uniform float normalStrength;
 
 uniform float emissionStrength;
 
+uniform float useCubemap;
 uniform samplerCube cubemap;
 uniform sampler2D renderTexture;
 
-uniform vec3 ambientLight;
+uniform vec3 ambientLight = vec3 (0.0, 0.0, 0.0);
 uniform vec3 lightPos;
 uniform vec3 diffuseColor;
 uniform vec3 specularColor;
@@ -43,8 +44,7 @@ uniform float fresnelValue;
 
 void main()
 {
-	outColor = vec4(1.0, 1.0, 1.0, 1.0);
-	/*vec4 vertexColor = throughColor;
+	vec4 vertexColor = throughColor;
 	vec4 color = vertexColor;
 
 	// Normal map
@@ -57,6 +57,10 @@ void main()
 	// Get texture color
 	vec4 texColor = texture(diffuseTexture, throughUV);
 	color = mix(color, texColor, diffuseStrength);
+
+	// Get cubemap color
+	vec4 cubemapColor = texture(cubemap, normalize(vertexModelPosition) * vec3(1.0, -1.0, 1.0));
+	color = mix(color, cubemapColor, useCubemap);
 
 	// Attenuation values
 	float d = distance (lightPos, vertexPosition);
@@ -78,10 +82,7 @@ void main()
 	float specularValue = pow (clamp (dot (reflectedLightVec, camVec), 0.0, 1.0), specularPower);
 	vec4 specular = vec4((specularValue * specularColor), 1.0) * falloff;
 
-	//float e = clamp(emissionStrength + 1.0, 0.0, 1.0);
-	
 	vec4 totalLight = mix (ambient + diffuse + specular, vec4(1.0, 1.0, 1.0, 1.0), emissionStrength);
-	//vec4 totalLight = mix (ambient + diffuse + specular, vec4(1.0, 1.0, 1.0, 1.0), e);
 
 	color = totalLight * color;
 
@@ -94,10 +95,10 @@ void main()
 	// Fresnel
 	vec3 refractedCamVec = normalize(refract(-camVec, normal, indexOfRefraction));
 	vec4 fresnelSkyboxSample = texture(cubemap, refractedCamVec);
-	//vec4 fresnelLightSample = clamp(dot(-refractedCamVec, lightVec), 0.0, 1.0) * vec4(diffuseColor, 1.0);
 	color = mix  (color, clamp(fresnelSkyboxSample, 0.0, 1.0), fresnelValue);
 
 	// Final mix
-	outColor = color;
-	//outColor = ambient;*/
+	outColor = vec4 (useCubemap, useCubemap, useCubemap, 1.0);
+	//outColor = color;
+	//outColor = vec4(normal, 1.0);
 }

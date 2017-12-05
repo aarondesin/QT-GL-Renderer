@@ -11,8 +11,6 @@
 struct Scene
 {
 public:
-	string name;
-	glm::vec3 ambientLight = glm::vec3(+0.1f, +0.1f, +0.1f);
 	Light* diffuseLight = NULL;
 	Light* activeLight = NULL;
 	Skybox* skybox = NULL;
@@ -20,7 +18,6 @@ public:
 	Scene() : sceneCamera(new Camera), renderTargetCamera (new Camera), activeCamera(sceneCamera),
 		renderables (new vector<Renderable*>), diffuseLight (new Light), activeLight(diffuseLight),
 		ambientLight (glm::vec3(+0.1f, +0.1f, +0.1f)) {}
-	Scene(string sceneName) : Scene() { name = sceneName; }
 
 	void addRenderable(Renderable* renderable) { renderables->push_back(renderable); }
 	vector<Renderable*>* getRenderables() { return renderables; }
@@ -33,7 +30,7 @@ public:
 	Camera* getRenderTargetCamera() { return renderTargetCamera; }
 	~Scene()
 	{
-		name = "";
+		//name = "";
 		delete diffuseLight;
 		delete skybox;
 		delete sceneCamera;
@@ -42,7 +39,10 @@ public:
 		ambientLight = glm::vec3(0.0f, 0.0f, 0.0f);
 		activeCamera = NULL;
 	}
+	glm::vec3 getAmbientLight() { return ambientLight; }
+	void setAmbientLight(glm::vec3 light) { ambientLight = light; }
 protected:
+	glm::vec3 ambientLight;
 	vector<Renderable*>* renderables = NULL;
 	Camera* sceneCamera = NULL;
 	Camera* renderTargetCamera = NULL;

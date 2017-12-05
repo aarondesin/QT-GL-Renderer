@@ -27,10 +27,6 @@ public:
 				throw exception();
 		}
 
-		
-		glGenTextures(1, &textureID);
-		glBindTexture(GL_TEXTURE_2D, textureID);
-
 		if (texName.length() <= 0) throw exception();
 		name = texName;
 
@@ -45,16 +41,22 @@ public:
 
 		glActiveTexture(activeTexture);
 
+		glGenTextures(1, &textureID);
+		glBindTexture(GL_TEXTURE_2D, textureID);
+
 		GLHelper::checkErrors("texture init");
 
 		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat,
 			width, height, 0,
 			format, GL_UNSIGNED_BYTE, pixels);
 
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
 		GLHelper::checkErrors("texture set");
 
 		setFilter(GL_LINEAR);
-		setWrapMode(GL_CLAMP_TO_EDGE);
+		setWrapMode(GL_REPEAT);
 
 		GLHelper::checkErrors("texture constructor");
 	}
@@ -77,8 +79,8 @@ public:
 		}
 
 		glActiveTexture(GL_TEXTURE0+textureID);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
 
 		GLHelper::checkErrors("texture.setFilter");
 	}
@@ -95,8 +97,8 @@ public:
 		}
 
 		glActiveTexture(GL_TEXTURE0+textureID);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapMode);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapMode);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode);
 
 		GLHelper::checkErrors("texture.setWrapMode");
 	}
