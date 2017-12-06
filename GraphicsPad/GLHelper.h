@@ -53,8 +53,29 @@ public:
 			}
 
 			cout << "Error " << err << ": " << errMsg << " after " << location << endl;
-			//throw exception();
+			throw exception();
 		}
+	}
+	static bool checkStatus(GLuint objectID,
+		PFNGLGETSHADERIVPROC objectPropertyGetterFunc,
+		PFNGLGETSHADERINFOLOGPROC getInfoLogFunc,
+		GLenum statusType)
+	{
+		GLint status;
+		objectPropertyGetterFunc(objectID, statusType, &status);
+		if (status != GL_TRUE)
+		{
+			GLint infoLogLength;
+			objectPropertyGetterFunc(objectID, GL_INFO_LOG_LENGTH, &infoLogLength);
+			GLchar* buffer = new GLchar[infoLogLength];
+
+			GLsizei bufferSize;
+			getInfoLogFunc(objectID, infoLogLength, &bufferSize, buffer);
+			cout << buffer << endl;
+			delete[] buffer;
+			return false;
+		}
+		return true;
 	}
 private:
 	static int nextTextureID;

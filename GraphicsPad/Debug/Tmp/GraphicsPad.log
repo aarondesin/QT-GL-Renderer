@@ -1,2 +1,4 @@
-﻿  GraphicsPad.vcxproj -> C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\Debug\GraphicsPad.exe
+﻿  MyGLWindow.cpp
+c:\users\u1088224\documents\github\adesin_shaders_finalproject\graphicspad\shapedata.h(39): warning C4018: '<': signed/unsigned mismatch
+  GraphicsPad.vcxproj -> C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\Debug\GraphicsPad.exe
   GraphicsPad.vcxproj -> C:\Users\u1088224\Documents\GitHub\ADesin_Shaders_FinalProject\GraphicsPad\Debug\GraphicsPad.pdb (Full PDB)

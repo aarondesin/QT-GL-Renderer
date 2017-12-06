@@ -177,6 +177,8 @@
     <ClInclude Include="OBJLoader.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="ShaderObject.h" />
+    <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="ShapeData.h" />
     <ClInclude Include="ShapeGenerator.h" />
     <ClInclude Include="Skybox.h" />
@@ -184,14 +186,10 @@
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="FragmentShader.glsl">
-      <FileType>Document</FileType>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="FragmentShaderShadow.glsl" />
-    <None Include="VertexShader.glsl" />
-    <None Include="VertexShaderShadow.glsl" />
+    <None Include="FragmentShaders\Shadow.glsl" />
+    <None Include="FragmentShaders\Standard.glsl" />
+    <None Include="VertexShaders\Shadow.glsl" />
+    <None Include="VertexShaders\Standard.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

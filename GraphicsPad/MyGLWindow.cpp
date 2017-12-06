@@ -20,15 +20,17 @@
 #include <map>
 #include <list>
 #include <OBJLoader.h>
+#include <ShaderProgram.h>
+#include <ShaderObject.h>
 using namespace std;
 
 #define VERTEX_BYTE_SIZE sizeof(float) * 15
 
 const float RANDOM_PLACEMENT_OFFSET = 40.0f;
 
-GLuint programID = -1;
-GLuint shadowProgramID = -1;
-GLuint activeProgramID = -1;
+ShaderProgram* activeProgram = NULL;
+ShaderProgram* standardProgram = NULL;
+ShaderProgram* shadowProgram = NULL;
 bool loadPlaneModel = false;
 
 Scene* scene = new Scene;
@@ -129,29 +131,28 @@ Cubemap* getCubemap(string name)
 	return cubemaps->at(name);
 }
 
-
-GLint getUniformLocation(const GLchar* uniformName)
+void setActiveProgram(ShaderProgram* program)
 {
-	GLint result = glGetUniformLocation(activeProgramID, uniformName);
-	GLHelper::checkErrors("getUniformLocation().glGetUniformLocation()");
-	if (result < 0)
+	GLHelper::checkErrors("setActiveProgram()");
+
+	if (program == activeProgram) return;
+
+	GLboolean result = glIsProgram(program->getProgramID());
+	GLHelper::checkErrors("setActiveProgram().glIsProgram()");
+	if (!result)
 	{
-		cout << "Failed to find uniform \"" << uniformName << "\" in program " << activeProgramID << "!" << endl;
-		throw exception();
+		cout << "ID \"" << program << "\" is not a program!" << endl;
+		return;
 	}
-	return result;
-}
 
-void setActiveProgram(GLuint program)
-{
-	glValidateProgram(program);
+	glValidateProgram(program->getProgramID());
 	GLHelper::checkErrors("setActiveProgram().glValidateProgram()");
 
-	activeProgramID = program;
-	glUseProgram(program);
+	activeProgram = program;
+	glUseProgram(program->getProgramID());
 	GLHelper::checkErrors("setActiveProgram().glUseProgram()");
 
-	cout << "Set program to " << program << endl;
+	cout << "Set program to " << program->getProgramID() << endl;
 }
 
 void setActiveDiffuseTexture(Texture* diffuse)
@@ -166,7 +167,7 @@ void setActiveDiffuseTexture(Texture* diffuse)
 
 	glActiveTexture(GL_TEXTURE0 + texID);
 	glBindTexture(GL_TEXTURE_2D, texID);
-	diffuseTextureUniformLoc = getUniformLocation("diffuseTexture");
+	diffuseTextureUniformLoc = standardProgram->getUniformLocation("diffuseTexture");
 	glUniform1i(diffuseTextureUniformLoc, texID);
 
 	GLHelper::checkErrors("setActiveDiffuseTexture");
@@ -184,7 +185,7 @@ void setActiveNormalMap(Texture* normalMap)
 
 	glActiveTexture(GL_TEXTURE0 + normalMapID);
 	glBindTexture(GL_TEXTURE_2D, normalMapID);
-	normalMapUniformLoc = getUniformLocation("normalMap");
+	normalMapUniformLoc = standardProgram->getUniformLocation("normalMap");
 	glUniform1i(normalMapUniformLoc, normalMapID);
 
 	GLHelper::checkErrors("setActiveNormalMap");
@@ -200,7 +201,7 @@ void setActiveAmbientOcclusionMap(Texture* ao)
 
 	glActiveTexture(GL_TEXTURE0 + aoMapID);
 	glBindTexture(GL_TEXTURE_2D, aoMapID);
-	ambientOcclusionUniformLoc = getUniformLocation("ambientOcclusion");
+	ambientOcclusionUniformLoc = activeProgram->getUniformLocation("ambientOcclusion");
 	glUniform1i(ambientOcclusionUniformLoc, aoMapID);
 }
 
@@ -214,7 +215,7 @@ void setActiveMetallicSmoothnessMap(Texture* ms)
 
 	glActiveTexture(GL_TEXTURE0 + msMapID);
 	glBindTexture(GL_TEXTURE_2D, msMapID);
-	metallicSmoothnessUniformLoc = getUniformLocation("metallicSmoothness");
+	metallicSmoothnessUniformLoc = activeProgram->getUniformLocation("metallicSmoothness");
 	glUniform1i(metallicSmoothnessUniformLoc, msMapID);
 }
 
@@ -228,7 +229,7 @@ void setActiveRenderTexture(Texture* renderTexture)
 
 	glActiveTexture(GL_TEXTURE0 + renderTextureID);
 	glBindTexture(GL_TEXTURE_2D, renderTextureID);
-	renderTextureUniformLoc = getUniformLocation("renderTexture");
+	renderTextureUniformLoc = activeProgram->getUniformLocation("renderTexture");
 	glUniform1i(renderTextureUniformLoc, renderTextureID);
 }
 
@@ -244,7 +245,7 @@ void setActiveCubemap(Cubemap* cubemap)
 
 	glActiveTexture(GL_TEXTURE0 + cubemapID);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapID);
-	cubemapUniformLoc = getUniformLocation("cubemap");
+	cubemapUniformLoc = activeProgram->getUniformLocation("cubemap");
 	glUniform1i(cubemapUniformLoc, cubemap->cubemapID);
 
 	GLHelper::checkErrors("setActiveCubemap");
@@ -260,60 +261,60 @@ void setActiveMaterial(Material* material)
 	if (material->diffuse != NULL)
 	{
 		setActiveDiffuseTexture(material->diffuse);
-		diffuseStrengthUniformLoc = getUniformLocation("diffuseStrength");
+		diffuseStrengthUniformLoc = activeProgram->getUniformLocation("diffuseStrength");
 		glUniform1f(diffuseStrengthUniformLoc, material->diffuseStrength);
 	}
 
 	else
 	{
 		setActiveDiffuseTexture(getTexture("Textures/White"));
-		diffuseStrengthUniformLoc = getUniformLocation("diffuseStrength");
+		diffuseStrengthUniformLoc = activeProgram->getUniformLocation("diffuseStrength");
 		glUniform1f(diffuseStrengthUniformLoc, 0.0f);
 	}
 
 	if (material->normal != NULL)
 	{
 		setActiveNormalMap(material->normal);
-		normalStrengthUniformLoc = getUniformLocation("normalStrength");
+		normalStrengthUniformLoc = activeProgram->getUniformLocation("normalStrength");
 		glUniform1f(normalStrengthUniformLoc, material->normalStrength);
 	}
 
 	else
 	{
 		setActiveNormalMap(getTexture("Textures/Gray"));
-		normalStrengthUniformLoc = getUniformLocation("normalStrength");
+		normalStrengthUniformLoc = activeProgram->getUniformLocation("normalStrength");
 		glUniform1f(normalStrengthUniformLoc, 0.0f);
 	}
 
-	specularPowerUniformLoc = getUniformLocation("specularPower");
+	specularPowerUniformLoc = activeProgram->getUniformLocation("specularPower");
 	glUniform1f(specularPowerUniformLoc, material->specularPower);
 
-	emissionStrengthUniformLoc = getUniformLocation("emissionStrength");
+	emissionStrengthUniformLoc = activeProgram->getUniformLocation("emissionStrength");
 	glUniform1f(emissionStrengthUniformLoc, material->emissionStrength);
 
-	reflectivityUniformLoc = getUniformLocation("reflectivity");
+	reflectivityUniformLoc = activeProgram->getUniformLocation("reflectivity");
 	glUniform1f(reflectivityUniformLoc, material->reflectivity);
 
-	indexOfRefractionUniformLoc = getUniformLocation("indexOfRefraction");
+	indexOfRefractionUniformLoc = activeProgram->getUniformLocation("indexOfRefraction");
 	glUniform1f(indexOfRefractionUniformLoc, material->indexOfRefraction);
 
-	fresnelValueUniformLoc = getUniformLocation("fresnelValue");
+	fresnelValueUniformLoc = activeProgram->getUniformLocation("fresnelValue");
 	glUniform1f(fresnelValueUniformLoc, material->fresnelValue);
 
-	useCubemapUniformLoc = getUniformLocation("useCubemap");
+	useCubemapUniformLoc = activeProgram->getUniformLocation("useCubemap");
 	glUniform1f(useCubemapUniformLoc, material->useCubemap);
 
 	if (material->ambientOcclusion != NULL)
 	{ 
 		setActiveAmbientOcclusionMap(material->ambientOcclusion);
-		ambientOcclusionScaleUniformLoc = getUniformLocation("ambientOcclusionScale");
+		ambientOcclusionScaleUniformLoc = activeProgram->getUniformLocation("ambientOcclusionScale");
 		glUniform1f(ambientOcclusionScaleUniformLoc, material->occlusionScale);
 	}
 
 	else
 	{
 		setActiveAmbientOcclusionMap(getTexture("Textures/White"));
-		ambientOcclusionScaleUniformLoc = getUniformLocation("ambientOcclusionScale");
+		ambientOcclusionScaleUniformLoc = activeProgram->getUniformLocation("ambientOcclusionScale");
 		glUniform1f(ambientOcclusionScaleUniformLoc, 0.0f);
 	}
 
@@ -522,35 +523,35 @@ void MyGLWindow::addMaterial(string name, Material* material)
 void MyGLWindow::updateUniforms()
 {
 	// Update ambient lighting strength
-	ambientLightUniformLoc = getUniformLocation("ambientLight");
+	ambientLightUniformLoc = activeProgram->getUniformLocation("ambientLight");
 	glUniform3f(ambientLightUniformLoc,
 		activeScene->getAmbientLight().r,
 		activeScene->getAmbientLight().g,
 		activeScene->getAmbientLight().b);
 
 	// Update light position
-	lightPosUniformLoc = getUniformLocation("lightPos");
+	lightPosUniformLoc = activeProgram->getUniformLocation("lightPos");
 	glUniform3f(lightPosUniformLoc,
 		activeScene->getActiveLight()->position.x,
 		activeScene->getActiveLight()->position.y,
 		activeScene->getActiveLight()->position.z);
 
 	// Update diffuse lighting
-	diffuseLightUniformLoc = getUniformLocation("diffuseColor");
+	diffuseLightUniformLoc = activeProgram->getUniformLocation("diffuseColor");
 	glUniform3f(diffuseLightUniformLoc,
 		activeScene->getActiveLight()->color.r,
 		activeScene->getActiveLight()->color.g,
 		activeScene->getActiveLight()->color.b);
 
 	// Update specular lighting
-	specularColorUniformLoc = getUniformLocation("specularColor");
+	specularColorUniformLoc = activeProgram->getUniformLocation("specularColor");
 	glUniform3f(specularColorUniformLoc,
 		activeScene->getActiveLight()->color.r,
 		activeScene->getActiveLight()->color.g,
 		activeScene->getActiveLight()->color.b);
 
 	// Update camera position
-	cameraPosUniformLoc = getUniformLocation("camPos");
+	cameraPosUniformLoc = activeProgram->getUniformLocation("camPos");
 	glUniform3f(cameraPosUniformLoc,
 		activeScene->getActiveCamera()->getPosition().x,
 		activeScene->getActiveCamera()->getPosition().y,
@@ -822,135 +823,33 @@ void MyGLWindow::initScene()
 	}
 }
 
-string readShaderCode(const char* fileName)
-{
-	ifstream input(fileName);
-	if (!input.good())
-	{
-		cout << "Failed to load file: " << fileName;
-		exit(1);
-	}
-
-	return string(istreambuf_iterator<char>(input),
-		istreambuf_iterator<char>());
-}
-
-bool checkStatus(GLuint objectID,
-	PFNGLGETSHADERIVPROC objectPropertyGetterFunc,
-	PFNGLGETSHADERINFOLOGPROC getInfoLogFunc,
-	GLenum statusType)
-{
-	GLint status;
-	objectPropertyGetterFunc(objectID, statusType, &status);
-	if (status != GL_TRUE)
-	{
-		cout << "error" << endl;
-		GLint infoLogLength;
-		objectPropertyGetterFunc(objectID, GL_INFO_LOG_LENGTH, &infoLogLength);
-		GLchar* buffer = new GLchar[infoLogLength];
-
-		GLsizei bufferSize;
-		getInfoLogFunc(objectID, infoLogLength, &bufferSize, buffer);
-		cout << buffer << endl;
-		delete[] buffer;
-		return false;
-	}
-	return true;
-}
-
-bool checkShaderStatus(GLuint shaderID)
-{
-	return checkStatus(shaderID, glGetShaderiv, glGetShaderInfoLog, GL_COMPILE_STATUS);
-}
-
-bool checkProgramStatus(GLuint programID)
-{
-	return checkStatus(programID, glGetProgramiv, glGetProgramInfoLog, GL_LINK_STATUS) &&
-		checkStatus(programID, glGetProgramiv, glGetProgramInfoLog, GL_VALIDATE_STATUS);
-}
-
 void MyGLWindow::installShaders()
 {
 	// Create shader objects
-	GLuint vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-	GLuint fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-	GLuint shadowVertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-	GLuint shadowFragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-
-	// Adapter is used to package the shader code strings in the format
-	// that OpenGL wants
-	const GLchar* adapter[1];
-
-	// Assign shaders
-	string temp = readShaderCode("VertexShader.glsl");
-	adapter[0] = temp.c_str();
-	glShaderSource(vertexShaderID, 1, adapter, 0);
-
-	temp = readShaderCode("FragmentShader.glsl");
-	adapter[0] = temp.c_str();
-	glShaderSource(fragmentShaderID, 1, adapter, 0);
-
-	temp = readShaderCode("VertexShaderShadow.glsl");
-	adapter[0] = temp.c_str();
-	cout << adapter[0] << endl;
-	glShaderSource(shadowVertexShaderID, 1, adapter, 0);
-
-	temp = readShaderCode("FragmentShaderShadow.glsl");
-	adapter[0] = temp.c_str();
-	cout << adapter[0] << endl;
-	glShaderSource(shadowFragmentShaderID, 1, adapter, 0);
-
-	glCompileShader(vertexShaderID);
-	glCompileShader(fragmentShaderID);
-	glCompileShader(shadowVertexShaderID);
-	glCompileShader(shadowFragmentShaderID);
+	ShaderObject* standardVertexShader = new ShaderObject(GL_VERTEX_SHADER, "VertexShaders/Standard.glsl");
+	ShaderObject* standardFragmentShader = new ShaderObject(GL_FRAGMENT_SHADER, "FragmentShaders/Standard.glsl");
+	ShaderObject* shadowVertexShader = new ShaderObject(GL_VERTEX_SHADER, "VertexShaders/Shadow.glsl");
+	ShaderObject* shadowFragmentShader = new ShaderObject(GL_FRAGMENT_SHADER, "FragmentShaders/Shadow.glsl");
 
 	// If either of the shaders is broken, quit out
-	if (!checkShaderStatus(vertexShaderID) || !checkShaderStatus(fragmentShaderID) ||
-		!checkShaderStatus(shadowVertexShaderID) || !checkShaderStatus(shadowFragmentShaderID))
-	{
+	if (!standardVertexShader->checkStatus() || !standardFragmentShader->checkStatus() ||
+		!shadowVertexShader->checkStatus() || !shadowFragmentShader->checkStatus())
 		throw exception();
-	}
 
 	cout << "Shaders compiled successfully." << endl;
 
 	// Init GL program and link shaders to it
-	programID = glCreateProgram();
-	glAttachShader(programID, vertexShaderID);
-	glAttachShader(programID, fragmentShaderID);
-	glLinkProgram(programID);
+	standardProgram = new ShaderProgram(standardVertexShader, standardFragmentShader);
+	shadowProgram = new ShaderProgram(shadowVertexShader, shadowFragmentShader);
 
-	shadowProgramID = glCreateProgram();
-	glAttachShader(shadowProgramID, shadowVertexShaderID);
-	glAttachShader(shadowProgramID, shadowFragmentShaderID);
-	glLinkProgram(shadowProgramID);
+	GLHelper::checkErrors("installShaders() -- create programs");
 
-	GLint count;
-	GLint size; // size of the variable
-	GLenum type; // type of the variable (float, vec3 or mat4, etc)
-
-	const GLsizei bufSize = 16; // maximum name length
-	GLchar name[bufSize]; // variable name in GLSL
-	GLsizei length; // name length
-	glGetProgramiv(shadowProgramID, GL_ACTIVE_UNIFORMS, &count);
-	printf("Active Uniforms: %d\n", count);
-
-	for (GLint i = 0; i < count; i++)
-	{
-		glGetActiveUniform(shadowProgramID, (GLuint)i, bufSize, &length, &size, &type, name);
-
-		printf("Uniform #%d Type: %u Name: %s\n", i, type, name);
-	}
-
-	if (!checkProgramStatus(programID) || !checkProgramStatus(shadowProgramID))
-	{
+	if (!standardProgram->checkStatus() || !shadowProgram->checkStatus())
 		throw exception();
-	}
 
-	cout << "Standard program " << programID << " linking successful." << endl;
-	cout << "Shadow program " << shadowProgramID << " linking successful." << endl;
+	GLHelper::checkErrors("installShaders() -- check program status");
 
-	setActiveProgram(programID);
+	setActiveProgram(standardProgram);
 
 	GLHelper::checkErrors("installShaders");
 }
@@ -963,20 +862,20 @@ void MyGLWindow::initializeGL()
 
 	installShaders();
 
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	
 	initGeometries();
 	initTextures();
 	initMaterials();
 	initScene();
-	
+
 	// Render texture
 	activeFramebuffer = makeFramebuffer("RenderTexture", true, false, 1024, 1024);
 
 	// Shadow map
 	shadowMap = makeFramebuffer("ShadowMap", false, true, 1024, 1024);
+	
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 
 	// Clear to black
 	glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
@@ -1052,7 +951,7 @@ void MyGLWindow::drawShadows(Camera* cam, bool flipped)
 	glm::mat4 depthModelMat = glm::mat4(1.0);
 	glm::mat4 depthMVP = depthProjMat * depthViewMat * depthModelMat;
 
-	GLint depthMatUL = getUniformLocation("depthMVP");
+	GLint depthMatUL = activeProgram->getUniformLocation("depthMVP");
 	//GLint depthMatUL = glGetUniformLocation(shadowProgramID, ")
 	glUniformMatrix4fv(depthMatUL, 1, GL_FALSE, &depthMVP[0][0]);
 
@@ -1117,25 +1016,25 @@ void MyGLWindow::paintGL()
 
 	GLHelper::checkErrors("paintGL -- clear buffers");
 
-	setActiveProgram(programID);
+	setActiveProgram(standardProgram);
 
 	updateUniforms();
 
-	modelMatUniformLocation = getUniformLocation("modelMatrix");
-	mvpUniformLocation = getUniformLocation("mvp");
+	modelMatUniformLocation = activeProgram->getUniformLocation("modelMatrix");
+	mvpUniformLocation = activeProgram->getUniformLocation("mvp");
 
 	GLHelper::checkErrors("paintGL -- update matrix uniforms");
 
 	// Draw to shadow map
 	if (shadowMap != NULL)
 	{
-		setActiveProgram(shadowProgramID);
+		setActiveProgram(shadowProgram);
 		glBindFramebuffer(GL_FRAMEBUFFER, shadowMap->getFramebufferObjectID());
 		glViewport(0, 0, shadowMap->getWidth(), shadowMap->getHeight());
 		drawShadows(activeScene->getShadowCamera(), false);
 	}
 
-	setActiveProgram(programID);
+	setActiveProgram(standardProgram);
 	if (activeFramebuffer != NULL &&
 		activeFramebuffer->getFramebufferObjectID() != NULL)
 	{
