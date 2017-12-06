@@ -9,9 +9,11 @@ in vec3 throughTangent;
 in vec3 throughBitangent;
 in vec4 throughShadowCoord;
 
-const float falloffConstantCoef = 0.05;
-const float falloffLinearCoef = 0.5;
-const float falloffExpCoef = 0.05;
+const float FALLOFF_CONSTANT = 0.05;
+const float FALLOFF_LINEAR = 0.5;
+const float FALLOFF_EXP = 0.05;
+
+const float SHADOW_BIAS = 0.005;
 
 uniform sampler2D diffuseTexture;
 uniform float diffuseStrength;
@@ -75,9 +77,9 @@ void main()
 
 	// Attenuation values
 	float d = distance (lightPos, vertexPosition);
-	float linearFalloff = d * falloffLinearCoef;
-	float expFalloff = d * d * falloffExpCoef;
-	float falloff = 1.0 / (falloffConstantCoef + linearFalloff + expFalloff);
+	float linearFalloff = d * FALLOFF_LINEAR;
+	float expFalloff = d * d * FALLOFF_EXP;
+	float falloff = 1.0 / (FALLOFF_CONSTANT + linearFalloff + expFalloff);
 
 	// Ambient light
 	vec4 ambient = vec4 (ambientLight, 1.0);
@@ -99,14 +101,17 @@ void main()
 	float specularValue = pow (clamp (dot (reflectedLightVec, camVec), 0.0, 1.0), specularPower * smoothness);
 	vec4 specular = vec4((specularValue * specularColor), 1.0) * falloff;
 
+	float localBias = clamp(SHADOW_BIAS * tan(acos(dot(normal, lightVec))), 0.00, 0.01);
+
 	float v = 1.0;
-	if (texture(shadowMap, throughShadowCoord.xy).z < throughShadowCoord.z)
+	if (texture(shadowMap, throughShadowCoord.xy).z < throughShadowCoord.z - localBias)
 	{
 		v = 0.0;
 	}
-	vec4 totalLight = mix (ambient + (diffuse + specular) * v, vec4(1.0, 1.0, 1.0, 1.0), emissionStrength);
 
-	color = totalLight * color;
+	vec4 totalLight = ambient + (diffuse + specular) * v;
+	vec4 unlitColor = color;
+	color = color * totalLight;
 
 	// Reflectivity
 	vec3 reflectedCamVec = normalize (reflect(-camVec, normal));
@@ -119,7 +124,11 @@ void main()
 	vec4 fresnelSkyboxSample = texture(cubemap, refractedCamVec);
 	color = mix  (color, clamp(fresnelSkyboxSample, 0.0, 1.0), fresnelValue);
 
+	// Emission
+	color = mix (color, unlitColor, emissionStrength);
+
 	// Final mix
 	outColor = color;
 	//outColor = vec4(normal, 1.0);
+	//outColor = vec4(emissionStrength, emissionStrength, emissionStrength, 1.0);
 }

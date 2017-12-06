@@ -127,7 +127,7 @@ void setActiveProgram(ShaderProgram* program)
 	glUseProgram(program->getProgramID());
 	GLHelper::checkErrors("setActiveProgram().glUseProgram()");
 
-	cout << "Set program to " << program->getProgramID() << endl;
+	//cout << "Set program to " << program->getProgramID() << endl;
 }
 
 void setActiveDiffuseTexture(Texture* diffuse)
@@ -438,10 +438,10 @@ void MyGLWindow::addMaterial(string name, Material* material)
 void MyGLWindow::updateUniforms()
 {
 	standardProgram->setUniformVec3("ambientLight", activeScene->getAmbientLight());
-	standardProgram->setUniformVec3("lightPos", activeScene->getActiveLight()->position);
+	standardProgram->setUniformVec3("lightPos", activeScene->getActiveLight()->renderable->transform.getPosition());
 	standardProgram->setUniformVec3("diffuseColor", activeScene->getActiveLight()->color);
 	standardProgram->setUniformVec3("specularColor", activeScene->getActiveLight()->color);
-	standardProgram->setUniformVec3("camPos", activeScene->getActiveCamera()->getPosition());
+	standardProgram->setUniformVec3("camPos", activeScene->getActiveCamera()->transform.getPosition());
 
 	GLHelper::checkErrors("update scene uniforms");
 }
@@ -474,15 +474,15 @@ void MyGLWindow::spawnRenderable()
 		rand() / (float)RAND_MAX - 0.5f) 
 		* RANDOM_PLACEMENT_OFFSET;
 
-	renderable->position = randPosition;
+	renderable->transform.setPosition(randPosition);
 
 	float scaleValue = rand() / RAND_MAX * 5 + 2.5f;
-	renderable->scale = glm::vec3(scaleValue, scaleValue, scaleValue);
+	renderable->transform.setScale(glm::vec3(scaleValue, scaleValue, scaleValue));
 
-	renderable->rotation = glm::vec3(
+	renderable->transform.setRotation(glm::vec3(
 		rand() / RAND_MAX * 360.0f, 
 		rand() / RAND_MAX * 360.0f, 
-		rand() / RAND_MAX * 360.0f);
+		rand() / RAND_MAX * 360.0f));
 
 	activeScene->addRenderable(renderable);
 }
@@ -492,43 +492,43 @@ void MyGLWindow::keyPressEvent(QKeyEvent* e)
 	switch (e->key())
 	{
 		case Qt::Key::Key_W:
-			activeScene->getActiveCamera()->moveForward();
+			activeScene->getActiveCamera()->transform.moveForward();
 			break;
 		case Qt::Key::Key_S:
-			activeScene->getActiveCamera()->moveBackward();
+			activeScene->getActiveCamera()->transform.moveBackward();
 			break;
 		case Qt::Key::Key_A:
-			activeScene->getActiveCamera()->strafeLeft();
+			activeScene->getActiveCamera()->transform.moveLeft();
 			break;
 		case Qt::Key::Key_D:
-			activeScene->getActiveCamera()->strafeRight();
+			activeScene->getActiveCamera()->transform.moveRight();
 			break;
 		case Qt::Key::Key_Q:
-			activeScene->getActiveCamera()->moveDown();
+			activeScene->getActiveCamera()->transform.moveDown();
 			break;
 		case Qt::Key::Key_E:
-			activeScene->getActiveCamera()->moveUp();
+			activeScene->getActiveCamera()->transform.moveUp();
 			break;
 		case Qt::Key::Key_Space:
 			spawnRenderable();
 			break;
 		case Qt::Key::Key_1:
-			activeScene->getActiveLight()->moveBackward();
+			activeScene->getActiveLight()->renderable->transform.moveBackward();
 			break;
 		case Qt::Key::Key_2:
-			activeScene->getActiveLight()->moveForward();
+			activeScene->getActiveLight()->renderable->transform.moveForward();
 			break;
 		case Qt::Key::Key_Left:
-			activeScene->getActiveLight()->moveLeft();
+			activeScene->getActiveLight()->renderable->transform.moveLeft();
 			break;
 		case Qt::Key::Key_Right:
-			activeScene->getActiveLight()->moveRight();
+			activeScene->getActiveLight()->renderable->transform.moveRight();
 			break;
 		case Qt::Key::Key_Up:
-			activeScene->getActiveLight()->moveUp();
+			activeScene->getActiveLight()->renderable->transform.moveUp();
 			break;
 		case Qt::Key::Key_Down:
-			activeScene->getActiveLight()->moveDown();
+			activeScene->getActiveLight()->renderable->transform.moveDown();
 			break;
 		case Qt::Key::Key_R:
 			activeScene->switchCamera();
@@ -591,6 +591,10 @@ void MyGLWindow::initMaterials()
 	lightMaterial->normalStrength = 0.0f;
 	lightMaterial->emissionStrength = 1.0f;
 	lightMaterial->normalStrength = 0.0f;
+	lightMaterial->reflectivity = 0.0f;
+	lightMaterial->useCubemap = 0.0f;
+	lightMaterial->metallicSmoothness = NULL;
+	lightMaterial->ambientOcclusion = NULL;
 	addMaterial("light", lightMaterial);
 
 	// Skybox material
@@ -657,7 +661,7 @@ void MyGLWindow::initScene()
 
 	// Light renderable
 	activeScene->getActiveLight()->renderable = lightRenderable;
-	activeScene->getActiveLight()->position = glm::vec3(0.0f, 5.0f, 0.0f);
+	activeScene->getActiveLight()->renderable->transform.setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
 	activeScene->setAmbientLight(glm::vec3(0.23f, 0.22f, 0.23f));
 
 	// Skybox
@@ -668,10 +672,10 @@ void MyGLWindow::initScene()
 	// Plane
 	Renderable* plane = new Renderable;
 	plane->geometry = getGeometry("plane");
-	plane->material = getMaterial("reflective");
-	plane->position = glm::vec3(0.0f, 0.0f, 0.0f);
-	plane->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	plane->scale = glm::vec3(50.0f, 50.0f, 50.0f);
+	plane->material = getMaterial("flat");
+	plane->transform.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	plane->transform.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+	plane->transform.setScale(glm::vec3(50.0f, 50.0f, 50.0f));
 	activeScene->addRenderable(plane);
 
 	if (loadPlaneModel)
@@ -680,9 +684,9 @@ void MyGLWindow::initScene()
 		Renderable* f2 = new Renderable;
 		f2->geometry = getGeometry("f2");
 		f2->material = getMaterial("f2");
-		f2->position = glm::vec3(0.0f, 2.5f, 0.0f);
-		f2->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-		f2->scale = glm::vec3(0.01f, 0.01f, 0.01f);
+		f2->transform.setPosition(glm::vec3(0.0f, 2.5f, 0.0f));
+		f2->transform.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+		f2->transform.setScale(glm::vec3(0.01f, 0.01f, 0.01f));
 		f2->drawMode = GL_TRIANGLES;
 		activeScene->addRenderable(f2);
 	}
@@ -693,18 +697,18 @@ void MyGLWindow::initScene()
 		Renderable* cube = new Renderable;
 		cube->geometry = getGeometry("cube");
 		cube->material = getMaterial("standard");
-		cube->position = glm::vec3(0.0f, 2.5f, 0.0f);
-		cube->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-		cube->scale = glm::vec3(2.0f, 2.0f, 2.0f);
+		cube->transform.setPosition(glm::vec3(0.0f, 2.5f, 0.0f));
+		cube->transform.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+		cube->transform.setScale(glm::vec3(2.0f, 2.0f, 2.0f));
 		activeScene->addRenderable(cube);
 
 		// Sphere
 		Renderable* sphere = new Renderable;
 		sphere->geometry = getGeometry("sphere");
 		sphere->material = getMaterial("flat");
-		sphere->position = glm::vec3(3.0f, 2.0f, 1.0f);
-		sphere->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-		sphere->scale = glm::vec3(2.0f, 2.0f, 2.0f);
+		sphere->transform.setPosition(glm::vec3(3.0f, 2.0f, 1.0f));
+		sphere->transform.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+		sphere->transform.setScale(glm::vec3(2.0f, 2.0f, 2.0f));
 		activeScene->addRenderable(sphere);
 	}
 }
@@ -771,7 +775,7 @@ void MyGLWindow::initializeGL()
 
 void MyGLWindow::drawSkybox(Camera* cam, glm::mat4 projMat, bool flipped)
 {
-	glm::vec3 camPosBackup = glm::vec3(cam->getPosition());
+	glm::vec3 camPosBackup = glm::vec3(cam->transform.getPosition());
 	glBindVertexArray(activeScene->skybox->geometry->vertexArrayObjectID);
 
 	GLHelper::checkErrors("drawSkybox -- bind vertex array");
@@ -779,13 +783,13 @@ void MyGLWindow::drawSkybox(Camera* cam, glm::mat4 projMat, bool flipped)
 	setActiveMaterial(getMaterial("skybox"));
 	setActiveCubemap(activeScene->skybox->cubemap);
 
-	cam->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	cam->transform.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	float scaleVal = flipped ? 1.0f : -1.0f;
 	glm::mat4 camMat = cam->getWorldToViewMatrix() * glm::scale(glm::vec3(1.0f, scaleVal, 1.0f));
 	glm::mat4 modelMat = glm::mat4();
 	glm::mat4 mvp = projMat * cam->getWorldToViewMatrix() * modelMat;
 
-	standardProgram->setUniformVec3("camPos", cam->getPosition());
+	standardProgram->setUniformVec3("camPos", cam->transform.getPosition());
 	standardProgram->setUniformMat4("modelMatrix", modelMat);
 	standardProgram->setUniformMat4("mvp", mvp);
 
@@ -797,7 +801,7 @@ void MyGLWindow::drawSkybox(Camera* cam, glm::mat4 projMat, bool flipped)
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	cam->setPosition(camPosBackup);
+	cam->transform.setPosition(camPosBackup);
 
 	GLHelper::checkErrors("drawSkybox");
 }
@@ -810,14 +814,14 @@ void drawRenderable(Renderable* renderable, glm::mat4 camMat, glm::mat4 projMat,
 
 	if (shadow)
 	{
-		glm::mat4 depthModelMat = renderable->getModelToWorldMatrix();
+		glm::mat4 depthModelMat = renderable->transform.getModelToWorldMatrix();
 		depthMVP = projMat * camMat * depthModelMat;
 		shadowProgram->setUniformMat4("depthMVP", depthMVP);
 	}
 
 	else
 	{
-		glm::mat4 modelToWorldMatrix = renderable->getModelToWorldMatrix();
+		glm::mat4 modelToWorldMatrix = renderable->transform.getModelToWorldMatrix();
 		glm::mat4 modelViewProjectionMatrix = projMat * camMat * modelToWorldMatrix;
 		
 		standardProgram->setUniformMat4("modelMatrix", modelToWorldMatrix);
@@ -847,9 +851,9 @@ void drawRenderable(Renderable* renderable, glm::mat4 camMat, glm::mat4 projMat,
 
 void MyGLWindow::drawShadows(Camera* cam, bool flipped)
 {
-	glm::vec3 inverseLight = -activeScene->getActiveLight()->getViewDirection();
+	glm::vec3 inverseLight = -activeScene->getActiveLight()->renderable->transform.getViewDirection();
 	glm::mat4 depthProjMat = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
-	glm::mat4 depthViewMat = glm::lookAt(inverseLight, activeScene->getActiveLight()->position, glm::vec3(0, 1, 0));
+	glm::mat4 depthViewMat = glm::lookAt(inverseLight, activeScene->getActiveLight()->renderable->transform.getPosition(), glm::vec3(0, 1, 0));
 	glm::mat4 depthModelMat = glm::mat4(1.0);
 	//glm::mat4 depthMVP = depthProjMat * depthViewMat * depthModelMat;
 
@@ -889,7 +893,7 @@ void MyGLWindow::draw(Camera* cam, bool flipped)
 	float scaleVal = flipped ? -1.0f : 1.0f;
 	glm::mat4 camMat = cam->getWorldToViewMatrix() * glm::scale(glm::vec3(1.0f, scaleVal, 1.0f));
 
-	standardProgram->setUniformVec3("camPos", activeScene->getActiveCamera()->getPosition());
+	standardProgram->setUniformVec3("camPos", activeScene->getActiveCamera()->transform.getPosition());
 
 	GLHelper::checkErrors("draw -- update camera pos");
 
@@ -928,11 +932,13 @@ void MyGLWindow::paintGL()
 		setActiveProgram(shadowProgram);
 		glBindFramebuffer(GL_FRAMEBUFFER, shadowMap->getFramebufferObjectID());
 		glViewport(0, 0, shadowMap->getWidth(), shadowMap->getHeight());
+		//glCullFace(GL_FRONT);
 		drawShadows(activeScene->getShadowCamera(), false);
 	}
 
 	setActiveProgram(standardProgram);
 	setActiveShadowMap(shadowMap->getDepthTexture());
+	//glCullFace(GL_BACK);
 	if (activeFramebuffer != NULL &&
 		activeFramebuffer->getFramebufferObjectID() != NULL)
 	{

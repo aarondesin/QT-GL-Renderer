@@ -36,7 +36,7 @@ public:
 		if (result < 0)
 		{
 			cout << "Failed to find uniform \"" << uniformName << "\" in program " << programID << "!" << endl;
-			throw exception();
+			//throw exception();
 		}
 		return result;
 	}

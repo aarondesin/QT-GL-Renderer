@@ -27,6 +27,7 @@
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="ShaderObject.h" />
+    <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FragmentShaders\Shadow.glsl" />

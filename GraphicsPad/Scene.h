@@ -14,13 +14,13 @@ public:
 	Skybox* skybox = NULL;
 	void setActiveLightPosition(glm::vec3 pos) 
 	{ 
-		activeLight->position = pos; 
-		shadowCamera->setPosition(pos);
+		activeLight->renderable->transform.setPosition(pos);
+		shadowCamera->transform.setPosition(pos);
 	}
-	void setActiveLightDirection(glm::vec3 viewDir)
+	void setActiveLightRotation(glm::vec3 rotation)
 	{
-		activeLight->setViewDirection(viewDir);
-		shadowCamera->setViewDirection(viewDir);
+		activeLight->renderable->transform.setRotation(rotation);
+		shadowCamera->transform.setRotation(rotation);
 	}
 	Scene() : sceneCamera(new Camera), renderTargetCamera (new Camera), activeCamera(sceneCamera),
 		renderables (new vector<Renderable*>), diffuseLight (new Light), activeLight(diffuseLight),
