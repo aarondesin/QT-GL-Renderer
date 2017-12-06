@@ -9,13 +9,12 @@ using namespace std;
 struct Texture
 {
 private:
-	string name;
 	GLuint textureID;
 public:
 	Texture() {
 		throw exception();
 	}
-	Texture(string texName, int width, int height, GLenum internalFormat, GLenum format, const GLvoid* pixels)
+	Texture(int width, int height, GLenum internalFormat, GLenum format, const GLvoid* pixels)
 	{
 		// Check format
 		switch (format)
@@ -26,9 +25,6 @@ public:
 			default:
 				throw exception();
 		}
-
-		if (texName.length() <= 0) throw exception();
-		name = texName;
 
 		textureID = GLHelper::getNextTextureID();
 
@@ -60,8 +56,8 @@ public:
 
 		GLHelper::checkErrors("texture constructor");
 	}
-	Texture(string texName, QImage* image, GLenum internalFormat, GLenum format) : 
-		Texture (texName, image->width(), image->height(), internalFormat, format, image->bits())
+	Texture(QImage* image, GLenum internalFormat, GLenum format) : 
+		Texture (image->width(), image->height(), internalFormat, format, image->bits())
 	{
 		if (image == NULL) 
 		{
@@ -124,7 +120,6 @@ public:
 	}
 	~Texture() 
 	{
-		name = "";
 		textureID = -1;
 	}
 };

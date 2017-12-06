@@ -148,6 +148,7 @@ ShapeData* OBJLoader::loadOBJFile(string filename)
 					vertex.tangent = glm::vec3(1.0f, 1.0f, 1.0f);
 					vertex.color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
+					//indices.push_back(vertices.size());
 					vertices.push_back(vertex);
 				}
 

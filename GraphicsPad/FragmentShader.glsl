@@ -113,4 +113,5 @@ void main()
 
 	// Final mix
 	outColor = color;
+	//outColor = vec4(normal, 1.0);
 }

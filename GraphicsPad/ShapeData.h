@@ -34,6 +34,13 @@ struct ShapeData
 			vertices[i].color = color;
 		}
 	}
+	void invertNormals()
+	{
+		for (int i = 0; i < numVertices; i++)
+		{
+			vertices[i].normal *= -1;
+		}
+	}
 	void cleanup()
 	{
 		delete [] vertices;

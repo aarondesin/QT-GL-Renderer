@@ -26,7 +26,9 @@ using namespace std;
 
 const float RANDOM_PLACEMENT_OFFSET = 40.0f;
 
-GLint programID = -1;
+GLuint programID = -1;
+GLuint shadowProgramID = -1;
+GLuint activeProgramID = -1;
 bool loadPlaneModel = false;
 
 Scene* scene = new Scene;
@@ -130,14 +132,26 @@ Cubemap* getCubemap(string name)
 
 GLint getUniformLocation(const GLchar* uniformName)
 {
-	GLint result = glGetUniformLocation(programID, uniformName);
+	GLint result = glGetUniformLocation(activeProgramID, uniformName);
 	GLHelper::checkErrors("getUniformLocation().glGetUniformLocation()");
 	if (result < 0)
 	{
-		cout << "Failed to find uniform \"" << uniformName << "\" in program " << programID << "!" << endl;
-		//throw exception();
+		cout << "Failed to find uniform \"" << uniformName << "\" in program " << activeProgramID << "!" << endl;
+		throw exception();
 	}
 	return result;
+}
+
+void setActiveProgram(GLuint program)
+{
+	glValidateProgram(program);
+	GLHelper::checkErrors("setActiveProgram().glValidateProgram()");
+
+	activeProgramID = program;
+	glUseProgram(program);
+	GLHelper::checkErrors("setActiveProgram().glUseProgram()");
+
+	cout << "Set program to " << program << endl;
 }
 
 void setActiveDiffuseTexture(Texture* diffuse)
@@ -360,7 +374,7 @@ Texture* MyGLWindow::makeTexture(string filename)
 		throw exception();
 	}
 
-	Texture* texture = new Texture(filename, image->width(), image->height(), GL_RGBA, GL_RGBA, image->bits());
+	Texture* texture = new Texture(image->width(), image->height(), GL_RGBA, GL_RGBA, image->bits());
 
 	GLHelper::checkErrors("makeTexture - texture construction");
 
@@ -517,23 +531,23 @@ void MyGLWindow::updateUniforms()
 	// Update light position
 	lightPosUniformLoc = getUniformLocation("lightPos");
 	glUniform3f(lightPosUniformLoc,
-		activeScene->activeLight->position.x,
-		activeScene->activeLight->position.y,
-		activeScene->activeLight->position.z);
+		activeScene->getActiveLight()->position.x,
+		activeScene->getActiveLight()->position.y,
+		activeScene->getActiveLight()->position.z);
 
 	// Update diffuse lighting
 	diffuseLightUniformLoc = getUniformLocation("diffuseColor");
 	glUniform3f(diffuseLightUniformLoc,
-		activeScene->activeLight->color.r,
-		activeScene->activeLight->color.g,
-		activeScene->activeLight->color.b);
+		activeScene->getActiveLight()->color.r,
+		activeScene->getActiveLight()->color.g,
+		activeScene->getActiveLight()->color.b);
 
 	// Update specular lighting
 	specularColorUniformLoc = getUniformLocation("specularColor");
 	glUniform3f(specularColorUniformLoc,
-		activeScene->activeLight->color.r,
-		activeScene->activeLight->color.g,
-		activeScene->activeLight->color.b);
+		activeScene->getActiveLight()->color.r,
+		activeScene->getActiveLight()->color.g,
+		activeScene->getActiveLight()->color.b);
 
 	// Update camera position
 	cameraPosUniformLoc = getUniformLocation("camPos");
@@ -612,22 +626,22 @@ void MyGLWindow::keyPressEvent(QKeyEvent* e)
 			spawnRenderable();
 			break;
 		case Qt::Key::Key_1:
-			activeScene->activeLight->moveBackward();
+			activeScene->getActiveLight()->moveBackward();
 			break;
 		case Qt::Key::Key_2:
-			activeScene->activeLight->moveForward();
+			activeScene->getActiveLight()->moveForward();
 			break;
 		case Qt::Key::Key_Left:
-			activeScene->activeLight->moveLeft();
+			activeScene->getActiveLight()->moveLeft();
 			break;
 		case Qt::Key::Key_Right:
-			activeScene->activeLight->moveRight();
+			activeScene->getActiveLight()->moveRight();
 			break;
 		case Qt::Key::Key_Up:
-			activeScene->activeLight->moveUp();
+			activeScene->getActiveLight()->moveUp();
 			break;
 		case Qt::Key::Key_Down:
-			activeScene->activeLight->moveDown();
+			activeScene->getActiveLight()->moveDown();
 			break;
 		case Qt::Key::Key_R:
 			activeScene->switchCamera();
@@ -641,7 +655,9 @@ void MyGLWindow::initGeometries()
 	ShapeData* cube = OBJLoader::loadOBJFile("Models/Cube.obj");
 	MyGLWindow::addGeometry("cube", cube);
 
-	ShapeData* invCube = OBJLoader::loadOBJFile("Models/InvertedCube.obj");
+	//ShapeData* invCube = OBJLoader::loadOBJFile("Models/InvertedCube.obj");
+	ShapeData* invCube = OBJLoader::loadOBJFile("Models/Cube.obj");
+	invCube->invertNormals();
 	MyGLWindow::addGeometry("invCube", invCube);
 
 	ShapeData* plane = OBJLoader::loadOBJFile("Models/Plane.obj");
@@ -753,13 +769,13 @@ void MyGLWindow::initScene()
 	activeScene = scene;
 
 	// Light renderable
-	activeScene->diffuseLight->renderable = lightRenderable;
-	activeScene->diffuseLight->position = glm::vec3(0.0f, 5.0f, 0.0f);
+	activeScene->getActiveLight()->renderable = lightRenderable;
+	activeScene->getActiveLight()->position = glm::vec3(0.0f, 5.0f, 0.0f);
 	activeScene->setAmbientLight(glm::vec3(0.23f, 0.22f, 0.23f));
 
 	// Skybox
 	activeScene->skybox = new Skybox;
-	activeScene->skybox->geometry = getGeometry("invCube");
+	activeScene->skybox->geometry = getGeometry("cube");
 	activeScene->skybox->cubemap = getCubemap("Textures/Skybox_Dawn512");
 
 	// Plane
@@ -780,6 +796,7 @@ void MyGLWindow::initScene()
 		f2->position = glm::vec3(0.0f, 2.5f, 0.0f);
 		f2->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 		f2->scale = glm::vec3(0.01f, 0.01f, 0.01f);
+		f2->drawMode = GL_TRIANGLES;
 		activeScene->addRenderable(f2);
 	}
 
@@ -848,7 +865,8 @@ bool checkShaderStatus(GLuint shaderID)
 
 bool checkProgramStatus(GLuint programID)
 {
-	return checkStatus(programID, glGetProgramiv, glGetProgramInfoLog, GL_LINK_STATUS);
+	return checkStatus(programID, glGetProgramiv, glGetProgramInfoLog, GL_LINK_STATUS) &&
+		checkStatus(programID, glGetProgramiv, glGetProgramInfoLog, GL_VALIDATE_STATUS);
 }
 
 void MyGLWindow::installShaders()
@@ -856,6 +874,8 @@ void MyGLWindow::installShaders()
 	// Create shader objects
 	GLuint vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+	GLuint shadowVertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+	GLuint shadowFragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
 	// Adapter is used to package the shader code strings in the format
 	// that OpenGL wants
@@ -870,11 +890,24 @@ void MyGLWindow::installShaders()
 	adapter[0] = temp.c_str();
 	glShaderSource(fragmentShaderID, 1, adapter, 0);
 
+	temp = readShaderCode("VertexShaderShadow.glsl");
+	adapter[0] = temp.c_str();
+	cout << adapter[0] << endl;
+	glShaderSource(shadowVertexShaderID, 1, adapter, 0);
+
+	temp = readShaderCode("FragmentShaderShadow.glsl");
+	adapter[0] = temp.c_str();
+	cout << adapter[0] << endl;
+	glShaderSource(shadowFragmentShaderID, 1, adapter, 0);
+
 	glCompileShader(vertexShaderID);
 	glCompileShader(fragmentShaderID);
+	glCompileShader(shadowVertexShaderID);
+	glCompileShader(shadowFragmentShaderID);
 
 	// If either of the shaders is broken, quit out
-	if (!checkShaderStatus(vertexShaderID) || !checkShaderStatus(fragmentShaderID))
+	if (!checkShaderStatus(vertexShaderID) || !checkShaderStatus(fragmentShaderID) ||
+		!checkShaderStatus(shadowVertexShaderID) || !checkShaderStatus(shadowFragmentShaderID))
 	{
 		throw exception();
 	}
@@ -887,14 +920,37 @@ void MyGLWindow::installShaders()
 	glAttachShader(programID, fragmentShaderID);
 	glLinkProgram(programID);
 
-	if (!checkProgramStatus(programID))
+	shadowProgramID = glCreateProgram();
+	glAttachShader(shadowProgramID, shadowVertexShaderID);
+	glAttachShader(shadowProgramID, shadowFragmentShaderID);
+	glLinkProgram(shadowProgramID);
+
+	GLint count;
+	GLint size; // size of the variable
+	GLenum type; // type of the variable (float, vec3 or mat4, etc)
+
+	const GLsizei bufSize = 16; // maximum name length
+	GLchar name[bufSize]; // variable name in GLSL
+	GLsizei length; // name length
+	glGetProgramiv(shadowProgramID, GL_ACTIVE_UNIFORMS, &count);
+	printf("Active Uniforms: %d\n", count);
+
+	for (GLint i = 0; i < count; i++)
+	{
+		glGetActiveUniform(shadowProgramID, (GLuint)i, bufSize, &length, &size, &type, name);
+
+		printf("Uniform #%d Type: %u Name: %s\n", i, type, name);
+	}
+
+	if (!checkProgramStatus(programID) || !checkProgramStatus(shadowProgramID))
 	{
 		throw exception();
 	}
 
-	cout << "Program " << programID << " linking successful." << endl;
+	cout << "Standard program " << programID << " linking successful." << endl;
+	cout << "Shadow program " << shadowProgramID << " linking successful." << endl;
 
-	glUseProgram(programID);
+	setActiveProgram(programID);
 
 	GLHelper::checkErrors("installShaders");
 }
@@ -915,7 +971,6 @@ void MyGLWindow::initializeGL()
 	initTextures();
 	initMaterials();
 	initScene();
-	
 	
 	// Render texture
 	activeFramebuffer = makeFramebuffer("RenderTexture", true, false, 1024, 1024);
@@ -945,7 +1000,10 @@ void MyGLWindow::drawSkybox(Camera* cam, glm::mat4 projMat, bool flipped)
 	glm::mat4 modelMat = glm::mat4();
 	glm::mat4 mvp = projMat * cam->getWorldToViewMatrix() * modelMat;
 
-	glUniform3f(cameraPosUniformLoc, 0.0f, 0.0f, 0.0f);
+	glUniform3f(cameraPosUniformLoc, 
+		cam->getPosition().x, 
+		cam->getPosition().y, 
+		cam->getPosition().z);
 	glUniformMatrix4fv(modelMatUniformLocation, 1, GL_FALSE, &modelMat[0][0]);
 	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
 
@@ -981,18 +1039,40 @@ void drawRenderable(Renderable* renderable, glm::mat4 camMat, glm::mat4 projMat)
 	GLHelper::checkErrors("draw -- set render material");
 
 	// Draw renderable
-	glDrawElements(GL_TRIANGLES, renderable->geometry->numIndices, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(renderable->drawMode, renderable->geometry->numIndices, GL_UNSIGNED_SHORT, 0);
 
 	GLHelper::checkErrors("draw -- draw renderable elements");
 }
 
+void MyGLWindow::drawShadows(Camera* cam, bool flipped)
+{
+	glm::vec3 inverseLight = -activeScene->getActiveLight()->getViewDirection();
+	glm::mat4 depthProjMat = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
+	glm::mat4 depthViewMat = glm::lookAt(inverseLight, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	glm::mat4 depthModelMat = glm::mat4(1.0);
+	glm::mat4 depthMVP = depthProjMat * depthViewMat * depthModelMat;
+
+	GLint depthMatUL = getUniformLocation("depthMVP");
+	//GLint depthMatUL = glGetUniformLocation(shadowProgramID, ")
+	glUniformMatrix4fv(depthMatUL, 1, GL_FALSE, &depthMVP[0][0]);
+
+	GLHelper::checkErrors("drawShadows -- send shadow matrix");
+
+	vector<Renderable*>* renderables = activeScene->getRenderables();
+	vector<Renderable*>::iterator renderablesIterator =
+		renderables->begin();
+	drawRenderable(activeScene->getActiveLight()->renderable, depthViewMat, depthProjMat);
+	for (; renderablesIterator != renderables->end(); ++renderablesIterator)
+	{
+		// Send geometry data and matrices
+		Renderable* renderable = *renderablesIterator;
+		drawRenderable(renderable, depthViewMat, depthProjMat);
+	}
+}
+
 void MyGLWindow::draw(Camera* cam, bool flipped)
 {
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	//updateUniforms();
-
-	GLHelper::checkErrors("draw -- update uniforms");
+	GLHelper::checkErrors("draw -- before function entry");
 
 	// View to projection
 	glm::mat4 projMat = glm::perspective(
@@ -1001,7 +1081,11 @@ void MyGLWindow::draw(Camera* cam, bool flipped)
 		activeScene->getActiveCamera()->clipNear,
 		activeScene->getActiveCamera()->clipFar);
 
+	GLHelper::checkErrors("draw -- update projection matrix");
+
+	glDisable(GL_CULL_FACE);
 	drawSkybox(cam, projMat, true);
+	glEnable(GL_CULL_FACE);
 
 	float scaleVal = flipped ? -1.0f : 1.0f;
 	glm::mat4 camMat = cam->getWorldToViewMatrix() * glm::scale(glm::vec3(1.0f, scaleVal, 1.0f));
@@ -1011,10 +1095,12 @@ void MyGLWindow::draw(Camera* cam, bool flipped)
 		activeScene->getActiveCamera()->getPosition().y,
 		activeScene->getActiveCamera()->getPosition().z);
 
+	GLHelper::checkErrors("draw -- update camera pos");
+
 	vector<Renderable*>* renderables = activeScene->getRenderables();
 	vector<Renderable*>::iterator renderablesIterator = 
 		renderables->begin();
-	//drawRenderable(activeScene->activeLight->renderable, camMat, projMat);
+	drawRenderable(activeScene->getActiveLight()->renderable, camMat, projMat);
 	for (; renderablesIterator != renderables->end(); ++renderablesIterator)
 	{
 		// Send geometry data and matrices
@@ -1029,32 +1115,48 @@ void MyGLWindow::paintGL()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	GLHelper::checkErrors("paintGL -- clear buffers");
+
+	setActiveProgram(programID);
+
 	updateUniforms();
 
 	modelMatUniformLocation = getUniformLocation("modelMatrix");
 	mvpUniformLocation = getUniformLocation("mvp");
 
+	GLHelper::checkErrors("paintGL -- update matrix uniforms");
+
+	// Draw to shadow map
 	if (shadowMap != NULL)
 	{
+		setActiveProgram(shadowProgramID);
 		glBindFramebuffer(GL_FRAMEBUFFER, shadowMap->getFramebufferObjectID());
 		glViewport(0, 0, shadowMap->getWidth(), shadowMap->getHeight());
-		draw(activeScene->activeLight, false);
+		drawShadows(activeScene->getShadowCamera(), false);
 	}
 
+	setActiveProgram(programID);
 	if (activeFramebuffer != NULL &&
 		activeFramebuffer->getFramebufferObjectID() != NULL)
 	{
 		// Render to framebuffer
 		glBindFramebuffer(GL_FRAMEBUFFER, activeFramebuffer->getFramebufferObjectID());
+		GLHelper::checkErrors("paintGL -- bind active framebuffer");
+
 		glViewport(0, 0, activeFramebuffer->getWidth(), activeFramebuffer->getHeight());
+		GLHelper::checkErrors("paintGL -- active framebuffer viewport");
+
 		draw(activeScene->getRenderTargetCamera(), true);
+		GLHelper::checkErrors("paintGL -- framebuffer draw call");
 	}
 
 	// Render to screen
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, width(), height());
-	glUniform1i(renderTextureUniformLoc, activeFramebuffer->getRenderTextureID());
-	draw(activeScene->getActiveCamera(), false);
+	GLHelper::checkErrors("paintGL -- bind screen framebuffer");
 
-	GLHelper::checkErrors("paintGL");
+	glViewport(0, 0, width(), height());
+	GLHelper::checkErrors("paintGL -- screen viewport");
+
+	draw(activeScene->getActiveCamera(), false);
+	GLHelper::checkErrors("paintGL -- main draw call");
 }

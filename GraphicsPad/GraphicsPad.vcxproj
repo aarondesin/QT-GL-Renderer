@@ -164,9 +164,6 @@
     <ClCompile Include="MyGLWindow.cpp" />
     <ClCompile Include="OBJLoader.cpp" />
     <ClCompile Include="ShapeGenerator.cpp" />
-    <Text Include="VertexShader.glsl">
-      <FileType>CppCode</FileType>
-    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -190,6 +187,11 @@
     <Text Include="FragmentShader.glsl">
       <FileType>Document</FileType>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FragmentShaderShadow.glsl" />
+    <None Include="VertexShader.glsl" />
+    <None Include="VertexShaderShadow.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

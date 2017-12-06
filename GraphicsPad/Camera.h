@@ -29,6 +29,7 @@ public:
 	void moveDown();
 	glm::vec3 getPosition() const { return position; }
 	void setPosition(glm::vec3 pos) { position = pos; }
+	void setViewDirection(glm::vec3 v) { viewDirection = v; }
 	float fov = 60.0f;
 	float clipNear = 0.1f;
 	float clipFar = 100.0f;

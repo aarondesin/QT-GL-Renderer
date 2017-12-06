@@ -35,7 +35,7 @@ public:
 
 		if (useColor)
 		{
-			renderTexture = new Texture(name, width, height, GL_RGB, GL_RGB, NULL);
+			renderTexture = new Texture(width, height, GL_RGB, GL_RGB, NULL);
 			glReadBuffer(GL_COLOR_ATTACHMENT0);
 			glDrawBuffer(GL_COLOR_ATTACHMENT0);
 			glActiveTexture(GL_TEXTURE0 + renderTexture->getTextureID());
@@ -46,7 +46,9 @@ public:
 
 		if (useDepth)
 		{
-			depthTexture = new Texture(name, width, height, GL_DEPTH_COMPONENT16, GL_R, NULL);
+			depthTexture = new Texture(width, height, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, NULL);
+			glActiveTexture(GL_TEXTURE0 + depthTexture->getTextureID());
+			glBindTexture(GL_TEXTURE_2D, depthTexture->getTextureID());
 			glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture->getTextureID(), 0);
 		}
 

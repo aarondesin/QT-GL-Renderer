@@ -27,7 +27,11 @@
     <ClInclude Include="Skybox.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="VertexShader.glsl" />
     <Text Include="FragmentShader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FragmentShaderShadow.glsl" />
+    <None Include="VertexShaderShadow.glsl" />
+    <None Include="VertexShader.glsl" />
   </ItemGroup>
 </Project>
