@@ -11,12 +11,17 @@ public:
 	void setViewDirection(glm::vec3 v) { viewDir = v; }
 	glm::vec3 getViewDirection() { return viewDir; }
 	Renderable* renderable = NULL;
-	void moveForward()  { position.z += 0.1f; }
-	void moveBackward() { position.z -= 0.1f; }
-	void moveLeft()     { position.x -= 0.1f; }
-	void moveRight()    { position.x += 0.1f; }
-	void moveUp()       { position.y += 0.1f; }
-	void moveDown()     { position.y -= 0.1f; }
+	void moveForward()  { position.z += 0.1f;  renderable->position.z += 0.f;
+	}
+	void moveBackward() { position.z -= 0.1f;  renderable->position.z -= 0.f;
+	}
+	void moveLeft()     { position.x -= 0.1f;  renderable->position.x -= 0.f;
+	}
+	void moveRight()    { position.x += 0.1f;  renderable->position.x += 0.f;
+	}
+	void moveUp()       { position.y += 0.1f; renderable->position.y += 0.f;
+	}
+	void moveDown() { position.y -= 0.1f; renderable->position.y -= 0.f; }
 private:
 	glm::vec3 viewDir = glm::vec3(0.0, 0.0, 1.0);
 };

@@ -7,6 +7,7 @@ in vec3 throughNormal;
 in vec2 throughUV;
 in vec3 throughTangent;
 in vec3 throughBitangent;
+in vec4 throughShadowCoord;
 
 const float falloffConstantCoef = 0.05;
 const float falloffLinearCoef = 0.5;
@@ -46,6 +47,8 @@ uniform sampler2D ambientOcclusion;
 uniform float ambientOcclusionScale;
 
 uniform sampler2D metallicSmoothness;
+
+uniform sampler2D shadowMap;
 
 void main()
 {
@@ -96,7 +99,12 @@ void main()
 	float specularValue = pow (clamp (dot (reflectedLightVec, camVec), 0.0, 1.0), specularPower * smoothness);
 	vec4 specular = vec4((specularValue * specularColor), 1.0) * falloff;
 
-	vec4 totalLight = mix (ambient + diffuse + specular, vec4(1.0, 1.0, 1.0, 1.0), emissionStrength);
+	float v = 1.0;
+	if (texture(shadowMap, throughShadowCoord.xy).z < throughShadowCoord.z)
+	{
+		v = 0.0;
+	}
+	vec4 totalLight = mix (ambient + (diffuse + specular) * v, vec4(1.0, 1.0, 1.0, 1.0), emissionStrength);
 
 	color = totalLight * color;
 

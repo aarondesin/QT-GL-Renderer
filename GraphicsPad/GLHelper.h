@@ -21,7 +21,7 @@ public:
 		nextFramebufferObjectID++;
 		return i;
 	}
-	static void GLHelper::checkErrors(string location)
+	static void GLHelper::checkErrors(string location, string additional="")
 	{
 		GLenum err;
 		string errMsg = "";
@@ -52,8 +52,8 @@ public:
 				break;
 			}
 
-			cout << "Error " << err << ": " << errMsg << " after " << location << endl;
-			throw exception();
+			cout << "GLerror " << err << ": " << errMsg << " after " << location << ". " << additional << endl;
+			//throw exception();
 		}
 	}
 	static bool checkStatus(GLuint objectID,

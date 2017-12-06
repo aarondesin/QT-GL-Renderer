@@ -108,7 +108,7 @@ public:
 
 		textureID = texID;
 	}
-	GLint getTextureID()
+	GLuint getTextureID()
 	{
 		if (textureID > GLHelper::MAX_TEXTURE_ID || textureID < 0)
 		{

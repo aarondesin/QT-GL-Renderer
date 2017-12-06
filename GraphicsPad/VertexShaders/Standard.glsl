@@ -9,6 +9,7 @@ in layout(location=4) vec3 tangent;
 uniform mat4 mvp;
 uniform mat4 modelMatrix;
 uniform vec3 ambientLight;
+uniform mat4 depthBiasMVP;
 
 out vec3 vertexPosition;
 out vec3 vertexModelPosition;
@@ -17,6 +18,7 @@ out vec3 throughNormal;
 out vec2 throughUV;
 out vec3 throughTangent;
 out vec3 throughBitangent;
+out vec4 throughShadowCoord;
 
 void main()
 {
@@ -29,4 +31,5 @@ void main()
 	throughUV = uv;
 	throughTangent = normalize(modelMatrix * vec4(tangent, 0.0)).xyz;
 	throughBitangent = normalize(cross(throughTangent, throughNormal));
+	throughShadowCoord = depthBiasMVP * p;
 }

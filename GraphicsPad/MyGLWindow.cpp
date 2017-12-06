@@ -38,6 +38,7 @@ Scene* activeScene = scene;
 
 Framebuffer *activeFramebuffer = NULL;
 Framebuffer* shadowMap = NULL;
+glm::mat4 depthMVP;
 
 // All images
 map<string, QImage*>* images = NULL;
@@ -59,32 +60,6 @@ map<string, ShapeData*>* geometries = NULL;
 
 // All materials
 map<string, Material*>* materials = NULL;
-
-// Uniform locations
-GLint cameraPosUniformLoc;
-GLint mvpUniformLocation;
-GLint modelMatUniformLocation;
-
-GLint ambientLightUniformLoc;
-GLint lightPosUniformLoc;
-GLint diffuseLightUniformLoc;
-GLint specularColorUniformLoc;
-GLint specularPowerUniformLoc;
-
-GLint diffuseTextureUniformLoc;
-GLint diffuseStrengthUniformLoc;
-GLint normalStrengthUniformLoc;
-GLint normalMapUniformLoc;
-GLint useCubemapUniformLoc;
-GLint cubemapUniformLoc;
-GLint reflectivityUniformLoc;
-GLint emissionStrengthUniformLoc;
-GLint indexOfRefractionUniformLoc;
-GLint fresnelValueUniformLoc;
-GLint ambientOcclusionUniformLoc;
-GLint ambientOcclusionScaleUniformLoc;
-GLint metallicSmoothnessUniformLoc;
-GLint renderTextureUniformLoc;
 
 ShapeData* getGeometry(string name)
 {
@@ -158,17 +133,9 @@ void setActiveProgram(ShaderProgram* program)
 void setActiveDiffuseTexture(Texture* diffuse)
 {
 	GLint texID = diffuse->getTextureID();
-
-	if (texID < 0)
-	{
-		cout << "Invalid texture ID!" << endl;
-		return;
-	}
-
 	glActiveTexture(GL_TEXTURE0 + texID);
 	glBindTexture(GL_TEXTURE_2D, texID);
-	diffuseTextureUniformLoc = standardProgram->getUniformLocation("diffuseTexture");
-	glUniform1i(diffuseTextureUniformLoc, texID);
+	standardProgram->setUniformInt("diffuseTexture", texID);
 
 	GLHelper::checkErrors("setActiveDiffuseTexture");
 }
@@ -176,17 +143,9 @@ void setActiveDiffuseTexture(Texture* diffuse)
 void setActiveNormalMap(Texture* normalMap)
 {
 	GLint normalMapID = normalMap->getTextureID();
-
-	if (normalMapID < 0)
-	{
-		cout << "Invalid normal map ID!" << endl;
-		return;
-	}
-
 	glActiveTexture(GL_TEXTURE0 + normalMapID);
 	glBindTexture(GL_TEXTURE_2D, normalMapID);
-	normalMapUniformLoc = standardProgram->getUniformLocation("normalMap");
-	glUniform1i(normalMapUniformLoc, normalMapID);
+	standardProgram->setUniformInt("normalMap", normalMapID);
 
 	GLHelper::checkErrors("setActiveNormalMap");
 }
@@ -194,61 +153,37 @@ void setActiveNormalMap(Texture* normalMap)
 void setActiveAmbientOcclusionMap(Texture* ao)
 {
 	GLint aoMapID = ao->getTextureID();
-	if (aoMapID < 0)
-	{
-		cout << "Invalid AO map ID!" << endl;
-	}
-
 	glActiveTexture(GL_TEXTURE0 + aoMapID);
 	glBindTexture(GL_TEXTURE_2D, aoMapID);
-	ambientOcclusionUniformLoc = activeProgram->getUniformLocation("ambientOcclusion");
-	glUniform1i(ambientOcclusionUniformLoc, aoMapID);
+	standardProgram->setUniformInt("ambientOcclusion", aoMapID);
 }
 
 void setActiveMetallicSmoothnessMap(Texture* ms)
 {
 	GLint msMapID = ms->getTextureID();
-	if (msMapID < 0)
-	{
-		cout << "Invalid MetallicSmoothness map ID!" << endl;
-	}
-
 	glActiveTexture(GL_TEXTURE0 + msMapID);
 	glBindTexture(GL_TEXTURE_2D, msMapID);
-	metallicSmoothnessUniformLoc = activeProgram->getUniformLocation("metallicSmoothness");
-	glUniform1i(metallicSmoothnessUniformLoc, msMapID);
-}
-
-void setActiveRenderTexture(Texture* renderTexture)
-{
-	GLint renderTextureID = renderTexture->getTextureID();
-	if (renderTextureID < 0)
-	{
-		cout << "Invalid render texture ID!" << endl;
-	}
-
-	glActiveTexture(GL_TEXTURE0 + renderTextureID);
-	glBindTexture(GL_TEXTURE_2D, renderTextureID);
-	renderTextureUniformLoc = activeProgram->getUniformLocation("renderTexture");
-	glUniform1i(renderTextureUniformLoc, renderTextureID);
+	standardProgram->setUniformInt("metallicSmoothness", msMapID);
 }
 
 void setActiveCubemap(Cubemap* cubemap)
 {
 	GLint cubemapID = cubemap->cubemapID;
-
-	if (cubemapID < 0)
-	{
-		cout << "Invalid cubemap ID!" << endl;
-		return;
-	}
-
 	glActiveTexture(GL_TEXTURE0 + cubemapID);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapID);
-	cubemapUniformLoc = activeProgram->getUniformLocation("cubemap");
-	glUniform1i(cubemapUniformLoc, cubemap->cubemapID);
+	standardProgram->setUniformInt("cubemap", cubemapID);
 
 	GLHelper::checkErrors("setActiveCubemap");
+}
+
+void setActiveShadowMap(Texture* shadowMap)
+{
+	GLint shadowMapID = shadowMap->getTextureID();
+	glActiveTexture(GL_TEXTURE0 + shadowMapID);
+	glBindTexture(GL_TEXTURE_2D, shadowMapID);
+	standardProgram->setUniformInt("shadowMap", shadowMapID);
+
+	GLHelper::checkErrors("setActiveShadowMap");
 }
 
 void setActiveFramebuffer(Framebuffer* framebuffer)
@@ -261,61 +196,44 @@ void setActiveMaterial(Material* material)
 	if (material->diffuse != NULL)
 	{
 		setActiveDiffuseTexture(material->diffuse);
-		diffuseStrengthUniformLoc = activeProgram->getUniformLocation("diffuseStrength");
-		glUniform1f(diffuseStrengthUniformLoc, material->diffuseStrength);
+		standardProgram->setUniformFloat("diffuseStrength", material->diffuseStrength);
 	}
 
 	else
 	{
 		setActiveDiffuseTexture(getTexture("Textures/White"));
-		diffuseStrengthUniformLoc = activeProgram->getUniformLocation("diffuseStrength");
-		glUniform1f(diffuseStrengthUniformLoc, 0.0f);
+		standardProgram->setUniformFloat("diffuseStrength", 0.0f);
 	}
 
 	if (material->normal != NULL)
 	{
 		setActiveNormalMap(material->normal);
-		normalStrengthUniformLoc = activeProgram->getUniformLocation("normalStrength");
-		glUniform1f(normalStrengthUniformLoc, material->normalStrength);
+		standardProgram->setUniformFloat("normalStrength", material->normalStrength);
 	}
 
 	else
 	{
 		setActiveNormalMap(getTexture("Textures/Gray"));
-		normalStrengthUniformLoc = activeProgram->getUniformLocation("normalStrength");
-		glUniform1f(normalStrengthUniformLoc, 0.0f);
+		standardProgram->setUniformFloat("normalStrength", 0.0f);
 	}
 
-	specularPowerUniformLoc = activeProgram->getUniformLocation("specularPower");
-	glUniform1f(specularPowerUniformLoc, material->specularPower);
-
-	emissionStrengthUniformLoc = activeProgram->getUniformLocation("emissionStrength");
-	glUniform1f(emissionStrengthUniformLoc, material->emissionStrength);
-
-	reflectivityUniformLoc = activeProgram->getUniformLocation("reflectivity");
-	glUniform1f(reflectivityUniformLoc, material->reflectivity);
-
-	indexOfRefractionUniformLoc = activeProgram->getUniformLocation("indexOfRefraction");
-	glUniform1f(indexOfRefractionUniformLoc, material->indexOfRefraction);
-
-	fresnelValueUniformLoc = activeProgram->getUniformLocation("fresnelValue");
-	glUniform1f(fresnelValueUniformLoc, material->fresnelValue);
-
-	useCubemapUniformLoc = activeProgram->getUniformLocation("useCubemap");
-	glUniform1f(useCubemapUniformLoc, material->useCubemap);
+	standardProgram->setUniformFloat("specularPower", material->specularPower);
+	standardProgram->setUniformFloat("emissionStrength", material->emissionStrength);
+	standardProgram->setUniformFloat("reflectivity", material->reflectivity);
+	standardProgram->setUniformFloat("indexOfRefraction", material->indexOfRefraction);
+	standardProgram->setUniformFloat("fresnelValue", material->fresnelValue);
+	standardProgram->setUniformFloat("useCubemap", material->useCubemap);
 
 	if (material->ambientOcclusion != NULL)
 	{ 
 		setActiveAmbientOcclusionMap(material->ambientOcclusion);
-		ambientOcclusionScaleUniformLoc = activeProgram->getUniformLocation("ambientOcclusionScale");
-		glUniform1f(ambientOcclusionScaleUniformLoc, material->occlusionScale);
+		standardProgram->setUniformFloat("ambientOcclusionScale", material->occlusionScale);
 	}
 
 	else
 	{
 		setActiveAmbientOcclusionMap(getTexture("Textures/White"));
-		ambientOcclusionScaleUniformLoc = activeProgram->getUniformLocation("ambientOcclusionScale");
-		glUniform1f(ambientOcclusionScaleUniformLoc, 0.0f);
+		standardProgram->setUniformFloat("ambientOcclusionScale", 0.0f);
 	}
 
 	if (material->metallicSmoothness != NULL)
@@ -441,8 +359,6 @@ Framebuffer* MyGLWindow::makeFramebuffer(string name, bool useColor, bool useDep
 
 	if (framebuffers == NULL) framebuffers = new map<string, Framebuffer*>;
 	framebuffers->emplace(std::pair<string, Framebuffer*>(name, framebuffer));
-
-	//cout << "--FRAMEBUFFER (" << framebuffer.framebufferObjectID << "): " << name << "--" << endl;
 	cout << "done." << endl;
 	GLHelper::checkErrors("makeFramebuffer");
 	return framebuffer;
@@ -490,7 +406,6 @@ void MyGLWindow::addGeometry(string name, ShapeData* geometry)
 	GLHelper::checkErrors("addGeometry - VAO creation");
 
 	if (geometries == NULL) geometries = new map<string, ShapeData*>;
-	//geometries[name] = geometry;
 	geometries->emplace(std::pair<string, ShapeData*>(name, geometry));
 	cout << "Added geometry: " << name << endl;
 	GLHelper::checkErrors("addGeometry");
@@ -522,40 +437,11 @@ void MyGLWindow::addMaterial(string name, Material* material)
 
 void MyGLWindow::updateUniforms()
 {
-	// Update ambient lighting strength
-	ambientLightUniformLoc = activeProgram->getUniformLocation("ambientLight");
-	glUniform3f(ambientLightUniformLoc,
-		activeScene->getAmbientLight().r,
-		activeScene->getAmbientLight().g,
-		activeScene->getAmbientLight().b);
-
-	// Update light position
-	lightPosUniformLoc = activeProgram->getUniformLocation("lightPos");
-	glUniform3f(lightPosUniformLoc,
-		activeScene->getActiveLight()->position.x,
-		activeScene->getActiveLight()->position.y,
-		activeScene->getActiveLight()->position.z);
-
-	// Update diffuse lighting
-	diffuseLightUniformLoc = activeProgram->getUniformLocation("diffuseColor");
-	glUniform3f(diffuseLightUniformLoc,
-		activeScene->getActiveLight()->color.r,
-		activeScene->getActiveLight()->color.g,
-		activeScene->getActiveLight()->color.b);
-
-	// Update specular lighting
-	specularColorUniformLoc = activeProgram->getUniformLocation("specularColor");
-	glUniform3f(specularColorUniformLoc,
-		activeScene->getActiveLight()->color.r,
-		activeScene->getActiveLight()->color.g,
-		activeScene->getActiveLight()->color.b);
-
-	// Update camera position
-	cameraPosUniformLoc = activeProgram->getUniformLocation("camPos");
-	glUniform3f(cameraPosUniformLoc,
-		activeScene->getActiveCamera()->getPosition().x,
-		activeScene->getActiveCamera()->getPosition().y,
-		activeScene->getActiveCamera()->getPosition().z);
+	standardProgram->setUniformVec3("ambientLight", activeScene->getAmbientLight());
+	standardProgram->setUniformVec3("lightPos", activeScene->getActiveLight()->position);
+	standardProgram->setUniformVec3("diffuseColor", activeScene->getActiveLight()->color);
+	standardProgram->setUniformVec3("specularColor", activeScene->getActiveLight()->color);
+	standardProgram->setUniformVec3("camPos", activeScene->getActiveCamera()->getPosition());
 
 	GLHelper::checkErrors("update scene uniforms");
 }
@@ -899,12 +785,9 @@ void MyGLWindow::drawSkybox(Camera* cam, glm::mat4 projMat, bool flipped)
 	glm::mat4 modelMat = glm::mat4();
 	glm::mat4 mvp = projMat * cam->getWorldToViewMatrix() * modelMat;
 
-	glUniform3f(cameraPosUniformLoc, 
-		cam->getPosition().x, 
-		cam->getPosition().y, 
-		cam->getPosition().z);
-	glUniformMatrix4fv(modelMatUniformLocation, 1, GL_FALSE, &modelMat[0][0]);
-	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
+	standardProgram->setUniformVec3("camPos", cam->getPosition());
+	standardProgram->setUniformMat4("modelMatrix", modelMat);
+	standardProgram->setUniformMat4("mvp", mvp);
 
 	GLHelper::checkErrors("drawSkybox -- calculate matrices");
 
@@ -919,21 +802,40 @@ void MyGLWindow::drawSkybox(Camera* cam, glm::mat4 projMat, bool flipped)
 	GLHelper::checkErrors("drawSkybox");
 }
 
-void drawRenderable(Renderable* renderable, glm::mat4 camMat, glm::mat4 projMat)
+void drawRenderable(Renderable* renderable, glm::mat4 camMat, glm::mat4 projMat, bool shadow)
 {
 	glBindVertexArray(renderable->geometry->vertexArrayObjectID);
 
 	GLHelper::checkErrors("draw -- bind renderable VAO");
 
-	glm::mat4 modelToWorldMatrix = renderable->getModelToWorldMatrix();
-	glm::mat4 modelViewProjectionMatrix = projMat * camMat * modelToWorldMatrix;
-	glUniformMatrix4fv(modelMatUniformLocation, 1, GL_FALSE, &modelToWorldMatrix[0][0]);
-	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
+	if (shadow)
+	{
+		glm::mat4 depthModelMat = renderable->getModelToWorldMatrix();
+		depthMVP = projMat * camMat * depthModelMat;
+		shadowProgram->setUniformMat4("depthMVP", depthMVP);
+	}
+
+	else
+	{
+		glm::mat4 modelToWorldMatrix = renderable->getModelToWorldMatrix();
+		glm::mat4 modelViewProjectionMatrix = projMat * camMat * modelToWorldMatrix;
+		
+		standardProgram->setUniformMat4("modelMatrix", modelToWorldMatrix);
+		standardProgram->setUniformMat4("mvp", modelViewProjectionMatrix);
+
+		glm::mat4 shadowBiasMatrix(
+			0.5f, 0.0f, 0.0f, 0.0f,
+			0.0f, 0.5f, 0.0f, 0.0f,
+			0.0f, 0.0f, 0.5f, 0.0f,
+			0.5f, 0.5f, 0.5f, 1.0f
+		);
+		glm::mat4 shadowBiasMVP = shadowBiasMatrix * depthMVP;
+		standardProgram->setUniformMat4("depthBiasMVP", shadowBiasMatrix);
+	}
 
 	GLHelper::checkErrors("draw -- send renderable matrices");
 
-	// Send material data
-	setActiveMaterial(renderable->material);
+	
 
 	GLHelper::checkErrors("draw -- set render material");
 
@@ -947,25 +849,23 @@ void MyGLWindow::drawShadows(Camera* cam, bool flipped)
 {
 	glm::vec3 inverseLight = -activeScene->getActiveLight()->getViewDirection();
 	glm::mat4 depthProjMat = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
-	glm::mat4 depthViewMat = glm::lookAt(inverseLight, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	glm::mat4 depthViewMat = glm::lookAt(inverseLight, activeScene->getActiveLight()->position, glm::vec3(0, 1, 0));
 	glm::mat4 depthModelMat = glm::mat4(1.0);
-	glm::mat4 depthMVP = depthProjMat * depthViewMat * depthModelMat;
+	//glm::mat4 depthMVP = depthProjMat * depthViewMat * depthModelMat;
 
-	GLint depthMatUL = activeProgram->getUniformLocation("depthMVP");
-	//GLint depthMatUL = glGetUniformLocation(shadowProgramID, ")
-	glUniformMatrix4fv(depthMatUL, 1, GL_FALSE, &depthMVP[0][0]);
+	//shadowProgram->setUniformMat4("depthMVP", depthMVP);
 
 	GLHelper::checkErrors("drawShadows -- send shadow matrix");
 
 	vector<Renderable*>* renderables = activeScene->getRenderables();
 	vector<Renderable*>::iterator renderablesIterator =
 		renderables->begin();
-	drawRenderable(activeScene->getActiveLight()->renderable, depthViewMat, depthProjMat);
+	//drawRenderable(activeScene->getActiveLight()->renderable, depthViewMat, depthProjMat, true);
 	for (; renderablesIterator != renderables->end(); ++renderablesIterator)
 	{
 		// Send geometry data and matrices
 		Renderable* renderable = *renderablesIterator;
-		drawRenderable(renderable, depthViewMat, depthProjMat);
+		drawRenderable(renderable, depthViewMat, depthProjMat, true);
 	}
 }
 
@@ -989,22 +889,22 @@ void MyGLWindow::draw(Camera* cam, bool flipped)
 	float scaleVal = flipped ? -1.0f : 1.0f;
 	glm::mat4 camMat = cam->getWorldToViewMatrix() * glm::scale(glm::vec3(1.0f, scaleVal, 1.0f));
 
-	glUniform3f(cameraPosUniformLoc,
-		activeScene->getActiveCamera()->getPosition().x,
-		activeScene->getActiveCamera()->getPosition().y,
-		activeScene->getActiveCamera()->getPosition().z);
+	standardProgram->setUniformVec3("camPos", activeScene->getActiveCamera()->getPosition());
 
 	GLHelper::checkErrors("draw -- update camera pos");
 
 	vector<Renderable*>* renderables = activeScene->getRenderables();
 	vector<Renderable*>::iterator renderablesIterator = 
 		renderables->begin();
-	drawRenderable(activeScene->getActiveLight()->renderable, camMat, projMat);
+	drawRenderable(activeScene->getActiveLight()->renderable, camMat, projMat, false);
 	for (; renderablesIterator != renderables->end(); ++renderablesIterator)
 	{
 		// Send geometry data and matrices
 		Renderable* renderable = *renderablesIterator;
-		drawRenderable(renderable, camMat, projMat);
+
+		// Send material data
+		setActiveMaterial(renderable->material);
+		drawRenderable(renderable, camMat, projMat, false);
 	}
 
 	GLHelper::checkErrors("draw");
@@ -1020,9 +920,6 @@ void MyGLWindow::paintGL()
 
 	updateUniforms();
 
-	modelMatUniformLocation = activeProgram->getUniformLocation("modelMatrix");
-	mvpUniformLocation = activeProgram->getUniformLocation("mvp");
-
 	GLHelper::checkErrors("paintGL -- update matrix uniforms");
 
 	// Draw to shadow map
@@ -1035,6 +932,7 @@ void MyGLWindow::paintGL()
 	}
 
 	setActiveProgram(standardProgram);
+	setActiveShadowMap(shadowMap->getDepthTexture());
 	if (activeFramebuffer != NULL &&
 		activeFramebuffer->getFramebufferObjectID() != NULL)
 	{

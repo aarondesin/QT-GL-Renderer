@@ -67,6 +67,7 @@ public:
 	GLint getFramebufferObjectID() { return framebufferObjectID; }
 	GLint getWidth() { return width; }
 	GLint getHeight() { return height; }
+	Texture* getDepthTexture() { return depthTexture; }
 	GLint getRenderTextureID() { return renderTexture->getTextureID(); }
 	GLint getDepthTextureID() { return depthTexture->getTextureID(); }
 };
