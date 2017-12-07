@@ -31,5 +31,5 @@ void main()
 	throughUV = uv;
 	throughTangent = normalize(modelMatrix * vec4(tangent, 0.0)).xyz;
 	throughBitangent = normalize(cross(throughTangent, throughNormal));
-	throughShadowCoord = depthBiasMVP * p;
+	throughShadowCoord = depthBiasMVP * vec4(vertexModelPosition, 1.0);
 }

@@ -31,7 +31,8 @@ const float RANDOM_PLACEMENT_OFFSET = 40.0f;
 ShaderProgram* activeProgram = NULL;
 ShaderProgram* standardProgram = NULL;
 ShaderProgram* shadowProgram = NULL;
-bool loadPlaneModel = false;
+//ShaderProgram* drawToScreenProgram = NULL;
+bool loadPlaneModel = true;
 
 Scene* scene = new Scene;
 Scene* activeScene = scene;
@@ -492,22 +493,22 @@ void MyGLWindow::keyPressEvent(QKeyEvent* e)
 	switch (e->key())
 	{
 		case Qt::Key::Key_W:
-			activeScene->getActiveCamera()->transform.moveForward();
+			activeScene->getActiveCamera()->moveForward();
 			break;
 		case Qt::Key::Key_S:
-			activeScene->getActiveCamera()->transform.moveBackward();
+			activeScene->getActiveCamera()->moveBackward();
 			break;
 		case Qt::Key::Key_A:
-			activeScene->getActiveCamera()->transform.moveLeft();
+			activeScene->getActiveCamera()->moveLeft();
 			break;
 		case Qt::Key::Key_D:
-			activeScene->getActiveCamera()->transform.moveRight();
+			activeScene->getActiveCamera()->moveRight();
 			break;
 		case Qt::Key::Key_Q:
-			activeScene->getActiveCamera()->transform.moveDown();
+			activeScene->getActiveCamera()->moveDown();
 			break;
 		case Qt::Key::Key_E:
-			activeScene->getActiveCamera()->transform.moveUp();
+			activeScene->getActiveCamera()->moveUp();
 			break;
 		case Qt::Key::Key_Space:
 			spawnRenderable();
@@ -552,6 +553,24 @@ void MyGLWindow::initGeometries()
 
 	ShapeData* sphere = OBJLoader::loadOBJFile("Models/Sphere16.obj");
 	MyGLWindow::addGeometry("sphere", sphere);
+
+	/*ShapeData* screenQuad = new ShapeData();
+	screenQuad->numIndices = 4;
+	screenQuad->numVertices = 4;
+	screenQuad->indices = new unsigned short[4]{ 0, 1, 2, 3 };
+	Vertex v1 = Vertex();
+	v1.position = glm::vec3(0.0f, 0.0f, 0.0f);
+	Vertex v2 = Vertex();
+	v2.position = glm::vec3(1.0f, 0.0f, 0.0f);
+	Vertex v3 = Vertex();
+	v3.position = glm::vec3(1.0f, 1.0f, 0.0f);
+	Vertex v4 = Vertex();
+	v4.position = glm::vec3(0.0f, 1.0f, 0.0f);
+	screenQuad->vertices = new Vertex[4]
+	{
+		v1, v2, v3, v4
+	};
+	MyGLWindow::addGeometry("screenQuad", screenQuad);*/
 
 	if (loadPlaneModel)
 	{
@@ -634,6 +653,15 @@ void MyGLWindow::initMaterials()
 	flatMaterial->normalStrength = 0.0f;
 	addMaterial("flat", flatMaterial);
 
+	// Shadow map material
+	Material* shadowMapMaterial = new Material();
+	shadowMapMaterial->diffuse = shadowMap->getDepthTexture();
+	shadowMapMaterial->diffuseStrength = 1.0f;
+	shadowMapMaterial->normal = NULL;
+	shadowMapMaterial->normalStrength = 0.0f;
+	shadowMapMaterial->emissionStrength = 1.0f;
+	addMaterial("shadowMap", shadowMapMaterial);
+
 	if (loadPlaneModel)
 	{
 		// F2 material
@@ -663,6 +691,7 @@ void MyGLWindow::initScene()
 	activeScene->getActiveLight()->renderable = lightRenderable;
 	activeScene->getActiveLight()->renderable->transform.setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
 	activeScene->setAmbientLight(glm::vec3(0.23f, 0.22f, 0.23f));
+	activeScene->getActiveLight()->renderable->transform.setViewDirection(glm::normalize(glm::vec3(1.0f, -0.25f, 1.0f)));
 
 	// Skybox
 	activeScene->skybox = new Skybox;
@@ -676,7 +705,18 @@ void MyGLWindow::initScene()
 	plane->transform.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	plane->transform.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 	plane->transform.setScale(glm::vec3(50.0f, 50.0f, 50.0f));
+	plane->castsShadows = true;
 	activeScene->addRenderable(plane);
+
+	Renderable* shadowMapPlane = new Renderable;
+	shadowMapPlane->geometry = getGeometry("plane");
+	shadowMapPlane->material = getMaterial("shadowMap");
+	shadowMapPlane->transform.setPosition(glm::vec3(-5.0f, 2.5f, -5.0f));
+	shadowMapPlane->transform.setRotation(glm::vec3(90.0f, 45.0f, 0.0f));
+	shadowMapPlane->transform.setScale(glm::vec3(3.0f, 3.0f, 3.0f));
+	shadowMapPlane->castsShadows = false;
+	shadowMapPlane->cullingOn = false;
+	activeScene->addRenderable(shadowMapPlane);
 
 	if (loadPlaneModel)
 	{
@@ -720,10 +760,13 @@ void MyGLWindow::installShaders()
 	ShaderObject* standardFragmentShader = new ShaderObject(GL_FRAGMENT_SHADER, "FragmentShaders/Standard.glsl");
 	ShaderObject* shadowVertexShader = new ShaderObject(GL_VERTEX_SHADER, "VertexShaders/Shadow.glsl");
 	ShaderObject* shadowFragmentShader = new ShaderObject(GL_FRAGMENT_SHADER, "FragmentShaders/Shadow.glsl");
+	//ShaderObject* screenVertexShader = new ShaderObject(GL_VERTEX_SHADER, "VertexShaders/Screen.glsl");
+	//ShaderObject* screenFragmentShader = new ShaderObject(GL_FRAGMENT_SHADER, "FragmentShaders/Screen.glsl");
 
 	// If either of the shaders is broken, quit out
 	if (!standardVertexShader->checkStatus() || !standardFragmentShader->checkStatus() ||
-		!shadowVertexShader->checkStatus() || !shadowFragmentShader->checkStatus())
+		!shadowVertexShader->checkStatus() || !shadowFragmentShader->checkStatus())// ||
+		//!screenVertexShader->checkStatus() || !screenFragmentShader->checkStatus())
 		throw exception();
 
 	cout << "Shaders compiled successfully." << endl;
@@ -731,10 +774,11 @@ void MyGLWindow::installShaders()
 	// Init GL program and link shaders to it
 	standardProgram = new ShaderProgram(standardVertexShader, standardFragmentShader);
 	shadowProgram = new ShaderProgram(shadowVertexShader, shadowFragmentShader);
+	//drawToScreenProgram = new ShaderProgram(screenVertexShader, screenFragmentShader);
 
 	GLHelper::checkErrors("installShaders() -- create programs");
 
-	if (!standardProgram->checkStatus() || !shadowProgram->checkStatus())
+	if (!standardProgram->checkStatus() || !shadowProgram->checkStatus())// || !drawToScreenProgram->checkStatus())
 		throw exception();
 
 	GLHelper::checkErrors("installShaders() -- check program status");
@@ -752,17 +796,17 @@ void MyGLWindow::initializeGL()
 
 	installShaders();
 
-	initGeometries();
-	initTextures();
-	initMaterials();
-	initScene();
-
 	// Render texture
 	activeFramebuffer = makeFramebuffer("RenderTexture", true, false, 1024, 1024);
 
 	// Shadow map
 	shadowMap = makeFramebuffer("ShadowMap", false, true, 1024, 1024);
-	
+
+	initGeometries();
+	initTextures();
+	initMaterials();
+	initScene();
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -827,19 +871,20 @@ void drawRenderable(Renderable* renderable, glm::mat4 camMat, glm::mat4 projMat,
 		standardProgram->setUniformMat4("modelMatrix", modelToWorldMatrix);
 		standardProgram->setUniformMat4("mvp", modelViewProjectionMatrix);
 
-		glm::mat4 shadowBiasMatrix(
+		glm::mat4 shadowBiasMatrix = glm::mat4(
 			0.5f, 0.0f, 0.0f, 0.0f,
 			0.0f, 0.5f, 0.0f, 0.0f,
 			0.0f, 0.0f, 0.5f, 0.0f,
 			0.5f, 0.5f, 0.5f, 1.0f
 		);
 		glm::mat4 shadowBiasMVP = shadowBiasMatrix * depthMVP;
-		standardProgram->setUniformMat4("depthBiasMVP", shadowBiasMatrix);
+		standardProgram->setUniformMat4("depthBiasMVP", shadowBiasMVP);
 	}
 
 	GLHelper::checkErrors("draw -- send renderable matrices");
 
-	
+	if (renderable->cullingOn) glEnable(GL_CULL_FACE);
+	else glDisable(GL_CULL_FACE);
 
 	GLHelper::checkErrors("draw -- set render material");
 
@@ -851,13 +896,15 @@ void drawRenderable(Renderable* renderable, glm::mat4 camMat, glm::mat4 projMat,
 
 void MyGLWindow::drawShadows(Camera* cam, bool flipped)
 {
-	glm::vec3 inverseLight = -activeScene->getActiveLight()->renderable->transform.getViewDirection();
-	glm::mat4 depthProjMat = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
-	glm::mat4 depthViewMat = glm::lookAt(inverseLight, activeScene->getActiveLight()->renderable->transform.getPosition(), glm::vec3(0, 1, 0));
-	glm::mat4 depthModelMat = glm::mat4(1.0);
-	//glm::mat4 depthMVP = depthProjMat * depthViewMat * depthModelMat;
+	glClear(GL_DEPTH_BUFFER_BIT);
 
-	//shadowProgram->setUniformMat4("depthMVP", depthMVP);
+	glm::vec3 pos = activeScene->getActiveLight()->renderable->transform.getPosition();
+	glm::vec3 dir = -activeScene->getActiveLight()->renderable->transform.getViewDirection();
+
+	glm::mat4 depthProjMat = glm::ortho<float>(-10.0f, 10.0f, -10.0f, 10.0f, -10.0f, 20.0f);
+	//glm::mat4 depthViewMat = glm::lookAt(dir, -pos, glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 depthViewMat = glm::lookAt(dir, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 depthModelMat = glm::mat4(1.0);
 
 	GLHelper::checkErrors("drawShadows -- send shadow matrix");
 
@@ -869,6 +916,7 @@ void MyGLWindow::drawShadows(Camera* cam, bool flipped)
 	{
 		// Send geometry data and matrices
 		Renderable* renderable = *renderablesIterator;
+		if (!renderable->castsShadows) continue;
 		drawRenderable(renderable, depthViewMat, depthProjMat, true);
 	}
 }
@@ -962,4 +1010,13 @@ void MyGLWindow::paintGL()
 
 	draw(activeScene->getActiveCamera(), false);
 	GLHelper::checkErrors("paintGL -- main draw call");
+
+	/*setActiveProgram(drawToScreenProgram);
+	GLint id = shadowMap->getDepthTextureID();
+	glActiveTexture(GL_TEXTURE0 + id);
+	glBindTexture(GL_TEXTURE_2D, id);
+	drawToScreenProgram->setUniformInt("depthTexture", id);
+	glBindVertexArray(getGeometry("screenQuad")->vertexArrayObjectID);
+	glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_SHORT, 0);
+	GLHelper::checkErrors("paintGL -- draw screen quad");*/
 }

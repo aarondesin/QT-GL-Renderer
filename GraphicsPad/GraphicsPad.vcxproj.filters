@@ -34,5 +34,7 @@
     <None Include="FragmentShaders\Standard.glsl" />
     <None Include="VertexShaders\Shadow.glsl" />
     <None Include="VertexShaders\Standard.glsl" />
+    <None Include="VertexShaders\Screen.glsl" />
+    <None Include="FragmentShaders\Screen.glsl" />
   </ItemGroup>
 </Project>

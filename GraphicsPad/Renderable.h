@@ -11,6 +11,8 @@ public:
 	Material* material = NULL;
 	Transform transform;
 	GLenum drawMode = GL_TRIANGLES;
+	bool castsShadows = true;
+	bool cullingOn = true;
 
 	Renderable() {}
 

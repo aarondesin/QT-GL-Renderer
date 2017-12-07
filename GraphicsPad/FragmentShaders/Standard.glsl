@@ -101,7 +101,8 @@ void main()
 	float specularValue = pow (clamp (dot (reflectedLightVec, camVec), 0.0, 1.0), specularPower * smoothness);
 	vec4 specular = vec4((specularValue * specularColor), 1.0) * falloff;
 
-	float localBias = clamp(SHADOW_BIAS * tan(acos(dot(normal, lightVec))), 0.00, 0.01);
+	//float localBias = clamp(SHADOW_BIAS * tan(acos(dot(normal, lightVec))), 0.00, 0.01);
+	float localBias = SHADOW_BIAS;
 
 	float v = 1.0;
 	if (texture(shadowMap, throughShadowCoord.xy).z < throughShadowCoord.z - localBias)
@@ -110,7 +111,7 @@ void main()
 	}
 
 	vec4 totalLight = ambient + (diffuse + specular) * v;
-	vec4 unlitColor = color;
+	vec4 unlitColor = vec4(color.r, color.g, color.b, 1.0);
 	color = color * totalLight;
 
 	// Reflectivity
@@ -129,6 +130,8 @@ void main()
 
 	// Final mix
 	outColor = color;
-	//outColor = vec4(normal, 1.0);
-	//outColor = vec4(emissionStrength, emissionStrength, emissionStrength, 1.0);
+	//outColor = vec4(throughShadowCoord.x, throughShadowCoord.y, throughShadowCoord.x, 1.0);
+	//outColor = mix (vec4 (0.0, 0.0, 0.0, 1.0), color, v);
+	//float s = texture(shadowMap, throughUV).b;
+	//outColor = mix(vec4(s,s,s,1.0), color, useCubemap);
 }

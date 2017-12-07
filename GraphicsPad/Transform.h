@@ -2,6 +2,7 @@
 
 #include <global.h>
 #include <glm\gtx\transform.hpp>
+#include<glm\gtx\euler_angles.hpp>
 
 #define SQR(x) x*x
 
@@ -20,10 +21,7 @@ public:
 		glm::mat4 scaleMatrix = glm::scale(scale);
 		return translateMatrix * rotateMatrix * scaleMatrix;
 	}
-	glm::vec3 forward() { return getViewDirection(); }
-	glm::vec3 right() { return glm::cross(forward(), glm::vec3(0.0f, 1.0f, 0.0f)); }
-	glm::vec3 up() { return glm::cross(forward(), glm::vec3(1.0f, 0.0f, 0.0f)); }
-	glm::vec3 getViewDirection()
+	/*glm::vec3 forward() 
 	{
 		return glm::vec3(
 			glm::cos(rotation.y) * glm::cos(rotation.x),
@@ -31,28 +29,44 @@ public:
 			glm::sin(rotation.x)
 		);
 	}
-	void setViewDirection(glm::vec3 viewDir)
+	glm::vec3 right() 
 	{
-		rotation = glm::vec3
-		(
-			glm::sqrt (SQR(viewDir.x) + SQR(viewDir.y)  + SQR(viewDir.z) ),
-			glm::atan(viewDir.y / viewDir.x),
-			glm::acos(viewDir.z)
+		float offset = glm::radians(90.0f);
+		return glm::vec3(
+			glm::cos(rotation.y + offset) * glm::cos(rotation.x),
+			glm::sin(rotation.y + offset) * glm::cos(rotation.x),
+			glm::sin(rotation.x)
 		);
 	}
+	glm::vec3 up() 
+	{ 
+		float offset = glm::radians(90.0f);
+		return glm::vec3(
+			glm::cos(rotation.y) * glm::cos(rotation.x + offset),
+			glm::sin(rotation.y) * glm::cos(rotation.x + offset),
+			glm::sin(rotation.x + offset)
+		);
+	}*/
+	void setViewDirection(glm::vec3 dir)
+	{
+		viewDir = dir;
+	}
+	glm::vec3 getViewDirection() { return viewDir; }
 	void setScale(glm::vec3 s) { scale = s; }
-	void moveForward() { position += forward() * 0.1f; }
-	void moveBackward() { position -= forward() * 0.1f; }
-	void moveUp() { position += up() * 0.1f; }
-	void moveDown() { position -= up() * 0.1f; }
-	void moveRight() { position += right() * 0.1f; }
-	void moveLeft() { position -= right() * 0.1f; }
+	void moveForward() { position.z += 0.1f; }
+	void moveBackward() { position.z -= 0.1f; }
+	void moveUp() { position.y += 0.1f; }
+	void moveDown() { position.y -= 0.1f; }
+	void moveRight() { position.x += 0.1f; }
+	void moveLeft() { position.x -= 0.1f; }
 
 	void setPosition(glm::vec3 pos) { position = pos; }
 	glm::vec3 getPosition() { return position; }
 	void setRotation(glm::vec3 rot) { rotation = rot; }
+	glm::vec3 getRotation() { return rotation; }
 private:
 	glm::vec3 scale;
 	glm::vec3 rotation;
 	glm::vec3 position;
+	glm::vec3 viewDir;
 };
