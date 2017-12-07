@@ -9,9 +9,9 @@ in vec3 throughTangent;
 in vec3 throughBitangent;
 in vec4 throughShadowCoord;
 
-const float FALLOFF_CONSTANT = 0.05;
-const float FALLOFF_LINEAR = 0.5;
-const float FALLOFF_EXP = 0.05;
+const float FALLOFF_CONSTANT = 0.025;
+const float FALLOFF_LINEAR = 0.25;
+const float FALLOFF_EXP = 0.025;
 
 const float SHADOW_BIAS = 0.005;
 

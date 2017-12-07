@@ -31,8 +31,8 @@ const float RANDOM_PLACEMENT_OFFSET = 40.0f;
 ShaderProgram* activeProgram = NULL;
 ShaderProgram* standardProgram = NULL;
 ShaderProgram* shadowProgram = NULL;
-//ShaderProgram* drawToScreenProgram = NULL;
 bool loadPlaneModel = true;
+bool movingLight = false;
 
 Scene* scene = new Scene;
 Scene* activeScene = scene;
@@ -40,6 +40,8 @@ Scene* activeScene = scene;
 Framebuffer *activeFramebuffer = NULL;
 Framebuffer* shadowMap = NULL;
 glm::mat4 depthMVP;
+
+Renderable* planeRenderable = NULL;
 
 // All images
 map<string, QImage*>* images = NULL;
@@ -127,8 +129,6 @@ void setActiveProgram(ShaderProgram* program)
 	activeProgram = program;
 	glUseProgram(program->getProgramID());
 	GLHelper::checkErrors("setActiveProgram().glUseProgram()");
-
-	//cout << "Set program to " << program->getProgramID() << endl;
 }
 
 void setActiveDiffuseTexture(Texture* diffuse)
@@ -439,7 +439,8 @@ void MyGLWindow::addMaterial(string name, Material* material)
 void MyGLWindow::updateUniforms()
 {
 	standardProgram->setUniformVec3("ambientLight", activeScene->getAmbientLight());
-	standardProgram->setUniformVec3("lightPos", activeScene->getActiveLight()->renderable->transform.getPosition());
+	//standardProgram->setUniformVec3("lightPos", activeScene->getActiveLight()->renderable->transform.getPosition());
+	standardProgram->setUniformVec3("lightDir", activeScene->getActiveLight()->renderable->transform.getViewDirection());
 	standardProgram->setUniformVec3("diffuseColor", activeScene->getActiveLight()->color);
 	standardProgram->setUniformVec3("specularColor", activeScene->getActiveLight()->color);
 	standardProgram->setUniformVec3("camPos", activeScene->getActiveCamera()->transform.getPosition());
@@ -513,23 +514,21 @@ void MyGLWindow::keyPressEvent(QKeyEvent* e)
 		case Qt::Key::Key_Space:
 			spawnRenderable();
 			break;
-		case Qt::Key::Key_1:
-			activeScene->getActiveLight()->renderable->transform.moveBackward();
-			break;
-		case Qt::Key::Key_2:
-			activeScene->getActiveLight()->renderable->transform.moveForward();
-			break;
 		case Qt::Key::Key_Left:
-			activeScene->getActiveLight()->renderable->transform.moveLeft();
+			//activeScene->getActiveLight()->renderable->transform.moveLeft();
+			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(-0.25f, 0.0f));
 			break;
 		case Qt::Key::Key_Right:
-			activeScene->getActiveLight()->renderable->transform.moveRight();
+			//activeScene->getActiveLight()->renderable->transform.moveRight();
+			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(+0.25f, 0.0f));
 			break;
 		case Qt::Key::Key_Up:
-			activeScene->getActiveLight()->renderable->transform.moveUp();
+			//activeScene->getActiveLight()->renderable->transform.moveUp();
+			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(0.0f, -0.25f));
 			break;
 		case Qt::Key::Key_Down:
-			activeScene->getActiveLight()->renderable->transform.moveDown();
+			//activeScene->getActiveLight()->renderable->transform.moveDown();
+			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(0.0f, 0.25f));
 			break;
 		case Qt::Key::Key_R:
 			activeScene->switchCamera();
@@ -729,6 +728,8 @@ void MyGLWindow::initScene()
 		f2->transform.setScale(glm::vec3(0.01f, 0.01f, 0.01f));
 		f2->drawMode = GL_TRIANGLES;
 		activeScene->addRenderable(f2);
+
+		planeRenderable = f2;
 	}
 
 	else
@@ -757,11 +758,10 @@ void MyGLWindow::installShaders()
 {
 	// Create shader objects
 	ShaderObject* standardVertexShader = new ShaderObject(GL_VERTEX_SHADER, "VertexShaders/Standard.glsl");
-	ShaderObject* standardFragmentShader = new ShaderObject(GL_FRAGMENT_SHADER, "FragmentShaders/Standard.glsl");
+	//ShaderObject* standardFragmentShader = new ShaderObject(GL_FRAGMENT_SHADER, "FragmentShaders/Standard.glsl");
+	ShaderObject* standardFragmentShader = new ShaderObject(GL_FRAGMENT_SHADER, "FragmentShaders/StandardDirectional.glsl");
 	ShaderObject* shadowVertexShader = new ShaderObject(GL_VERTEX_SHADER, "VertexShaders/Shadow.glsl");
 	ShaderObject* shadowFragmentShader = new ShaderObject(GL_FRAGMENT_SHADER, "FragmentShaders/Shadow.glsl");
-	//ShaderObject* screenVertexShader = new ShaderObject(GL_VERTEX_SHADER, "VertexShaders/Screen.glsl");
-	//ShaderObject* screenFragmentShader = new ShaderObject(GL_FRAGMENT_SHADER, "FragmentShaders/Screen.glsl");
 
 	// If either of the shaders is broken, quit out
 	if (!standardVertexShader->checkStatus() || !standardFragmentShader->checkStatus() ||
@@ -948,7 +948,7 @@ void MyGLWindow::draw(Camera* cam, bool flipped)
 	vector<Renderable*>* renderables = activeScene->getRenderables();
 	vector<Renderable*>::iterator renderablesIterator = 
 		renderables->begin();
-	drawRenderable(activeScene->getActiveLight()->renderable, camMat, projMat, false);
+	//drawRenderable(activeScene->getActiveLight()->renderable, camMat, projMat, false);
 	for (; renderablesIterator != renderables->end(); ++renderablesIterator)
 	{
 		// Send geometry data and matrices
@@ -964,6 +964,12 @@ void MyGLWindow::draw(Camera* cam, bool flipped)
 
 void MyGLWindow::paintGL()
 {
+	if (planeRenderable != NULL)
+	{
+		planeRenderable->transform.setPosition(planeRenderable->transform.getPosition() + 10.0f * glm::vec3(rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX));
+		planeRenderable->transform.setRotation(planeRenderable->transform.getRotation() + 10.0f * glm::vec3(rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX));
+	}
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	GLHelper::checkErrors("paintGL -- clear buffers");

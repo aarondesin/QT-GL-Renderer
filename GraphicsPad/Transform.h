@@ -8,6 +8,7 @@
 
 struct Transform
 {
+	const glm::vec3 UP = glm::vec3(0.0f, 1.0f, 0.0f);
 public:
 	Transform() : position(glm::vec3(0.0f, 0.0f, 0.0f)), 
 		rotation(glm::vec3(0.0f, 0.0f, 0.0f)), scale(glm::vec3(1.0f, 1.0f, 1.0f)) {}
@@ -21,32 +22,6 @@ public:
 		glm::mat4 scaleMatrix = glm::scale(scale);
 		return translateMatrix * rotateMatrix * scaleMatrix;
 	}
-	/*glm::vec3 forward() 
-	{
-		return glm::vec3(
-			glm::cos(rotation.y) * glm::cos(rotation.x),
-			glm::sin(rotation.y) * glm::cos(rotation.x),
-			glm::sin(rotation.x)
-		);
-	}
-	glm::vec3 right() 
-	{
-		float offset = glm::radians(90.0f);
-		return glm::vec3(
-			glm::cos(rotation.y + offset) * glm::cos(rotation.x),
-			glm::sin(rotation.y + offset) * glm::cos(rotation.x),
-			glm::sin(rotation.x)
-		);
-	}
-	glm::vec3 up() 
-	{ 
-		float offset = glm::radians(90.0f);
-		return glm::vec3(
-			glm::cos(rotation.y) * glm::cos(rotation.x + offset),
-			glm::sin(rotation.y) * glm::cos(rotation.x + offset),
-			glm::sin(rotation.x + offset)
-		);
-	}*/
 	void setViewDirection(glm::vec3 dir)
 	{
 		viewDir = dir;
@@ -64,6 +39,15 @@ public:
 	glm::vec3 getPosition() { return position; }
 	void setRotation(glm::vec3 rot) { rotation = rot; }
 	glm::vec3 getRotation() { return rotation; }
+	void rotateView(glm::vec2 rot)
+	{
+		const float ROTATIONAL_SPEED = 0.5f;
+		glm::vec3 strafeDirection = glm::cross(viewDir, UP);
+		glm::mat4 rotator = glm::rotate(-rot.x * ROTATIONAL_SPEED, UP) *
+			glm::rotate(-rot.y * ROTATIONAL_SPEED, strafeDirection);
+
+		viewDir = glm::mat3(rotator) * viewDir;
+	}
 private:
 	glm::vec3 scale;
 	glm::vec3 rotation;

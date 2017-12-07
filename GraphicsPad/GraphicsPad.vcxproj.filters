@@ -31,10 +31,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="FragmentShaders\Shadow.glsl" />
-    <None Include="FragmentShaders\Standard.glsl" />
     <None Include="VertexShaders\Shadow.glsl" />
     <None Include="VertexShaders\Standard.glsl" />
     <None Include="VertexShaders\Screen.glsl" />
     <None Include="FragmentShaders\Screen.glsl" />
+    <None Include="FragmentShaders\Standard.glsl" />
+    <None Include="FragmentShaders\StandardDirectional.glsl" />
   </ItemGroup>
 </Project>

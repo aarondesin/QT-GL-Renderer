@@ -6,7 +6,7 @@ using namespace std;
 
 class Camera
 {
-	const glm::vec3 UP;
+	const glm::vec3 UP = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::vec2 oldMousePosition;
 	static const float MOVEMENT_SPEED;
 	glm::vec3 strafeDirection;
