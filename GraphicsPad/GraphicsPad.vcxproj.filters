@@ -7,6 +7,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="OBJLoader.cpp" />
     <ClCompile Include="GLHelper.cpp" />
+    <ClCompile Include="AssetStorage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyGLWindow.h" />
@@ -28,6 +29,7 @@
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="ShaderObject.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="AssetStorage.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FragmentShaders\Shadow.glsl" />

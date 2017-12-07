@@ -21,7 +21,6 @@ protected:
 	void MyGLWindow::keyPressEvent(QKeyEvent* e);
 	void MyGLWindow::initScene();
 	void MyGLWindow::updateUniforms();
-	void MyGLWindow::spawnRenderable();
 	void MyGLWindow::drawShadows(Camera* cam, bool flipped);
 	void MyGLWindow::drawSkybox(Camera* cam, glm::mat4 projMat, bool flipped);
 	void MyGLWindow::draw(Camera* cam, bool flipped);
@@ -30,9 +29,7 @@ protected:
 	Texture* MyGLWindow::makeTexture(string filename);
 	Cubemap* MyGLWindow::makeCubemap(string filename);
 	Framebuffer* MyGLWindow::makeFramebuffer(string filename, bool useColor, bool useDepth, int width, int height);
-	void MyGLWindow::addTexture(string name, Texture* texture);
-	void MyGLWindow::addGeometry(string name, ShapeData* geometry);
-	void MyGLWindow::addMaterial(string name, Material* material);
+	void MyGLWindow::makeGeometry(string filename, ShapeData* geometry);
 	void MyGLWindow::initTextures();
 	void MyGLWindow::initMaterials();
 	void MyGLWindow::initGeometries();
