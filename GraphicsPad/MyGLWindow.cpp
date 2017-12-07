@@ -516,19 +516,19 @@ void MyGLWindow::keyPressEvent(QKeyEvent* e)
 			break;
 		case Qt::Key::Key_Left:
 			//activeScene->getActiveLight()->renderable->transform.moveLeft();
-			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(-0.25f, 0.0f));
+			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(-0.5f, 0.0f));
 			break;
 		case Qt::Key::Key_Right:
 			//activeScene->getActiveLight()->renderable->transform.moveRight();
-			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(+0.25f, 0.0f));
+			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(+0.5f, 0.0f));
 			break;
 		case Qt::Key::Key_Up:
 			//activeScene->getActiveLight()->renderable->transform.moveUp();
-			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(0.0f, -0.25f));
+			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(0.0f, -0.5f));
 			break;
 		case Qt::Key::Key_Down:
 			//activeScene->getActiveLight()->renderable->transform.moveDown();
-			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(0.0f, 0.25f));
+			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(0.0f, 0.5f));
 			break;
 		case Qt::Key::Key_R:
 			activeScene->switchCamera();
@@ -690,6 +690,7 @@ void MyGLWindow::initScene()
 	activeScene->getActiveLight()->renderable = lightRenderable;
 	activeScene->getActiveLight()->renderable->transform.setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
 	activeScene->setAmbientLight(glm::vec3(0.23f, 0.22f, 0.23f));
+	activeScene->getActiveLight()->color = glm::vec3(1.0f, 1.0f, 0.925f);
 	activeScene->getActiveLight()->renderable->transform.setViewDirection(glm::normalize(glm::vec3(1.0f, -0.25f, 1.0f)));
 
 	// Skybox
@@ -705,7 +706,7 @@ void MyGLWindow::initScene()
 	plane->transform.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 	plane->transform.setScale(glm::vec3(50.0f, 50.0f, 50.0f));
 	plane->castsShadows = true;
-	activeScene->addRenderable(plane);
+	//activeScene->addRenderable(plane);
 
 	Renderable* shadowMapPlane = new Renderable;
 	shadowMapPlane->geometry = getGeometry("plane");
@@ -800,7 +801,7 @@ void MyGLWindow::initializeGL()
 	activeFramebuffer = makeFramebuffer("RenderTexture", true, false, 1024, 1024);
 
 	// Shadow map
-	shadowMap = makeFramebuffer("ShadowMap", false, true, 1024, 1024);
+	shadowMap = makeFramebuffer("ShadowMap", false, true, 4096, 4096);
 
 	initGeometries();
 	initTextures();

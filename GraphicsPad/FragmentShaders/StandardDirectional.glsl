@@ -9,7 +9,7 @@ in vec3 throughTangent;
 in vec3 throughBitangent;
 in vec4 throughShadowCoord;
 
-const float SHADOW_BIAS = 0.005;
+const float SHADOW_BIAS = 0.0005;
 
 uniform sampler2D diffuseTexture;
 uniform float diffuseStrength;
@@ -91,8 +91,8 @@ void main()
 	float specularValue = pow (clamp (dot (reflectedLightVec, camVec), 0.0, 1.0), specularPower * smoothness);
 	vec4 specular = vec4((specularValue * specularColor), 1.0);
 
-	//float localBias = clamp(SHADOW_BIAS * tan(acos(dot(normal, lightVec))), 0.00, 0.01);
-	float localBias = SHADOW_BIAS;
+	float localBias = clamp(SHADOW_BIAS * tan(acos(dot(normal, lightVec))), 0.00, 0.01);
+	//float localBias = SHADOW_BIAS;
 
 	vec2 poisson[4] = vec2[](
 		vec2( -0.94201624, -0.39906216 ),
@@ -104,7 +104,7 @@ void main()
 	float v = 1.0;
 	for (int i = 0; i < 4; i++)
 	{
-		if (texture(shadowMap, throughShadowCoord.xy + poisson[i]/128.0).z < throughShadowCoord.z - localBias)
+		if (texture(shadowMap, throughShadowCoord.xy + poisson[i]/4096.0).z < throughShadowCoord.z - localBias)
 		{
 			//v = 0.0;
 			v -= 0.25;
