@@ -41,6 +41,8 @@ Framebuffer *activeFramebuffer = NULL;
 Framebuffer* shadowMap = NULL;
 glm::mat4 depthMVP;
 
+const float LIGHT_ROTATE_SPEED = 1.25f;
+
 void setActiveProgram(ShaderProgram* program)
 {
 	GLHelper::checkErrors("setActiveProgram()");
@@ -298,14 +300,12 @@ void MyGLWindow::makeGeometry(string name, ShapeData* geometry)
 	glBindBuffer(GL_ARRAY_BUFFER, geometry->vertexBufferID);
 	glBufferData(GL_ARRAY_BUFFER, geometry->vertexBufferSize(),
 		geometry->vertices, GL_STATIC_DRAW);
-
 	GLHelper::checkErrors("addGeometry - vertex buffer creation");
 
 	glGenBuffers(1, &geometry->indexBufferID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->indexBufferID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, geometry->indexBufferSize(),
 		geometry->indices, GL_STATIC_DRAW);
-
 	GLHelper::checkErrors("addGeometry - index buffer creation");
 
 	glGenVertexArrays(1, &geometry->vertexArrayObjectID);
@@ -322,6 +322,8 @@ void MyGLWindow::makeGeometry(string name, ShapeData* geometry)
 	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (char*)(sizeof(float) * 10));
 	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, VERTEX_BYTE_SIZE, (char*)(sizeof(float) * 12));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->indexBufferID);
+
+	glBindVertexArray(0);
 
 	GLHelper::checkErrors("addGeometry - VAO creation");
 
@@ -367,16 +369,16 @@ void MyGLWindow::keyPressEvent(QKeyEvent* e)
 			activeScene->getActiveCamera()->moveUp();
 			break;
 		case Qt::Key::Key_Left:
-			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(-0.5f, 0.0f));
+			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(-LIGHT_ROTATE_SPEED, 0.0f));
 			break;
 		case Qt::Key::Key_Right:
-			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(+0.5f, 0.0f));
+			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(+LIGHT_ROTATE_SPEED, 0.0f));
 			break;
 		case Qt::Key::Key_Up:
-			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(0.0f, -0.5f));
+			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(0.0f, -LIGHT_ROTATE_SPEED));
 			break;
 		case Qt::Key::Key_Down:
-			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(0.0f, 0.5f));
+			activeScene->getActiveLight()->renderable->transform.rotateView(glm::vec2(0.0f, LIGHT_ROTATE_SPEED));
 			break;
 		case Qt::Key::Key_R:
 			activeScene->switchCamera();
@@ -404,6 +406,9 @@ void MyGLWindow::initGeometries()
 	{
 		ShapeData* model = OBJLoader::loadOBJFile("Models/BristolF2.obj");
 		makeGeometry("f2", model);
+
+		ShapeData* mine = OBJLoader::loadOBJFile("Models/Mine.obj");
+		makeGeometry("mine", mine);
 	}
 }
 
@@ -425,6 +430,11 @@ void MyGLWindow::initTextures()
 		makeTexture("Textures/BristolF2_AO");
 		makeTexture("Textures/BristolF2_MetallicSmoothness");
 		makeTexture("Textures/BristolF2_Normal");
+
+		makeTexture("Textures/Mine_Diffuse");
+		makeTexture("Textures/Mine_AO");
+		makeTexture("Textures/Mine_MetallicSmoothness");
+		makeTexture("Textures/Mine_Normal");
 	}
 }
 
@@ -498,11 +508,22 @@ void MyGLWindow::initMaterials()
 		f2Material->diffuseStrength = 1.0f;
 		f2Material->normal = AssetStorage::getTexture("Textures/BristolF2_Normal");
 		f2Material->normalStrength = 0.0f;
-		f2Material->reflectivity = 0.2f;
+		f2Material->reflectivity = 0.25f;
 		f2Material->ambientOcclusion = AssetStorage::getTexture("Textures/BristolF2_AO");
 		f2Material->occlusionScale = 1.0f;
 		f2Material->metallicSmoothness = AssetStorage::getTexture("Textures/BristolF2_MetallicSmoothness");
 		AssetStorage::addMaterial("f2", f2Material);
+
+		Material* mineMaterial = new Material;
+		mineMaterial->diffuse = AssetStorage::getTexture("Textures/Mine_Diffuse");
+		mineMaterial->diffuseStrength = 1.0f;
+		mineMaterial->normal = AssetStorage::getTexture("Textures/Mine_Normal");
+		mineMaterial->normalStrength = 1.0f;
+		mineMaterial->reflectivity = 0.2f;
+		mineMaterial->ambientOcclusion = AssetStorage::getTexture("Textures/Mine_AO");
+		mineMaterial->occlusionScale = 1.0f;
+		mineMaterial->metallicSmoothness = AssetStorage::getTexture("Textures/Mine_MetallicSmoothness");
+		AssetStorage::addMaterial("mine", mineMaterial);
 	}
 }
 
@@ -556,7 +577,32 @@ void MyGLWindow::initScene()
 		f2->transform.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 		f2->transform.setScale(glm::vec3(0.01f, 0.01f, 0.01f));
 		f2->drawMode = GL_TRIANGLES;
+		f2->cullingOn = false;
 		activeScene->addRenderable(f2);
+
+		Renderable* mine1 = new Renderable;
+		mine1->geometry = AssetStorage::getGeometry("mine");
+		mine1->material = AssetStorage::getMaterial("mine");
+		mine1->transform.setPosition(glm::vec3(6.0f, 0.5f, 3.0f));
+		mine1->transform.setRotation(glm::vec3(3.0f, 60.0f, 30.0f));
+		mine1->transform.setScale(glm::vec3(0.015f, 0.015f, 0.015f));
+		activeScene->addRenderable(mine1);
+
+		Renderable* mine2 = new Renderable;
+		mine2->geometry = AssetStorage::getGeometry("mine");
+		mine2->material = AssetStorage::getMaterial("mine");
+		mine2->transform.setPosition(glm::vec3(-4.0f, -2.0f, 1.0f));
+		mine2->transform.setRotation(glm::vec3(15.0f, 45.0f, -30.0f));
+		mine2->transform.setScale(glm::vec3(0.015f, 0.015f, 0.015f));
+		activeScene->addRenderable(mine2);
+
+		Renderable* mine3 = new Renderable;
+		mine3->geometry = AssetStorage::getGeometry("mine");
+		mine3->material = AssetStorage::getMaterial("mine");
+		mine3->transform.setPosition(glm::vec3(1.0f, 5.0f, 10.0f));
+		mine3->transform.setRotation(glm::vec3(-90.0f, 10.0f, -2.0f));
+		mine3->transform.setScale(glm::vec3(0.015f, 0.015f, 0.015f));
+		activeScene->addRenderable(mine3);
 	}
 
 	else
@@ -685,7 +731,15 @@ void drawRenderable(Renderable* renderable, glm::mat4 camMat, glm::mat4 projMat,
 
 	else
 	{
+		
 		glm::mat4 modelToWorldMatrix = renderable->transform.getModelToWorldMatrix();
+
+		glm::vec3 dir = -activeScene->getActiveLight()->renderable->transform.getViewDirection();
+		glm::mat4 depthProjMat = glm::ortho<float>(-10.0f, 10.0f, -10.0f, 10.0f, -10.0f, 20.0f);
+		glm::mat4 depthViewMat = glm::lookAt(dir, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+		depthMVP = depthProjMat * depthViewMat * modelToWorldMatrix;
+
 		glm::mat4 modelViewProjectionMatrix = projMat * camMat * modelToWorldMatrix;
 		
 		standardProgram->setUniformMat4("modelMatrix", modelToWorldMatrix);
@@ -710,6 +764,8 @@ void drawRenderable(Renderable* renderable, glm::mat4 camMat, glm::mat4 projMat,
 
 	// Draw renderable
 	glDrawElements(renderable->drawMode, renderable->geometry->numIndices, GL_UNSIGNED_SHORT, 0);
+
+
 
 	GLHelper::checkErrors("draw -- draw renderable elements");
 }

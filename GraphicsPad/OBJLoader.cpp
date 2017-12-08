@@ -43,14 +43,14 @@ vector<string> splitStringByCharacter (string str, charArray chars)
 
 ShapeData* OBJLoader::loadOBJFile(string filename)
 {
-	ShapeData* result = new ShapeData;
+	ShapeData* result = new ShapeData();
 
-	vector<glm::vec3> positions;
-	vector<glm::vec3> normals;
-	vector<glm::vec2> uvs;
+	vector<glm::vec3> positions = vector<glm::vec3>();
+	vector<glm::vec3> normals = vector<glm::vec3>();
+	vector<glm::vec2> uvs = vector<glm::vec2>();
 
-	vector<Vertex> vertices;
-	vector<unsigned short> indices;
+	vector<Vertex> vertices = vector<Vertex>();
+	vector<unsigned short> indices = vector<unsigned short>();
 
 	bool facesMode = false;
 

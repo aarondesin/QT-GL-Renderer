@@ -104,7 +104,7 @@ void main()
 	float v = 1.0;
 	for (int i = 0; i < 4; i++)
 	{
-		if (texture(shadowMap, throughShadowCoord.xy + poisson[i]/4096.0).z < throughShadowCoord.z - localBias)
+		if (texture(shadowMap, throughShadowCoord.xy + poisson[i]/8192.0).z < throughShadowCoord.z - localBias)
 		{
 			//v = 0.0;
 			v -= 0.25;

@@ -7,7 +7,7 @@ using namespace std;
 class GLHelper
 {
 public:
-	static const int MAX_TEXTURE_ID = 15;
+	static const int MAX_TEXTURE_ID = 31;
 	static int getNextTextureID()
 	{
 		int i = nextTextureID;

@@ -110,7 +110,7 @@ public:
 	}
 	GLuint getTextureID()
 	{
-		if (textureID > GLHelper::MAX_TEXTURE_ID || textureID < 0)
+		if (textureID < 0)
 		{
 			cout << "Invalid texture ID! " << textureID << endl;
 			throw exception();
