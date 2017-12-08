@@ -156,21 +156,22 @@ ShapeData* OBJLoader::loadOBJFile(string filename)
 				indices.push_back(index + 1);
 				indices.push_back(index + 2);
 
-				/*Vertex a = vertices.data()[index];
-				Vertex b = vertices.data()[index + 1];
-				Vertex c = vertices.data()[index + 1];
+				Vertex p0 = vertices.data()[index];
+				Vertex p1 = vertices.data()[index + 1];
+				Vertex p2 = vertices.data()[index + 1];
 
-				glm::vec3 baPos = b.position - a.position;
-				glm::vec3 caPos = c.position - a.position;
+				glm::vec3 q1 = p1.position - p0.position;
+				glm::vec3 q2 = p2.position - p0.position;
 
-				glm::vec2 baUV = b.uv - a.uv;
-				glm::vec2 caUV = c.uv - a.uv;
+				glm::vec2 st1 = p1.uv - p0.uv;
+				glm::vec2 st2 = p2.uv - p0.uv;
 
-				baPos = baUV.x * 
+				float c = (1.0f / (st1.x * st2.y - st2.x * st1.y));
+				glm::mat2 mat1 = glm::mat2(glm::vec2(st2.y, -st2.x), glm::vec2(-st1.y, st1.x));
+				glm::mat3x2 mat2 = glm::mat3x2(glm::vec2(q1.x, q2.x), glm::vec2(q1.y, q2.y), glm::vec2(q1.z, q2.z));
+				glm::mat3x2 tb1 = c * mat1 * mat2;
 
-				a.tangent = baPos;
-				b.tangent = baPos;
-				c.tangent = baPos;*/
+				p0.tangent = p1.tangent = p2.tangent = glm::vec3(tb1[0].x, tb1[1].x, tb1[2].x);
 
 				if (size > 4)
 				{
@@ -179,21 +180,22 @@ ShapeData* OBJLoader::loadOBJFile(string filename)
 					indices.push_back(index);
 					indices.push_back(index + size - 3);
 					
-					
+					Vertex p3 = vertices.data()[index + size - 2];
+					Vertex p4 = vertices.data()[index];
+					Vertex p5 = vertices.data()[index + size - 3];
 
-					/*Vertex a = vertices.data()[index];
-					Vertex b = vertices.data()[index + size - 2];
-					Vertex c = vertices.data()[index + size - 3];
+					glm::vec3 q3 = p4.position - p3.position;
+					glm::vec3 q4 = p5.position - p3.position;
 
-					glm::vec3 baPos = b.position - a.position;
-					glm::vec3 caPos = c.position - a.position;
+					glm::vec2 st3 = p4.uv - p3.uv;
+					glm::vec2 st4 = p5.uv - p3.uv;
 
-					glm::vec2 baUV = b.uv - a.uv;
-					glm::vec2 caUV = c.uv - a.uv;
+					float c = (1.0f / (st3.x * st4.y - st3.x * st4.y));
+					glm::mat2 mat3 = glm::mat2(glm::vec2(st4.y, -st4.x), glm::vec2(-st3.y, st3.x));
+					glm::mat3x2 mat4 = glm::mat3x2(glm::vec2(q3.x, q4.x), glm::vec2(q3.y, q4.y), glm::vec2(q3.z, q4.z));
+					glm::mat3x2 tb2 = c * mat3 * mat4;
 
-					a.tangent = baPos;
-					b.tangent = baPos;
-					c.tangent = baPos;*/
+					p3.tangent = p4.tangent = p5.tangent = glm::vec3(tb2[0].x, tb2[1].x, tb2[2].x);
 				}
 			}
 		}

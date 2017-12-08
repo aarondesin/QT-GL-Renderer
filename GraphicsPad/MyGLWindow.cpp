@@ -507,7 +507,7 @@ void MyGLWindow::initMaterials()
 		f2Material->diffuse = AssetStorage::getTexture("Textures/BristolF2_Albedo");
 		f2Material->diffuseStrength = 1.0f;
 		f2Material->normal = AssetStorage::getTexture("Textures/BristolF2_Normal");
-		f2Material->normalStrength = 0.0f;
+		f2Material->normalStrength = 1.0f;
 		f2Material->reflectivity = 0.25f;
 		f2Material->ambientOcclusion = AssetStorage::getTexture("Textures/BristolF2_AO");
 		f2Material->occlusionScale = 1.0f;
